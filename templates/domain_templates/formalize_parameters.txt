@@ -1,0 +1,6 @@
+最终答案放在标题“### Action Parameters”下方，使用``` ```注释块，PDDL格式如下：
+
+### Action Parameters
+```
+- ?t - type: 'parameter_description'
+```

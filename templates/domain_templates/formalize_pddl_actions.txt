@@ -1,0 +1,51 @@
+最终答案放在以下标题下方：'### Action Parameters'、'### Action Preconditions'、'### Action Effects'，然后使用“## NEXT ACTION”分隔下一个动作。最后以“## New predicates”结尾，答案放在 ``` [PREDICATES] ``` 中，格式如下：
+
+"""
+[动作名称]
+### Action Parameters
+```
+- ?t - type: 'parameter_description'
+```
+
+### Action Preconditions
+```
+(and
+    (predicate_name ?t1 ?t2) ; 注释描述
+)
+```
+
+### Action Effects
+```
+(and
+    (predicate_name ?t1 ?t2) ; 注释描述
+)
+```
+
+## NEXT ACTION
+[动作名称]
+### Action Parameters
+```
+- ?t - type: 'parameter_description'
+```
+
+### Action Preconditions
+```
+(and
+    (predicate_name ?t1 ?t2) ; 注释描述
+)
+```
+
+### Action Effects
+```
+(and
+    (predicate_name ?t1 ?t2) ; 注释描述
+)
+```
+
+### New Predicates
+```
+- (predicate_name ?t1 - type_1 ?t2 - type_2): 'predicate_description'
+``` 
+"""
+
+依此类推…

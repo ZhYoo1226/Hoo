@@ -1,0 +1,5003 @@
+[2026-05-18 14:06:43]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 14:06:43]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 14:06:43]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 14:06:43]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 14:06:43]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 14:06:43]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 14:06:43]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 14:06:43]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 14:06:43]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:06:43]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 14:06:43]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:06:43]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 14:06:43]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 14:06:43]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 14:06:43]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 14:06:43]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 14:06:43]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input",
+    "state.table_text": "input"
+  }
+}
+[2026-05-18 14:06:43]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 14:06:43]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 14:06:43]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 14:06:43]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input"
+  }
+}
+[2026-05-18 14:06:43]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 14:06:43]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.preview_file_content": "input",
+    "state.file_uuid": "input"
+  }
+}
+[2026-05-18 14:06:43]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 14:06:43]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 14:06:43]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 14:06:44]: 开始清除所有聊天记录
+[2026-05-18 14:06:44]: 开始清除所有的工作任务
+[2026-05-18 14:06:44]: 开始清除所有评估建议
+[2026-05-18 14:06:44]: 开始清除所有聊天记录
+[2026-05-18 14:06:44]: 开始清除所有的工作任务
+[2026-05-18 14:06:44]: 开始清除所有评估建议
+[2026-05-18 14:06:44]: 成功删除聊天记录文件: D:\solver\workspace\chat\chat_20260518.md
+[2026-05-18 14:08:44]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 14:08:44]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 14:08:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 14:08:44]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 14:08:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 14:08:44]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 14:08:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 14:08:44]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 14:08:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:08:44]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 14:08:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:08:44]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 14:08:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 14:08:44]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 14:08:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 14:08:44]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 14:08:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_text": "input",
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 14:08:44]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 14:08:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 14:08:44]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 14:08:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "current_file.内容预览": "input"
+  }
+}
+[2026-05-18 14:08:44]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 14:08:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 14:08:44]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 14:08:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "state.task.task_execute_history": "input",
+    "list_tools": "input"
+  }
+}
+[2026-05-18 14:08:44]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 14:08:44]: 开始清除所有聊天记录
+[2026-05-18 14:08:44]: 开始清除所有的工作任务
+[2026-05-18 14:08:44]: 开始清除所有评估建议
+[2026-05-18 14:08:44]: 开始清除所有聊天记录
+[2026-05-18 14:08:44]: 开始清除所有的工作任务
+[2026-05-18 14:08:44]: 开始清除所有评估建议
+[2026-05-18 14:08:44]: 成功删除聊天记录文件: D:\solver\workspace\chat\chat_20260518.md
+[2026-05-18 14:22:44]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 14:22:44]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 14:22:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 14:22:44]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 14:22:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 14:22:44]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 14:22:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 14:22:44]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 14:22:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:22:44]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 14:22:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:22:44]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 14:22:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 14:22:44]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 14:22:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 14:22:44]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 14:22:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input",
+    "state.table_text": "input"
+  }
+}
+[2026-05-18 14:22:44]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 14:22:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 14:22:44]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 14:22:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "current_file.内容预览": "input"
+  }
+}
+[2026-05-18 14:22:44]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 14:22:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.preview_file_content": "input",
+    "state.file_uuid": "input"
+  }
+}
+[2026-05-18 14:22:44]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 14:22:44]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 14:22:44]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 14:22:45]: 开始清除所有聊天记录
+[2026-05-18 14:22:45]: 开始清除所有的工作任务
+[2026-05-18 14:22:45]: 开始清除所有评估建议
+[2026-05-18 14:22:45]: 开始清除所有聊天记录
+[2026-05-18 14:22:45]: 开始清除所有的工作任务
+[2026-05-18 14:22:45]: 开始清除所有评估建议
+[2026-05-18 14:22:45]: 成功删除聊天记录文件: D:\solver\workspace\chat\chat_20260518.md
+[2026-05-18 14:31:53]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 14:31:53]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 14:31:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 14:31:53]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 14:31:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 14:31:53]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 14:31:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 14:31:53]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 14:31:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:31:53]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 14:31:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:31:53]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 14:31:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 14:31:53]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 14:31:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 14:31:53]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 14:31:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_text": "input",
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 14:31:53]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 14:31:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 14:31:53]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 14:31:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "current_file.内容预览": "input"
+  }
+}
+[2026-05-18 14:31:53]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 14:31:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 14:31:53]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 14:31:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 14:31:53]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 14:33:34]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 14:33:34]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 14:33:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 14:33:34]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 14:33:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 14:33:34]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 14:33:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 14:33:34]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 14:33:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:33:34]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 14:33:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:33:34]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 14:33:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 14:33:34]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 14:33:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 14:33:34]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 14:33:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_text": "input",
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 14:33:34]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 14:33:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 14:33:34]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 14:33:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "current_file.内容预览": "input"
+  }
+}
+[2026-05-18 14:33:34]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 14:33:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 14:33:34]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 14:33:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "state.task.task_execute_history": "input",
+    "list_tools": "input"
+  }
+}
+[2026-05-18 14:33:34]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 14:37:09]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 14:37:09]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 14:37:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 14:37:09]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 14:37:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 14:37:09]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 14:37:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 14:37:09]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 14:37:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:37:09]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 14:37:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:37:09]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 14:37:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 14:37:09]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 14:37:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 14:37:09]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 14:37:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_text": "input",
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 14:37:09]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 14:37:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 14:37:09]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 14:37:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input"
+  }
+}
+[2026-05-18 14:37:09]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 14:37:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 14:37:09]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 14:37:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "state.task.task_execute_history": "input",
+    "list_tools": "input"
+  }
+}
+[2026-05-18 14:37:09]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 14:42:25]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 14:42:25]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 14:42:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 14:42:25]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 14:42:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 14:42:25]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 14:42:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 14:42:25]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 14:42:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:42:25]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 14:42:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:42:25]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 14:42:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 14:42:25]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 14:42:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 14:42:25]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 14:42:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_text": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 14:42:25]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 14:42:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 14:42:25]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 14:42:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "current_file.内容预览": "input"
+  }
+}
+[2026-05-18 14:42:25]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 14:42:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 14:42:25]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 14:42:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "state.task.task_execute_history": "input",
+    "list_tools": "input"
+  }
+}
+[2026-05-18 14:42:25]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 14:45:07]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 14:45:07]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 14:45:08]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 14:45:08]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 14:45:08]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 14:45:08]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 14:45:08]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 14:45:08]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 14:45:08]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:45:08]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 14:45:08]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:45:08]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 14:45:08]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 14:45:08]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 14:45:08]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 14:45:08]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 14:45:08]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_text": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 14:45:08]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 14:45:08]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 14:45:08]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 14:45:08]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input"
+  }
+}
+[2026-05-18 14:45:08]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 14:45:08]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 14:45:08]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 14:45:08]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "state.task.task_execute_history": "input",
+    "list_tools": "input"
+  }
+}
+[2026-05-18 14:45:08]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 14:45:42]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 14:45:42]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 14:45:42]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 14:45:42]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 14:45:42]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 14:45:42]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 14:45:42]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 14:45:42]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 14:45:42]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:45:42]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 14:45:42]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:45:42]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 14:45:42]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 14:45:42]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 14:45:42]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 14:45:42]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 14:45:42]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_text": "input",
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 14:45:42]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 14:45:42]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 14:45:42]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 14:45:42]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "current_file.内容预览": "input"
+  }
+}
+[2026-05-18 14:45:42]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 14:45:42]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 14:45:42]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 14:45:42]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "state.task.task_execute_history": "input",
+    "list_tools": "input"
+  }
+}
+[2026-05-18 14:45:42]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 14:47:52]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 14:47:52]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 14:47:52]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 14:47:52]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 14:47:52]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 14:47:52]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 14:47:52]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 14:47:52]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 14:47:52]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:47:52]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 14:47:52]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:47:52]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 14:47:52]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 14:47:52]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 14:47:52]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 14:47:52]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 14:47:52]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_text": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 14:47:52]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 14:47:52]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 14:47:52]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 14:47:52]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "current_file.内容预览": "input"
+  }
+}
+[2026-05-18 14:47:52]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 14:47:52]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 14:47:52]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 14:47:52]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 14:47:52]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 14:51:30]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 14:51:30]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 14:51:30]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 14:51:30]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 14:51:30]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_solar": "input",
+    "current_lunar": "input"
+  }
+}
+[2026-05-18 14:51:30]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 14:51:30]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 14:51:30]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 14:51:30]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:51:30]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 14:51:30]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:51:30]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 14:51:30]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 14:51:30]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 14:51:30]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 14:51:30]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 14:51:30]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_text": "input",
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 14:51:30]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 14:51:30]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 14:51:30]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 14:51:30]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input"
+  }
+}
+[2026-05-18 14:51:30]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 14:51:30]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 14:51:30]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 14:51:30]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 14:51:30]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 14:57:28]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 14:57:28]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 14:57:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 14:57:28]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 14:57:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 14:57:28]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 14:57:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 14:57:28]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 14:57:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:57:28]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 14:57:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 14:57:28]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 14:57:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 14:57:28]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 14:57:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 14:57:28]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 14:57:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input",
+    "state.table_text": "input"
+  }
+}
+[2026-05-18 14:57:28]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 14:57:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 14:57:28]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 14:57:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input"
+  }
+}
+[2026-05-18 14:57:28]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 14:57:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 14:57:28]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 14:57:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 14:57:28]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 15:04:33]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 15:04:33]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 15:04:33]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 15:04:33]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 15:04:33]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 15:04:33]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 15:04:33]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 15:04:33]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 15:04:33]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 15:04:33]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 15:04:33]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 15:04:33]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 15:04:33]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 15:04:33]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 15:04:33]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 15:04:33]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 15:04:33]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input",
+    "state.table_text": "input"
+  }
+}
+[2026-05-18 15:04:33]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 15:04:33]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 15:04:33]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 15:04:33]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input"
+  }
+}
+[2026-05-18 15:04:33]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 15:04:33]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 15:04:33]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 15:04:33]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 15:04:33]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 15:11:59]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 15:11:59]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 15:11:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 15:11:59]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 15:11:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 15:11:59]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 15:11:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 15:11:59]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 15:11:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 15:11:59]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 15:11:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 15:11:59]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 15:11:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 15:11:59]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 15:11:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 15:11:59]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 15:11:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_text": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 15:11:59]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 15:11:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 15:11:59]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 15:11:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "current_file.内容预览": "input"
+  }
+}
+[2026-05-18 15:11:59]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 15:11:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 15:11:59]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 15:11:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "state.task.task_execute_history": "input",
+    "list_tools": "input"
+  }
+}
+[2026-05-18 15:11:59]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 15:18:20]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 15:18:20]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 15:18:20]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 15:18:20]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 15:18:20]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 15:18:20]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 15:18:20]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 15:18:20]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 15:18:20]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 15:18:20]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 15:18:20]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 15:18:20]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 15:18:20]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 15:18:20]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 15:18:20]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 15:18:20]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 15:18:20]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_text": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 15:18:20]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 15:18:20]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 15:18:20]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 15:18:20]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input"
+  }
+}
+[2026-05-18 15:18:20]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 15:18:20]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.preview_file_content": "input",
+    "state.file_uuid": "input"
+  }
+}
+[2026-05-18 15:18:20]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 15:18:20]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "state.task.task_execute_history": "input",
+    "list_tools": "input"
+  }
+}
+[2026-05-18 15:18:20]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 15:53:34]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 15:53:34]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 15:53:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 15:53:34]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 15:53:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 15:53:34]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 15:53:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 15:53:34]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 15:53:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 15:53:34]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 15:53:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 15:53:34]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 15:53:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 15:53:34]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 15:53:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 15:53:34]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 15:53:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_text": "input",
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 15:53:34]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 15:53:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 15:53:34]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 15:53:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "current_file.内容预览": "input"
+  }
+}
+[2026-05-18 15:53:34]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 15:53:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 15:53:34]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 15:53:34]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "state.task.task_execute_history": "input",
+    "list_tools": "input"
+  }
+}
+[2026-05-18 15:53:34]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 16:15:49]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 16:15:49]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 16:15:49]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 16:15:49]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 16:15:49]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_solar": "input",
+    "current_lunar": "input"
+  }
+}
+[2026-05-18 16:15:49]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 16:15:49]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 16:15:49]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 16:15:49]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 16:15:49]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 16:15:49]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 16:15:49]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 16:15:49]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 16:15:49]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 16:15:49]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 16:15:49]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 16:15:49]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input",
+    "state.table_text": "input"
+  }
+}
+[2026-05-18 16:15:49]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 16:15:49]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 16:15:49]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 16:15:49]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "current_file.内容预览": "input"
+  }
+}
+[2026-05-18 16:15:49]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 16:15:49]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 16:15:49]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 16:15:49]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 16:15:49]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 16:20:59]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 16:20:59]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 16:20:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 16:20:59]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 16:20:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_solar": "input",
+    "current_lunar": "input"
+  }
+}
+[2026-05-18 16:20:59]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 16:20:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 16:20:59]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 16:20:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 16:20:59]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 16:20:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 16:20:59]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 16:20:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 16:20:59]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 16:20:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 16:20:59]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 16:20:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_text": "input",
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 16:20:59]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 16:20:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 16:20:59]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 16:20:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input"
+  }
+}
+[2026-05-18 16:20:59]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 16:20:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 16:20:59]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 16:20:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "state.task.task_execute_history": "input",
+    "list_tools": "input"
+  }
+}
+[2026-05-18 16:20:59]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 16:31:18]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 16:31:18]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 16:31:18]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 16:31:18]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 16:31:18]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 16:31:18]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 16:31:18]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 16:31:18]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 16:31:18]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 16:31:18]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 16:31:18]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 16:31:18]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 16:31:18]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 16:31:18]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 16:31:18]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 16:31:18]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 16:31:18]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_text": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 16:31:18]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 16:31:18]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 16:31:18]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 16:31:18]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input"
+  }
+}
+[2026-05-18 16:31:18]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 16:31:18]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-18 16:31:18]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 16:31:18]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "state.task.task_execute_history": "input",
+    "list_tools": "input"
+  }
+}
+[2026-05-18 16:31:18]: 系统提示词索引构建完成，共 12 个提示词
+[2026-05-18 22:26:26]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\policy\动态任务处理策略.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "动态任务处理策略",
+  "文件名": "动态任务处理策略.md",
+  "文件路径": "policy\\动态任务处理策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\policy\智能体核心行为策略.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体核心行为策略",
+  "文件名": "智能体核心行为策略.md",
+  "文件路径": "policy\\智能体核心行为策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\policy\智能体聊天风格策略.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体聊天风格策略",
+  "文件名": "智能体聊天风格策略.md",
+  "文件路径": "policy\\智能体聊天风格策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\system\元认知分类.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "元认知分类",
+  "文件名": "元认知分类.md",
+  "文件路径": "system\\元认知分类.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "read_user_profile": "input",
+    "current_solar": "input",
+    "read_agent_profile": "input",
+    "current_lunar": "input"
+  }
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\分析任务信息需求.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析任务信息需求",
+  "文件名": "分析任务信息需求.md",
+  "文件路径": "task\\分析任务信息需求.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\分析创建任务.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析创建任务",
+  "文件名": "分析创建任务.md",
+  "文件路径": "task\\分析创建任务.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v3.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v3",
+  "文件名": "分析用户对话意图v3.md",
+  "文件路径": "task\\分析用户对话意图v3.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input",
+    "state.table_text": "input"
+  }
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input"
+  }
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.preview_file_content": "input",
+    "state.file_uuid": "input"
+  }
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\用户元认知预测.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户元认知预测",
+  "文件名": "用户元认知预测.md",
+  "文件路径": "task\\用户元认知预测.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\用户补充信息.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户补充信息",
+  "文件名": "用户补充信息.md",
+  "文件路径": "task\\用户补充信息.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\观察用户意图.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "观察用户意图",
+  "文件名": "观察用户意图.md",
+  "文件路径": "task\\观察用户意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:26:26]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 22:26:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 22:26:26]: 系统提示词索引构建完成，共 22 个提示词
+[2026-05-18 22:26:27]: 开始清除所有聊天记录
+[2026-05-18 22:26:27]: 开始清除所有的工作任务
+[2026-05-18 22:26:27]: 开始清除所有评估建议
+[2026-05-18 22:48:02]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\policy\动态任务处理策略.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "动态任务处理策略",
+  "文件名": "动态任务处理策略.md",
+  "文件路径": "policy\\动态任务处理策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\policy\智能体核心行为策略.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体核心行为策略",
+  "文件名": "智能体核心行为策略.md",
+  "文件路径": "policy\\智能体核心行为策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\policy\智能体聊天风格策略.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体聊天风格策略",
+  "文件名": "智能体聊天风格策略.md",
+  "文件路径": "policy\\智能体聊天风格策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\system\元认知分类.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "元认知分类",
+  "文件名": "元认知分类.md",
+  "文件路径": "system\\元认知分类.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_solar": "input",
+    "read_agent_profile": "input",
+    "current_lunar": "input",
+    "read_user_profile": "input"
+  }
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\分析任务信息需求.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析任务信息需求",
+  "文件名": "分析任务信息需求.md",
+  "文件路径": "task\\分析任务信息需求.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\分析创建任务.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析创建任务",
+  "文件名": "分析创建任务.md",
+  "文件路径": "task\\分析创建任务.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v3.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v3",
+  "文件名": "分析用户对话意图v3.md",
+  "文件路径": "task\\分析用户对话意图v3.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input",
+    "state.table_text": "input"
+  }
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "current_file.内容预览": "input"
+  }
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.preview_file_content": "input",
+    "state.file_uuid": "input"
+  }
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\用户元认知预测.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户元认知预测",
+  "文件名": "用户元认知预测.md",
+  "文件路径": "task\\用户元认知预测.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\用户补充信息.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户补充信息",
+  "文件名": "用户补充信息.md",
+  "文件路径": "task\\用户补充信息.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\观察用户意图.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "观察用户意图",
+  "文件名": "观察用户意图.md",
+  "文件路径": "task\\观察用户意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:48:02]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 22:48:02]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 22:48:02]: 系统提示词索引构建完成，共 22 个提示词
+[2026-05-18 22:48:03]: 开始清除所有聊天记录
+[2026-05-18 22:48:03]: 开始清除所有的工作任务
+[2026-05-18 22:48:03]: 开始清除所有评估建议
+[2026-05-18 22:50:29]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\policy\动态任务处理策略.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "动态任务处理策略",
+  "文件名": "动态任务处理策略.md",
+  "文件路径": "policy\\动态任务处理策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\policy\智能体核心行为策略.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体核心行为策略",
+  "文件名": "智能体核心行为策略.md",
+  "文件路径": "policy\\智能体核心行为策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\policy\智能体聊天风格策略.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体聊天风格策略",
+  "文件名": "智能体聊天风格策略.md",
+  "文件路径": "policy\\智能体聊天风格策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\system\元认知分类.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "元认知分类",
+  "文件名": "元认知分类.md",
+  "文件路径": "system\\元认知分类.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_solar": "input",
+    "current_lunar": "input",
+    "read_user_profile": "input",
+    "read_agent_profile": "input"
+  }
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\分析任务信息需求.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析任务信息需求",
+  "文件名": "分析任务信息需求.md",
+  "文件路径": "task\\分析任务信息需求.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\分析创建任务.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析创建任务",
+  "文件名": "分析创建任务.md",
+  "文件路径": "task\\分析创建任务.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v3.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v3",
+  "文件名": "分析用户对话意图v3.md",
+  "文件路径": "task\\分析用户对话意图v3.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_text": "input",
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input"
+  }
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.preview_file_content": "input",
+    "state.file_uuid": "input"
+  }
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\用户元认知预测.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户元认知预测",
+  "文件名": "用户元认知预测.md",
+  "文件路径": "task\\用户元认知预测.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\用户补充信息.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户补充信息",
+  "文件名": "用户补充信息.md",
+  "文件路径": "task\\用户补充信息.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\观察用户意图.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "观察用户意图",
+  "文件名": "观察用户意图.md",
+  "文件路径": "task\\观察用户意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:50:29]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 22:50:29]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 22:50:29]: 系统提示词索引构建完成，共 22 个提示词
+[2026-05-18 22:50:30]: 开始清除所有聊天记录
+[2026-05-18 22:50:30]: 开始清除所有的工作任务
+[2026-05-18 22:50:30]: 开始清除所有评估建议
+[2026-05-18 22:50:31]: 成功删除聊天记录文件: D:\pySpace\opensolver\workspace\chat\chat_20260518.md
+[2026-05-18 22:56:58]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\policy\动态任务处理策略.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "动态任务处理策略",
+  "文件名": "动态任务处理策略.md",
+  "文件路径": "policy\\动态任务处理策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\policy\智能体核心行为策略.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体核心行为策略",
+  "文件名": "智能体核心行为策略.md",
+  "文件路径": "policy\\智能体核心行为策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\policy\智能体聊天风格策略.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体聊天风格策略",
+  "文件名": "智能体聊天风格策略.md",
+  "文件路径": "policy\\智能体聊天风格策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\system\元认知分类.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "元认知分类",
+  "文件名": "元认知分类.md",
+  "文件路径": "system\\元认知分类.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "read_agent_profile": "input",
+    "current_solar": "input",
+    "current_lunar": "input",
+    "read_user_profile": "input"
+  }
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\分析任务信息需求.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析任务信息需求",
+  "文件名": "分析任务信息需求.md",
+  "文件路径": "task\\分析任务信息需求.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\分析创建任务.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析创建任务",
+  "文件名": "分析创建任务.md",
+  "文件路径": "task\\分析创建任务.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v3.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v3",
+  "文件名": "分析用户对话意图v3.md",
+  "文件路径": "task\\分析用户对话意图v3.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_text": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "current_file.内容预览": "input"
+  }
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.preview_file_content": "input",
+    "state.file_uuid": "input"
+  }
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\用户元认知预测.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户元认知预测",
+  "文件名": "用户元认知预测.md",
+  "文件路径": "task\\用户元认知预测.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\用户补充信息.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户补充信息",
+  "文件名": "用户补充信息.md",
+  "文件路径": "task\\用户补充信息.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\观察用户意图.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "观察用户意图",
+  "文件名": "观察用户意图.md",
+  "文件路径": "task\\观察用户意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:56:58]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 22:56:58]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 22:56:58]: 系统提示词索引构建完成，共 22 个提示词
+[2026-05-18 22:57:00]: 开始清除所有聊天记录
+[2026-05-18 22:57:00]: 开始清除所有的工作任务
+[2026-05-18 22:57:00]: 开始清除所有评估建议
+[2026-05-18 22:57:28]: 成功删除工作任务目录: D:\pySpace\opensolver\workspace\task\任务_20260518225404
+[2026-05-18 22:59:26]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\policy\动态任务处理策略.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "动态任务处理策略",
+  "文件名": "动态任务处理策略.md",
+  "文件路径": "policy\\动态任务处理策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\policy\智能体核心行为策略.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体核心行为策略",
+  "文件名": "智能体核心行为策略.md",
+  "文件路径": "policy\\智能体核心行为策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\policy\智能体聊天风格策略.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体聊天风格策略",
+  "文件名": "智能体聊天风格策略.md",
+  "文件路径": "policy\\智能体聊天风格策略.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\system\元认知分类.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "元认知分类",
+  "文件名": "元认知分类.md",
+  "文件路径": "system\\元认知分类.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "read_user_profile": "input",
+    "read_agent_profile": "input",
+    "current_lunar": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\分析任务信息需求.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析任务信息需求",
+  "文件名": "分析任务信息需求.md",
+  "文件路径": "task\\分析任务信息需求.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\分析创建任务.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析创建任务",
+  "文件名": "分析创建任务.md",
+  "文件路径": "task\\分析创建任务.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v3.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v3",
+  "文件名": "分析用户对话意图v3.md",
+  "文件路径": "task\\分析用户对话意图v3.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_text": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input"
+  }
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.preview_file_content": "input",
+    "state.file_uuid": "input"
+  }
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\用户元认知预测.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户元认知预测",
+  "文件名": "用户元认知预测.md",
+  "文件路径": "task\\用户元认知预测.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\用户补充信息.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户补充信息",
+  "文件名": "用户补充信息.md",
+  "文件路径": "task\\用户补充信息.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\观察用户意图.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "观察用户意图",
+  "文件名": "观察用户意图.md",
+  "文件路径": "task\\观察用户意图.md",
+  "输入参数": {}
+}
+[2026-05-18 22:59:26]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 22:59:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 22:59:26]: 系统提示词索引构建完成，共 22 个提示词
+[2026-05-18 22:59:28]: 开始清除所有聊天记录
+[2026-05-18 22:59:28]: 开始清除所有的工作任务
+[2026-05-18 22:59:28]: 开始清除所有评估建议
+[2026-05-18 23:06:26]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 23:06:26]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 23:06:42]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 23:06:42]: 发现提示词文件: ./workspace/prompts\policy\动态任务处理策略.md
+[2026-05-18 23:06:56]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "动态任务处理策略",
+  "文件名": "动态任务处理策略.md",
+  "文件路径": "policy\\动态任务处理策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:06:56]: 发现提示词文件: ./workspace/prompts\policy\智能体核心行为策略.md
+[2026-05-18 23:06:59]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体核心行为策略",
+  "文件名": "智能体核心行为策略.md",
+  "文件路径": "policy\\智能体核心行为策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:06:59]: 发现提示词文件: ./workspace/prompts\policy\智能体聊天风格策略.md
+[2026-05-18 23:07:04]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体聊天风格策略",
+  "文件名": "智能体聊天风格策略.md",
+  "文件路径": "policy\\智能体聊天风格策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:07:04]: 发现提示词文件: ./workspace/prompts\system\元认知分类.md
+[2026-05-18 23:07:07]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "元认知分类",
+  "文件名": "元认知分类.md",
+  "文件路径": "system\\元认知分类.md",
+  "输入参数": {}
+}
+[2026-05-18 23:07:07]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 23:11:22]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 23:11:22]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 23:11:24]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 23:11:24]: 发现提示词文件: ./workspace/prompts\policy\动态任务处理策略.md
+[2026-05-18 23:11:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "动态任务处理策略",
+  "文件名": "动态任务处理策略.md",
+  "文件路径": "policy\\动态任务处理策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:11:25]: 发现提示词文件: ./workspace/prompts\policy\智能体核心行为策略.md
+[2026-05-18 23:11:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体核心行为策略",
+  "文件名": "智能体核心行为策略.md",
+  "文件路径": "policy\\智能体核心行为策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:11:25]: 发现提示词文件: ./workspace/prompts\policy\智能体聊天风格策略.md
+[2026-05-18 23:11:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体聊天风格策略",
+  "文件名": "智能体聊天风格策略.md",
+  "文件路径": "policy\\智能体聊天风格策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:11:25]: 发现提示词文件: ./workspace/prompts\system\元认知分类.md
+[2026-05-18 23:11:25]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "元认知分类",
+  "文件名": "元认知分类.md",
+  "文件路径": "system\\元认知分类.md",
+  "输入参数": {
+    "\n  \"action\": \"predict:task|predict:clarify|predict:ask|predict:continue\"\n": "input"
+  }
+}
+[2026-05-18 23:11:25]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 23:11:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "read_agent_profile": "input",
+    "read_prompt('智能体核心行为策略')": "input",
+    "read_prompt('智能体聊天风格策略')": "input",
+    "read_prompt('动态任务处理策略')": "input",
+    "read_user_profile": "input",
+    "current_solar": "input",
+    "current_lunar": "input"
+  }
+}
+[2026-05-18 23:11:26]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 23:11:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 23:11:26]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 23:11:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {
+    "\n  \"action\": \"meta:plan\",\n  \"thought\": \"用户对之前已接受的分析框架做进一步细化限制，属于对已有任务的澄清修正，应更新规划并确认。\",\n  \"response\": \"明白，我调整分析计划:投诉内容作为重点，行为数据限定近一个月，竞品仅关注价格变动和新增功能。按此方向推进。\",\n  \"plan\": {\n    \"name\": \"用户流失原因分析\",\n    \"task\": \"分析最近一个月用户流失的主要原因，包括用户行为、投诉记录和竞品动态。\",\n    \"task_id\": \"123456789\",\n    \"confidence\": 0.9,\n    \"steps\": [\n      \"提取近一个月用户流失前的行为特征\",\n      \"深度分析投诉文本，归类流失主因\",\n      \"监测竞品的价格调整公告与功能更新日志\",\n      \"交叉对比，给出流失主因及竞品影响权重\"\n    ]\n  ": "input",
+    "\n  \"action\": \"meta:listen\",\n  \"thought\": \"用户在进行连续的情绪倾诉，内容未包含新的任务需求或疑问，此刻不宜打断或转换话题，应保持倾听状态。\",\n  \"response\": \"\"\n": "input",
+    "\n  \"action\": \"meta:task\",\n  \"thought\": \"用户提出一个新的对比分析任务，与前一个查询任务在数据层面相关，但属于明确的全新指令，需要独立执行。\",\n  \"response\": \"收到，我将为您提取并对比本月与上个月的退货率，稍后呈现结果。\",\n  \"task\": {\n    \"name\": \"月度退货率对比\",\n    \"task\": \"对比本月和上个月的整体退货率，可按时间维度呈现趋势。\",\n    \"goal\": \"了解退货率的变化情况，辅助经营决策。\",\n    \"type\": \"查询统计\"\n  ": "input",
+    "\n  \"action\": \"meta:speak | meta:task | meta:plan | meta:ask\",\n  \"response\": \"根据action类型生成对应响应\",\n  \"plan\": {  // 仅当 action 为 meta:plan 时需要，否则省略\n    \"task\": \"重新根据背景信息总结任务描述。\",\n    \"task_id\": \"123456789\", // 任务 ID，用于关联任务和历史记录\n    \"steps\": [\"重新规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "  // 仅当 action 为 meta:task 时需要，否则省略\n    \"name\": \"任务名称\",\n    \"task\": \"任务的具体需求描述\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"type\": \"查询统计 | 业务探索 | 搜索问答\",\n    \"steps\": [\"规划的步骤1\", \"步骤2\", ...]\n  ": "input"
+  }
+}
+[2026-05-18 23:11:26]: 发现提示词文件: ./workspace/prompts\task\分析任务信息需求.md
+[2026-05-18 23:11:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析任务信息需求",
+  "文件名": "分析任务信息需求.md",
+  "文件路径": "task\\分析任务信息需求.md",
+  "输入参数": {
+    "\n    \"action\": \"predict:continue\"\n": "input",
+    "\"action\": \"predict:continue\"": "input",
+    "\n    \"action\": \"meta:ask\",\n    \"question\": \"具体、可回答的提问内容（只问最必要的1-3个问题）\"\n": "input",
+    "\"action\": \"meta:ask\", \"question\": \"请问你想查询哪个城市的天气？\"": "input"
+  }
+}
+[2026-05-18 23:11:26]: 发现提示词文件: ./workspace/prompts\task\分析创建任务.md
+[2026-05-18 23:11:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析创建任务",
+  "文件名": "分析创建任务.md",
+  "文件路径": "task\\分析创建任务.md",
+  "输入参数": {
+    "\n    \"action\": \"meta:task\",\n    \"name\": \"任务名称\",\n    \"type\": \"查询统计 | 业务探索 | 搜索问答\",\n    \"task\": \"任务的具体需求描述\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"规划的步骤1\", \"步骤2\", ...]\n": "input",
+    "\n  \"action\": \"predict:continue\"\n": "input",
+    "\n  \"action\": \"meta:task\",\n  \"name\": \"第二季度产品线利润趋势分析\",\n  \"type\": \"统计分析\",\n  \"task\": \"分析今年第二季度各产品线的利润变化趋势\",\n  \"goal\": \"生成各产品线利润的同比/环比变化报告，找出关键波动因素\",\n  \"steps\": [\n    \"提取第二季度各产品线的收入与成本数据\",\n    \"计算各产品线的利润及同比增长率\",\n    \"绘制趋势图表并识别异常波动\",\n    \"汇总分析结论\"\n  ]\n": "input",
+    "\n    \"action\": \"predict:continue\"\n": "input"
+  }
+}
+[2026-05-18 23:11:26]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 23:11:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {
+    "  // 仅当 action 为 meta:ask 时需要，否则省略\n    \"question\": \"需要澄清用户需求的问题\"\n  ": "input",
+    "  // 仅当 action 为 meta:task 时需要，否则省略\n    \"name\": \"任务名称\",\n    \"type\": \"查询统计 | 业务探索 | 搜索问答\",\n    \"task\": \"任务的具体需求描述\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "\n  \"action\": \"meta:speak | meta:task | meta:plan | meta:ask | meta:read\",\n  \"speak\": {  // 仅当 action 为 meta:speak 时需要，否则省略\n    \"think\": \"50字内的决策总结\"\n  ": "input",
+    "\n  \"action\": \"meta:plan\",\n  \"plan\": {\n    \"task_id\": \"123456789\",\n    \"name\": \"用户流失原因分析\",\n    \"task\": \"分析最近一个月用户流失的主要原因，包括用户行为、投诉记录和竞品动态。\",\n    \"steps\": [\n      \"提取近一个月用户流失前的行为特征\",\n      \"深度分析投诉文本，归类流失主因\",\n      \"监测竞品的价格调整公告与功能更新日志\",\n      \"交叉对比，给出流失主因及竞品影响权重\"\n    ]\n  ": "input",
+    "\n  \"action\": \"meta:speak\",\n  \"speak\": {\n    \"think\": \"设计类沟通任务，直接回答用户问题\"\n  ": "input",
+    "  // 仅当 action 为 meta:read 时需要，否则省略\n    \"uuid\": \"文件唯一标识符\"\n  ": "input",
+    "  // 仅当 action 为 meta:plan 时需要，否则省略\n    \"task_id\": \"123456789\", // 任务 ID，用于关联任务和历史记录\n    \"task\": \"重新根据背景信息总结任务描述。\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"重新规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "\n  \"action\": \"meta:task\",\n  \"task\": {\n    \"name\": \"月度退货率对比\",\n    \"type\": \"查询统计\",\n    \"task\": \"对比本月和上个月的整体退货率，可按时间维度呈现趋势。\",\n    \"goal\": \"了解退货率的变化情况，辅助经营决策。\",\n    \"steps\": [\n      \"对比本月和上个月的退货率\",\n      \"分析退货率变化趋势\"\n    ]\n  ": "input"
+  }
+}
+[2026-05-18 23:11:26]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 23:11:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "\n  \"action\": \"meta:speak | meta:task | meta:plan | meta:listen | meta:ask\",\n  \"thought\": \"决策过程说明(50字以内)\",\n  \"response\": \"根据 action 生成的文本回复（具体规则见下方）\",\n  \"plan\": {  // 仅当 action 为 meta:plan 时需要，否则省略\n    \"task\": \"重新根据背景信息总结任务描述。\",\n    \"task_id\": \"123456789\", // 任务 ID，用于关联任务和历史记录\n    \"confidence\": 0.0-1.0,  // 当前方案与历史方案的匹配置信度，决定是否搜索知识库\n    \"steps\": [\"重新规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "get_chat_history_text": "input",
+    "\n  \"action\": \"meta:plan\",\n  \"thought\": \"用户对之前已接受的分析框架做进一步细化限制，属于对已有任务的澄清修正，应更新规划并确认。\",\n  \"response\": \"明白，我调整分析计划:投诉内容作为重点，行为数据限定近一个月，竞品仅关注价格变动和新增功能。按此方向推进。\",\n  \"plan\": {\n    \"name\": \"用户流失原因分析\",\n    \"task\": \"分析最近一个月用户流失的主要原因，包括用户行为、投诉记录和竞品动态。\",\n    \"task_id\": \"123456789\",\n    \"confidence\": 0.9,\n    \"steps\": [\n      \"提取近一个月用户流失前的行为特征\",\n      \"深度分析投诉文本，归类流失主因\",\n      \"监测竞品的价格调整公告与功能更新日志\",\n      \"交叉对比，给出流失主因及竞品影响权重\"\n    ]\n  ": "input",
+    "\n  \"action\": \"meta:listen\",\n  \"thought\": \"用户在进行连续的情绪倾诉，内容未包含新的任务需求或疑问，此刻不宜打断或转换话题，应保持倾听状态。\",\n  \"response\": \"\"\n": "input",
+    "\n  \"action\": \"meta:task\",\n  \"thought\": \"用户提出一个新的对比分析任务，与前一个查询任务在数据层面相关，但属于明确的全新指令，需要独立执行。\",\n  \"response\": \"收到，我将为您提取并对比本月与上个月的退货率，稍后呈现结果。\",\n  \"task\": {\n    \"name\": \"月度退货率对比\",\n    \"task\": \"对比本月和上个月的整体退货率，可按时间维度呈现趋势。\",\n    \"goal\": \"了解退货率的变化情况，辅助经营决策。\",\n    \"type\": \"查询统计\"\n  ": "input",
+    "  // 仅当 action 为 meta:task 时需要，否则省略\n    \"name\": \"任务名称\",\n    \"task\": \"任务的具体需求描述\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"type\": \"查询统计 | 业务探索 | 搜索问答\",\n    \"steps\": [\"规划的步骤1\", \"步骤2\", ...]\n  ": "input"
+  }
+}
+[2026-05-18 23:11:26]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 23:11:26]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {
+    "  // 仅当 action 为 meta:ask 时需要，否则省略\n    \"question\": \"需要澄清用户需求的问题\"\n  ": "input",
+    "  // 仅当 action 为 meta:task 时需要，否则省略\n    \"name\": \"任务名称\",\n    \"type\": \"查询统计 | 业务探索 | 搜索问答\",\n    \"task\": \"任务的具体需求描述\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "\n  \"action\": \"meta:speak | meta:task | meta:plan | meta:ask | meta:read\",\n  \"speak\": {  // 仅当 action 为 meta:speak 时需要，否则省略\n    \"think\": \"50字内的决策总结\"\n  ": "input",
+    "\n  \"action\": \"meta:plan\",\n  \"plan\": {\n    \"task_id\": \"123456789\",\n    \"name\": \"用户流失原因分析\",\n    \"task\": \"分析最近一个月用户流失的主要原因，包括用户行为、投诉记录和竞品动态。\",\n    \"steps\": [\n      \"提取近一个月用户流失前的行为特征\",\n      \"深度分析投诉文本，归类流失主因\",\n      \"监测竞品的价格调整公告与功能更新日志\",\n      \"交叉对比，给出流失主因及竞品影响权重\"\n    ]\n  ": "input",
+    "\n  \"action\": \"meta:speak\",\n  \"speak\": {\n    \"think\": \"设计类沟通任务，直接回答用户问题\"\n  ": "input",
+    "  // 仅当 action 为 meta:read 时需要，否则省略\n    \"uuid\": \"文件唯一标识符\"\n  ": "input",
+    "  // 仅当 action 为 meta:plan 时需要，否则省略\n    \"task_id\": \"123456789\", // 任务 ID，用于关联任务和历史记录\n    \"task\": \"重新根据背景信息总结任务描述。\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"重新规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "\n  \"action\": \"meta:task\",\n  \"task\": {\n    \"name\": \"月度退货率对比\",\n    \"type\": \"查询统计\",\n    \"task\": \"对比本月和上个月的整体退货率，可按时间维度呈现趋势。\",\n    \"goal\": \"了解退货率的变化情况，辅助经营决策。\",\n    \"steps\": [\n      \"对比本月和上个月的退货率\",\n      \"分析退货率变化趋势\"\n    ]\n  ": "input"
+  }
+}
+[2026-05-18 23:11:26]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v3.md
+[2026-05-18 23:11:27]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v3",
+  "文件名": "分析用户对话意图v3.md",
+  "文件路径": "task\\分析用户对话意图v3.md",
+  "输入参数": {
+    "  // 仅当 action 为 meta:ask 时需要，否则省略\n    \"question\": \"需要澄清用户需求的问题\"\n  ": "input",
+    "  // 仅当 action 为 meta:task 时需要，否则省略\n    \"name\": \"任务名称\",\n    \"type\": \"查询统计 | 业务探索 | 搜索问答\",\n    \"task\": \"任务的具体需求描述\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "\n  \"action\": \"meta:speak | meta:task | meta:plan | meta:ask | meta:read\",\n  \"speak\": {  // 仅当 action 为 meta:speak 时需要，否则省略\n    \"think\": \"50字内的决策总结\"\n  ": "input",
+    "\n  \"action\": \"meta:plan\",\n  \"plan\": {\n    \"task_id\": \"123456789\",\n    \"name\": \"用户流失原因分析\",\n    \"task\": \"分析最近一个月用户流失的主要原因，包括用户行为、投诉记录和竞品动态。\",\n    \"steps\": [\n      \"提取近一个月用户流失前的行为特征\",\n      \"深度分析投诉文本，归类流失主因\",\n      \"监测竞品的价格调整公告与功能更新日志\",\n      \"交叉对比，给出流失主因及竞品影响权重\"\n    ]\n  ": "input",
+    "\n  \"action\": \"meta:speak\",\n  \"speak\": {\n    \"think\": \"设计类沟通任务，直接回答用户问题\"\n  ": "input",
+    "  // 仅当 action 为 meta:read 时需要，否则省略\n    \"uuid\": \"文件唯一标识符\"\n  ": "input",
+    "  // 仅当 action 为 meta:plan 时需要，否则省略\n    \"task_id\": \"123456789\", // 任务 ID，用于关联任务和历史记录\n    \"task\": \"重新根据背景信息总结任务描述。\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"重新规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "\n  \"action\": \"meta:task\",\n  \"task\": {\n    \"name\": \"月度退货率对比\",\n    \"type\": \"查询统计\",\n    \"task\": \"对比本月和上个月的整体退货率，可按时间维度呈现趋势。\",\n    \"goal\": \"了解退货率的变化情况，辅助经营决策。\",\n    \"steps\": [\n      \"对比本月和上个月的退货率\",\n      \"分析退货率变化趋势\"\n    ]\n  ": "input"
+  }
+}
+[2026-05-18 23:11:27]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 23:11:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "\n      \"学号\": \"2024002\",\n      \"姓名\": \"李四\",\n      \"科目\": \"语文\",\n      \"成绩\": \"88\",\n      \"等级\": \"B+\"\n    ": "input",
+    "\n      \"交易日期\": \"2024-05-28\",\n      \"账号\": \"4402074201108982926\",\n      \"储种\": \"活期\",\n      \"摘要\": \"工本费\",\n      \"收入/支出金额\": \"-16.48\",\n      \"余额\": \"1083.52\",\n      \"对方户名\": null\n    ": "input",
+    "\"姓名\": \"李四\", \"年龄\": \"30\", \"金额\": \"2000.00\"": "input",
+    "\n  \"action\": \"data:extract_datatable\",\n  \"thought\": \"第二行文本明显粘连，包含两组完整的“订单号:...日期:...金额:...状态:...”模式，因此拆分为两行（SO002 和 SO003）。金额字段含有人民币符号“¥”和千位分隔逗号，需移除非数字字符，保留小数点。清洗后“¥ 2,999.50”变为“2999.50”，“¥ 1,280.00”变为“1280.00”，“¥ 59.90”变为“59.90”。字段标识通过冒号映射到表头字段（订单号、日期、金额、状态）。\",\n  \"data\": [\n    {\n      \"订单号\": \"SO001\",\n      \"日期\": \"2024-03-01\",\n      \"金额\": \"2999.50\",\n      \"状态\": \"已发货\"\n    ": "input",
+    "\n      \"表头字段1\": \"值3\",\n      \"表头字段2\": \"值4\"\n    ": "input",
+    "\n      \"订单号\": \"SO003\",\n      \"日期\": \"2024-03-02\",\n      \"金额\": \"59.90\",\n      \"状态\": \"已取消\"\n    ": "input",
+    "state.table_headers": "input",
+    "\n  \"action\": \"data:extract_datatable\",\n  \"thought\": \"检测到一行中存在两个完整的记录模式（姓名、年龄、金额重复出现），因此拆分为两行。金额去除千位逗号并转为数字格式。\",\n  \"data\": [\n    {\"姓名\": \"张三\", \"年龄\": \"25\", \"金额\": \"1000.50\"": "input",
+    "\n  \"action\": \"data:extract_datatable\",\n  \"thought\": \"原始数据为多行文本，部分记录存在行内粘连（第二段包含两个完整货品记录：A-102 和 A-103）。根据重复出现的“货品编号:”模式进行拆分。库存数量“1,500”需去除逗号得到“1500”；其余数字无异常。单价字段保留原始数值。字段标识中的“单价(元)”与表头完全一致。缺失值留空，无缺失。\",\n  \"data\": [\n    {\n      \"货品编号\": \"A-101\",\n      \"名称\": \"无缝钢管(φ20)\",\n      \"库存数量\": \"1500\",\n      \"单价(元)\": \"36.50\"\n    ": "input",
+    "\n      \"交易日期\": \"2024-05-16\",\n      \"账号\": \"4402074201108982926\",\n      \"储种\": \"活期\",\n      \"摘要\": \"卡存\",\n      \"收入/支出金额\": \"+1000.00\",\n      \"余额\": \"100.00\",\n      \"对方户名\": null\n    ": "input",
+    "\n  \"action\": \"data:extract_datatable\",   //处理data数据的动作，必须为data:extract_datatable\n  \"thought\": \"详细解释你如何识别并拆分异常合并的行、如何进行字段对齐和数字清洗等处理过程\",\n  \"data\": [\n    {\n      \"表头字段1\": \"值1\",\n      \"表头字段2\": \"值2\"\n    ": "input",
+    "\n  \"action\": \"data:extract_datatable\",\n  \"thought\": \"已忽略无效的表头。原始表格第二行存在明显的行粘连：同一行内出现了两组“交易日期 账号 储种 摘要 收入/支出金额 余额”的模式（日期和账号重复、摘要和金额对应），检测到应为三笔独立交易被错误合并。将该行拆分为两行，分别对应2024-05-16的卡存和2024-05-28的工本费。收入/支出金额中的正负符号和数字格式均正确。余额字段在粘连行中为“100.00 1083.52”，根据上下文，第一笔（卡存）后余额仍为100.00，第二笔（工本费支出）后余额为1083.52，故拆分后各自填入。对方户名缺失，留空。\",\n  \"data\": [\n    {\n      \"交易日期\": \"2024-05-15\",\n      \"账号\": \"4402074201108982926\",\n      \"储种\": \"活期\",\n      \"摘要\": \"开户\",\n      \"收入/支出金额\": \"+100.00\",\n      \"余额\": \"100.00\",\n      \"对方户名\": null\n    ": "input",
+    "\n      \"订单号\": \"SO002\",\n      \"日期\": \"2024-03-02\",\n      \"金额\": \"1280.00\",\n      \"状态\": \"待支付\"\n    ": "input",
+    "\n      \"货品编号\": \"A-102\",\n      \"名称\": \"不锈钢螺栓(M8)\",\n      \"库存数量\": \"2000\",\n      \"单价(元)\": \"0.85\"\n    ": "input",
+    "\n      \"货品编号\": \"A-103\",\n      \"名称\": \"铜垫片\",\n      \"库存数量\": \"500\",\n      \"单价(元)\": \"2.10\"\n    ": "input",
+    "state.table_text": "input",
+    "\n      \"学号\": \"2024003\",\n      \"姓名\": \"王五\",\n      \"科目\": \"语文\",\n      \"成绩\": \"92\",\n      \"等级\": \"A\"\n    ": "input",
+    "\n  \"action\": \"data:extract_datatable\",\n  \"thought\": \"第二行出现行粘连：学号、姓名、科目、成绩、等级字段内均包含两个空格分隔的值，且顺序一一对应，识别为两笔独立记录（李四和王五）。因此将该行拆分为两行。成绩字段是纯数字，无需清洗；等级字段为文本，直接使用。无缺失字段。\",\n  \"data\": [\n    {\n      \"学号\": \"2024001\",\n      \"姓名\": \"张三\",\n      \"科目\": \"数学\",\n      \"成绩\": \"95\",\n      \"等级\": \"A\"\n    ": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 23:11:28]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 23:11:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-18 23:11:28]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 23:11:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input",
+    "\n  \"action\": \"state:UpdateAbstractState\",\n  \"params\": {\n    \"text\": \"这是一份银行流水明细文件，记录了账户的收入与支出变动。可能用于财务对账、贷款申请或税务申报。\",\n    \"uuid\": \"1234567890\"\n  ": "input",
+    "\n  \"action\": \"state:UpdateAbstractState\",\n  \"params\": {\n    \"text\": \"该文件为跨境电子商务数据合规指引，明确数据处理的规范要求、适用范围与监管原则。可能用于企业制定内部数据管理制度、法务合规审查或监管机构执法参考。\",\n    \"uuid\": \"fdeff01bc23d0\"\n  ": "input",
+    "\n  \"action\": \"state:UpdateAbstractState\",\n  \"params\": {\n    \"text\": \"本项目方案从行业痛点出发，提出产品功能设计与技术架构，包含实施计划与财务预测。可能用于向投资人路演、申请项目立项或作为内部可行性研究参考。\",\n    \"uuid\": \"cc0ff0eee52cab\"\n  ": "input"
+  }
+}
+[2026-05-18 23:11:28]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 23:11:28]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "\n  \"action\": \"state:UpdateTableHeadState\",\n  \"thought\": \"解析Excel文件内容，定位每个Sheet的表头行位置，提取非空列的字段名。\",\n  \"uuid\": \"accab830fffe41\",\n  \"headers\": [\n      {\n        \"sheet_name\": \"明细汇总表\",\n        \"table_head\": [\"姓名\",\"性别\",\"出生\",\"日期\",\"摘要\",\"用途\"]\n      ": "input",
+    "\n  \"action\": \"state:UpdateTableHeadState\",\n  \"thought\": \"遍历所有Sheet，第一个Sheet为新津银行流水，表头在第二行，提取到银行名称、日期、交易日期、摘要、用途五个字段；第二个Sheet为中国银行张丹丹，表头在第二行，提取到银行名称、日期、交易日期、摘要四个字段。\",\n  \"uuid\": \"accab830fffe41\",\n  \"headers\": [\n    {\n      \"sheet_name\": \"新津银行流水\",\n      \"table_head\": [\"银行名称\",\"日期\",\"交易日期\",\"摘要\",\"用途\"]\n    ": "input",
+    "\n      \"sheet_name\": \"中国银行张丹丹\",\n      \"table_head\": [\"银行名称\",\"日期\",\"交易日期\",\"摘要\"]\n    ": "input",
+    "state.preview_file_content": "input",
+    "\n  \"action\": \"state:UpdateTableHeadState\",\n  \"thought\": \"遍历所有Sheet，第一个Sheet新津银行流水内容为空，标记为无；第二个Sheet科研申报名录提取到申请单位、日期、申请人、项目名四个字段。\",\n  \"uuid\": \"fe41aab045fefe2\",\n  \"headers\": [\n    {\n      \"sheet_name\": \"新津银行流水\",\n      \"table_head\": [\"无\"]\n    ": "input",
+    "\n      \"sheet_name\": \"科研申报名录\",\n      \"table_head\": [\"申请单位\",\"日期\",\"申请人\",\"项目名\"]\n    ": "input",
+    "state.file_uuid": "input"
+  }
+}
+[2026-05-18 23:11:28]: 发现提示词文件: ./workspace/prompts\task\用户元认知预测.md
+[2026-05-18 23:11:31]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户元认知预测",
+  "文件名": "用户元认知预测.md",
+  "文件路径": "task\\用户元认知预测.md",
+  "输入参数": {
+    "\n  \"action\": \"predict:continue\"\n": "input",
+    "\n  \"action\": \"predict:speak|predict:task|predict:clarify|predict:ask|predict:continue\"\n": "input",
+    "\n  \"action\": \"predict:speak\"\n": "input",
+    "\n  \"action\": \"predict:ask\"\n": "input",
+    "\n  \"action\": \"predict:task\"\n": "input",
+    "\n  \"action\": \"predict:clarify\"\n": "input"
+  }
+}
+[2026-05-18 23:11:31]: 发现提示词文件: ./workspace/prompts\task\用户补充信息.md
+[2026-05-18 23:11:32]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户补充信息",
+  "文件名": "用户补充信息.md",
+  "文件路径": "task\\用户补充信息.md",
+  "输入参数": {
+    "\n    \"action\": \"meta:clarify\",\n    \"task_id\": \"12345678\",\n    \"information\": \"提炼后的关键信息摘要（去除冗余，保留结构化要点）\"\n": "input",
+    "\n    \"action\": \"predict:continue\"\n": "input",
+    "\n    \"action\": \"meta:clarify\",\n    \"task_id\": \"20260518010101\",\n    \"information\": \"出发日期：下周二\"\n": "input"
+  }
+}
+[2026-05-18 23:11:32]: 发现提示词文件: ./workspace/prompts\task\观察用户意图.md
+[2026-05-18 23:11:32]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "观察用户意图",
+  "文件名": "观察用户意图.md",
+  "文件路径": "task\\观察用户意图.md",
+  "输入参数": {
+    "\n  \"action\": \"predict:task|predict:clarify|predict:ask|predict:continue\"\n": "input"
+  }
+}
+[2026-05-18 23:11:32]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 23:11:32]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "\n  \"action\": \"下一步行动action代码\",\n  \"thought\": \"做出该决策的简短原因\",  //这是action的默认参数\n  \"response\": \"如果可以，根据用户输入，直接给出用户的回答，调用meta:speak，无需解释。\",   //这是action的默认回复参数\n  \"可选参数1\" : \"根据工具需求，直接给出恰当的参数值，无需解释\",    //这是action的可选参数\n  ...   //action的其他参数，仅当 action 需要参数时，否则省略\n": "input",
+    "\n  \"action\": \"meta:ask\",\n  \"thought\": \"需要用户补充账号密码信息\",\n  \"response\": \"我不知道登录的账号密码\"\n": "input",
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 23:11:32]: 系统提示词索引构建完成，共 22 个提示词
+[2026-05-18 23:11:34]: 开始清除所有聊天记录
+[2026-05-18 23:11:34]: 成功删除聊天记录文件: D:\pySpace\opensolver\workspace\chat\chat_20260518.md
+[2026-05-18 23:11:34]: 开始清除所有的工作任务
+[2026-05-18 23:11:34]: 开始清除所有评估建议
+[2026-05-18 23:14:54]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 23:14:54]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\policy\动态任务处理策略.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "动态任务处理策略",
+  "文件名": "动态任务处理策略.md",
+  "文件路径": "policy\\动态任务处理策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\policy\智能体核心行为策略.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体核心行为策略",
+  "文件名": "智能体核心行为策略.md",
+  "文件路径": "policy\\智能体核心行为策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\policy\智能体聊天风格策略.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体聊天风格策略",
+  "文件名": "智能体聊天风格策略.md",
+  "文件路径": "policy\\智能体聊天风格策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\system\元认知分类.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "元认知分类",
+  "文件名": "元认知分类.md",
+  "文件路径": "system\\元认知分类.md",
+  "输入参数": {
+    "\n  \"action\": \"predict:task|predict:clarify|predict:ask|predict:continue\"\n": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_solar": "input",
+    "read_user_profile": "input",
+    "read_prompt('智能体聊天风格策略')": "input",
+    "read_agent_profile": "input",
+    "read_prompt('动态任务处理策略')": "input",
+    "current_lunar": "input",
+    "read_prompt('智能体核心行为策略')": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {
+    "\n  \"action\": \"meta:task\",\n  \"thought\": \"用户提出一个新的对比分析任务，与前一个查询任务在数据层面相关，但属于明确的全新指令，需要独立执行。\",\n  \"response\": \"收到，我将为您提取并对比本月与上个月的退货率，稍后呈现结果。\",\n  \"task\": {\n    \"name\": \"月度退货率对比\",\n    \"task\": \"对比本月和上个月的整体退货率，可按时间维度呈现趋势。\",\n    \"goal\": \"了解退货率的变化情况，辅助经营决策。\",\n    \"type\": \"查询统计\"\n  ": "input",
+    "\n  \"action\": \"meta:plan\",\n  \"thought\": \"用户对之前已接受的分析框架做进一步细化限制，属于对已有任务的澄清修正，应更新规划并确认。\",\n  \"response\": \"明白，我调整分析计划:投诉内容作为重点，行为数据限定近一个月，竞品仅关注价格变动和新增功能。按此方向推进。\",\n  \"plan\": {\n    \"name\": \"用户流失原因分析\",\n    \"task\": \"分析最近一个月用户流失的主要原因，包括用户行为、投诉记录和竞品动态。\",\n    \"task_id\": \"123456789\",\n    \"confidence\": 0.9,\n    \"steps\": [\n      \"提取近一个月用户流失前的行为特征\",\n      \"深度分析投诉文本，归类流失主因\",\n      \"监测竞品的价格调整公告与功能更新日志\",\n      \"交叉对比，给出流失主因及竞品影响权重\"\n    ]\n  ": "input",
+    "\n  \"action\": \"meta:speak | meta:task | meta:plan | meta:ask\",\n  \"response\": \"根据action类型生成对应响应\",\n  \"plan\": {  // 仅当 action 为 meta:plan 时需要，否则省略\n    \"task\": \"重新根据背景信息总结任务描述。\",\n    \"task_id\": \"123456789\", // 任务 ID，用于关联任务和历史记录\n    \"steps\": [\"重新规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "  // 仅当 action 为 meta:task 时需要，否则省略\n    \"name\": \"任务名称\",\n    \"task\": \"任务的具体需求描述\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"type\": \"查询统计 | 业务探索 | 搜索问答\",\n    \"steps\": [\"规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "\n  \"action\": \"meta:listen\",\n  \"thought\": \"用户在进行连续的情绪倾诉，内容未包含新的任务需求或疑问，此刻不宜打断或转换话题，应保持倾听状态。\",\n  \"response\": \"\"\n": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\分析任务信息需求.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析任务信息需求",
+  "文件名": "分析任务信息需求.md",
+  "文件路径": "task\\分析任务信息需求.md",
+  "输入参数": {
+    "\n    \"action\": \"meta:ask\",\n    \"question\": \"具体、可回答的提问内容（只问最必要的1-3个问题）\"\n": "input",
+    "\"action\": \"predict:continue\"": "input",
+    "\"action\": \"meta:ask\", \"question\": \"请问你想查询哪个城市的天气？\"": "input",
+    "\n    \"action\": \"predict:continue\"\n": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\分析创建任务.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析创建任务",
+  "文件名": "分析创建任务.md",
+  "文件路径": "task\\分析创建任务.md",
+  "输入参数": {
+    "\n    \"action\": \"predict:continue\"\n": "input",
+    "\n  \"action\": \"meta:task\",\n  \"name\": \"第二季度产品线利润趋势分析\",\n  \"type\": \"统计分析\",\n  \"task\": \"分析今年第二季度各产品线的利润变化趋势\",\n  \"goal\": \"生成各产品线利润的同比/环比变化报告，找出关键波动因素\",\n  \"steps\": [\n    \"提取第二季度各产品线的收入与成本数据\",\n    \"计算各产品线的利润及同比增长率\",\n    \"绘制趋势图表并识别异常波动\",\n    \"汇总分析结论\"\n  ]\n": "input",
+    "\n  \"action\": \"predict:continue\"\n": "input",
+    "\n    \"action\": \"meta:task\",\n    \"name\": \"任务名称\",\n    \"type\": \"查询统计 | 业务探索 | 搜索问答\",\n    \"task\": \"任务的具体需求描述\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"规划的步骤1\", \"步骤2\", ...]\n": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {
+    "  // 仅当 action 为 meta:read 时需要，否则省略\n    \"uuid\": \"文件唯一标识符\"\n  ": "input",
+    "\n  \"action\": \"meta:plan\",\n  \"plan\": {\n    \"task_id\": \"123456789\",\n    \"name\": \"用户流失原因分析\",\n    \"task\": \"分析最近一个月用户流失的主要原因，包括用户行为、投诉记录和竞品动态。\",\n    \"steps\": [\n      \"提取近一个月用户流失前的行为特征\",\n      \"深度分析投诉文本，归类流失主因\",\n      \"监测竞品的价格调整公告与功能更新日志\",\n      \"交叉对比，给出流失主因及竞品影响权重\"\n    ]\n  ": "input",
+    "  // 仅当 action 为 meta:ask 时需要，否则省略\n    \"question\": \"需要澄清用户需求的问题\"\n  ": "input",
+    "\n  \"action\": \"meta:speak\",\n  \"speak\": {\n    \"think\": \"设计类沟通任务，直接回答用户问题\"\n  ": "input",
+    "  // 仅当 action 为 meta:plan 时需要，否则省略\n    \"task_id\": \"123456789\", // 任务 ID，用于关联任务和历史记录\n    \"task\": \"重新根据背景信息总结任务描述。\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"重新规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "  // 仅当 action 为 meta:task 时需要，否则省略\n    \"name\": \"任务名称\",\n    \"type\": \"查询统计 | 业务探索 | 搜索问答\",\n    \"task\": \"任务的具体需求描述\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "\n  \"action\": \"meta:speak | meta:task | meta:plan | meta:ask | meta:read\",\n  \"speak\": {  // 仅当 action 为 meta:speak 时需要，否则省略\n    \"think\": \"50字内的决策总结\"\n  ": "input",
+    "\n  \"action\": \"meta:task\",\n  \"task\": {\n    \"name\": \"月度退货率对比\",\n    \"type\": \"查询统计\",\n    \"task\": \"对比本月和上个月的整体退货率，可按时间维度呈现趋势。\",\n    \"goal\": \"了解退货率的变化情况，辅助经营决策。\",\n    \"steps\": [\n      \"对比本月和上个月的退货率\",\n      \"分析退货率变化趋势\"\n    ]\n  ": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "\n  \"action\": \"meta:speak | meta:task | meta:plan | meta:listen | meta:ask\",\n  \"thought\": \"决策过程说明(50字以内)\",\n  \"response\": \"根据 action 生成的文本回复（具体规则见下方）\",\n  \"plan\": {  // 仅当 action 为 meta:plan 时需要，否则省略\n    \"task\": \"重新根据背景信息总结任务描述。\",\n    \"task_id\": \"123456789\", // 任务 ID，用于关联任务和历史记录\n    \"confidence\": 0.0-1.0,  // 当前方案与历史方案的匹配置信度，决定是否搜索知识库\n    \"steps\": [\"重新规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "get_chat_history_text": "input",
+    "\n  \"action\": \"meta:task\",\n  \"thought\": \"用户提出一个新的对比分析任务，与前一个查询任务在数据层面相关，但属于明确的全新指令，需要独立执行。\",\n  \"response\": \"收到，我将为您提取并对比本月与上个月的退货率，稍后呈现结果。\",\n  \"task\": {\n    \"name\": \"月度退货率对比\",\n    \"task\": \"对比本月和上个月的整体退货率，可按时间维度呈现趋势。\",\n    \"goal\": \"了解退货率的变化情况，辅助经营决策。\",\n    \"type\": \"查询统计\"\n  ": "input",
+    "\n  \"action\": \"meta:plan\",\n  \"thought\": \"用户对之前已接受的分析框架做进一步细化限制，属于对已有任务的澄清修正，应更新规划并确认。\",\n  \"response\": \"明白，我调整分析计划:投诉内容作为重点，行为数据限定近一个月，竞品仅关注价格变动和新增功能。按此方向推进。\",\n  \"plan\": {\n    \"name\": \"用户流失原因分析\",\n    \"task\": \"分析最近一个月用户流失的主要原因，包括用户行为、投诉记录和竞品动态。\",\n    \"task_id\": \"123456789\",\n    \"confidence\": 0.9,\n    \"steps\": [\n      \"提取近一个月用户流失前的行为特征\",\n      \"深度分析投诉文本，归类流失主因\",\n      \"监测竞品的价格调整公告与功能更新日志\",\n      \"交叉对比，给出流失主因及竞品影响权重\"\n    ]\n  ": "input",
+    "  // 仅当 action 为 meta:task 时需要，否则省略\n    \"name\": \"任务名称\",\n    \"task\": \"任务的具体需求描述\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"type\": \"查询统计 | 业务探索 | 搜索问答\",\n    \"steps\": [\"规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "\n  \"action\": \"meta:listen\",\n  \"thought\": \"用户在进行连续的情绪倾诉，内容未包含新的任务需求或疑问，此刻不宜打断或转换话题，应保持倾听状态。\",\n  \"response\": \"\"\n": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {
+    "  // 仅当 action 为 meta:read 时需要，否则省略\n    \"uuid\": \"文件唯一标识符\"\n  ": "input",
+    "\n  \"action\": \"meta:plan\",\n  \"plan\": {\n    \"task_id\": \"123456789\",\n    \"name\": \"用户流失原因分析\",\n    \"task\": \"分析最近一个月用户流失的主要原因，包括用户行为、投诉记录和竞品动态。\",\n    \"steps\": [\n      \"提取近一个月用户流失前的行为特征\",\n      \"深度分析投诉文本，归类流失主因\",\n      \"监测竞品的价格调整公告与功能更新日志\",\n      \"交叉对比，给出流失主因及竞品影响权重\"\n    ]\n  ": "input",
+    "  // 仅当 action 为 meta:ask 时需要，否则省略\n    \"question\": \"需要澄清用户需求的问题\"\n  ": "input",
+    "\n  \"action\": \"meta:speak\",\n  \"speak\": {\n    \"think\": \"设计类沟通任务，直接回答用户问题\"\n  ": "input",
+    "  // 仅当 action 为 meta:plan 时需要，否则省略\n    \"task_id\": \"123456789\", // 任务 ID，用于关联任务和历史记录\n    \"task\": \"重新根据背景信息总结任务描述。\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"重新规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "  // 仅当 action 为 meta:task 时需要，否则省略\n    \"name\": \"任务名称\",\n    \"type\": \"查询统计 | 业务探索 | 搜索问答\",\n    \"task\": \"任务的具体需求描述\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "\n  \"action\": \"meta:speak | meta:task | meta:plan | meta:ask | meta:read\",\n  \"speak\": {  // 仅当 action 为 meta:speak 时需要，否则省略\n    \"think\": \"50字内的决策总结\"\n  ": "input",
+    "\n  \"action\": \"meta:task\",\n  \"task\": {\n    \"name\": \"月度退货率对比\",\n    \"type\": \"查询统计\",\n    \"task\": \"对比本月和上个月的整体退货率，可按时间维度呈现趋势。\",\n    \"goal\": \"了解退货率的变化情况，辅助经营决策。\",\n    \"steps\": [\n      \"对比本月和上个月的退货率\",\n      \"分析退货率变化趋势\"\n    ]\n  ": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v3.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v3",
+  "文件名": "分析用户对话意图v3.md",
+  "文件路径": "task\\分析用户对话意图v3.md",
+  "输入参数": {
+    "  // 仅当 action 为 meta:read 时需要，否则省略\n    \"uuid\": \"文件唯一标识符\"\n  ": "input",
+    "\n  \"action\": \"meta:plan\",\n  \"plan\": {\n    \"task_id\": \"123456789\",\n    \"name\": \"用户流失原因分析\",\n    \"task\": \"分析最近一个月用户流失的主要原因，包括用户行为、投诉记录和竞品动态。\",\n    \"steps\": [\n      \"提取近一个月用户流失前的行为特征\",\n      \"深度分析投诉文本，归类流失主因\",\n      \"监测竞品的价格调整公告与功能更新日志\",\n      \"交叉对比，给出流失主因及竞品影响权重\"\n    ]\n  ": "input",
+    "  // 仅当 action 为 meta:ask 时需要，否则省略\n    \"question\": \"需要澄清用户需求的问题\"\n  ": "input",
+    "\n  \"action\": \"meta:speak\",\n  \"speak\": {\n    \"think\": \"设计类沟通任务，直接回答用户问题\"\n  ": "input",
+    "  // 仅当 action 为 meta:plan 时需要，否则省略\n    \"task_id\": \"123456789\", // 任务 ID，用于关联任务和历史记录\n    \"task\": \"重新根据背景信息总结任务描述。\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"重新规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "  // 仅当 action 为 meta:task 时需要，否则省略\n    \"name\": \"任务名称\",\n    \"type\": \"查询统计 | 业务探索 | 搜索问答\",\n    \"task\": \"任务的具体需求描述\",\n    \"goal\": \"任务最终要达成的目标\",\n    \"steps\": [\"规划的步骤1\", \"步骤2\", ...]\n  ": "input",
+    "\n  \"action\": \"meta:speak | meta:task | meta:plan | meta:ask | meta:read\",\n  \"speak\": {  // 仅当 action 为 meta:speak 时需要，否则省略\n    \"think\": \"50字内的决策总结\"\n  ": "input",
+    "\n  \"action\": \"meta:task\",\n  \"task\": {\n    \"name\": \"月度退货率对比\",\n    \"type\": \"查询统计\",\n    \"task\": \"对比本月和上个月的整体退货率，可按时间维度呈现趋势。\",\n    \"goal\": \"了解退货率的变化情况，辅助经营决策。\",\n    \"steps\": [\n      \"对比本月和上个月的退货率\",\n      \"分析退货率变化趋势\"\n    ]\n  ": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "\n      \"订单号\": \"SO002\",\n      \"日期\": \"2024-03-02\",\n      \"金额\": \"1280.00\",\n      \"状态\": \"待支付\"\n    ": "input",
+    "\n  \"action\": \"data:extract_datatable\",\n  \"thought\": \"第二行出现行粘连：学号、姓名、科目、成绩、等级字段内均包含两个空格分隔的值，且顺序一一对应，识别为两笔独立记录（李四和王五）。因此将该行拆分为两行。成绩字段是纯数字，无需清洗；等级字段为文本，直接使用。无缺失字段。\",\n  \"data\": [\n    {\n      \"学号\": \"2024001\",\n      \"姓名\": \"张三\",\n      \"科目\": \"数学\",\n      \"成绩\": \"95\",\n      \"等级\": \"A\"\n    ": "input",
+    "\n      \"货品编号\": \"A-103\",\n      \"名称\": \"铜垫片\",\n      \"库存数量\": \"500\",\n      \"单价(元)\": \"2.10\"\n    ": "input",
+    "\n      \"表头字段1\": \"值3\",\n      \"表头字段2\": \"值4\"\n    ": "input",
+    "\n      \"货品编号\": \"A-102\",\n      \"名称\": \"不锈钢螺栓(M8)\",\n      \"库存数量\": \"2000\",\n      \"单价(元)\": \"0.85\"\n    ": "input",
+    "\n  \"action\": \"data:extract_datatable\",\n  \"thought\": \"原始数据为多行文本，部分记录存在行内粘连（第二段包含两个完整货品记录：A-102 和 A-103）。根据重复出现的“货品编号:”模式进行拆分。库存数量“1,500”需去除逗号得到“1500”；其余数字无异常。单价字段保留原始数值。字段标识中的“单价(元)”与表头完全一致。缺失值留空，无缺失。\",\n  \"data\": [\n    {\n      \"货品编号\": \"A-101\",\n      \"名称\": \"无缝钢管(φ20)\",\n      \"库存数量\": \"1500\",\n      \"单价(元)\": \"36.50\"\n    ": "input",
+    "\n  \"action\": \"data:extract_datatable\",\n  \"thought\": \"已忽略无效的表头。原始表格第二行存在明显的行粘连：同一行内出现了两组“交易日期 账号 储种 摘要 收入/支出金额 余额”的模式（日期和账号重复、摘要和金额对应），检测到应为三笔独立交易被错误合并。将该行拆分为两行，分别对应2024-05-16的卡存和2024-05-28的工本费。收入/支出金额中的正负符号和数字格式均正确。余额字段在粘连行中为“100.00 1083.52”，根据上下文，第一笔（卡存）后余额仍为100.00，第二笔（工本费支出）后余额为1083.52，故拆分后各自填入。对方户名缺失，留空。\",\n  \"data\": [\n    {\n      \"交易日期\": \"2024-05-15\",\n      \"账号\": \"4402074201108982926\",\n      \"储种\": \"活期\",\n      \"摘要\": \"开户\",\n      \"收入/支出金额\": \"+100.00\",\n      \"余额\": \"100.00\",\n      \"对方户名\": null\n    ": "input",
+    "\"姓名\": \"李四\", \"年龄\": \"30\", \"金额\": \"2000.00\"": "input",
+    "state.table_text": "input",
+    "\n      \"学号\": \"2024002\",\n      \"姓名\": \"李四\",\n      \"科目\": \"语文\",\n      \"成绩\": \"88\",\n      \"等级\": \"B+\"\n    ": "input",
+    "state.table_headers": "input",
+    "\n      \"交易日期\": \"2024-05-16\",\n      \"账号\": \"4402074201108982926\",\n      \"储种\": \"活期\",\n      \"摘要\": \"卡存\",\n      \"收入/支出金额\": \"+1000.00\",\n      \"余额\": \"100.00\",\n      \"对方户名\": null\n    ": "input",
+    "\n  \"action\": \"data:extract_datatable\",\n  \"thought\": \"检测到一行中存在两个完整的记录模式（姓名、年龄、金额重复出现），因此拆分为两行。金额去除千位逗号并转为数字格式。\",\n  \"data\": [\n    {\"姓名\": \"张三\", \"年龄\": \"25\", \"金额\": \"1000.50\"": "input",
+    "\n      \"交易日期\": \"2024-05-28\",\n      \"账号\": \"4402074201108982926\",\n      \"储种\": \"活期\",\n      \"摘要\": \"工本费\",\n      \"收入/支出金额\": \"-16.48\",\n      \"余额\": \"1083.52\",\n      \"对方户名\": null\n    ": "input",
+    "\n  \"action\": \"data:extract_datatable\",   //处理data数据的动作，必须为data:extract_datatable\n  \"thought\": \"详细解释你如何识别并拆分异常合并的行、如何进行字段对齐和数字清洗等处理过程\",\n  \"data\": [\n    {\n      \"表头字段1\": \"值1\",\n      \"表头字段2\": \"值2\"\n    ": "input",
+    "\n  \"action\": \"data:extract_datatable\",\n  \"thought\": \"第二行文本明显粘连，包含两组完整的“订单号:...日期:...金额:...状态:...”模式，因此拆分为两行（SO002 和 SO003）。金额字段含有人民币符号“¥”和千位分隔逗号，需移除非数字字符，保留小数点。清洗后“¥ 2,999.50”变为“2999.50”，“¥ 1,280.00”变为“1280.00”，“¥ 59.90”变为“59.90”。字段标识通过冒号映射到表头字段（订单号、日期、金额、状态）。\",\n  \"data\": [\n    {\n      \"订单号\": \"SO001\",\n      \"日期\": \"2024-03-01\",\n      \"金额\": \"2999.50\",\n      \"状态\": \"已发货\"\n    ": "input",
+    "\n      \"学号\": \"2024003\",\n      \"姓名\": \"王五\",\n      \"科目\": \"语文\",\n      \"成绩\": \"92\",\n      \"等级\": \"A\"\n    ": "input",
+    "state.table_content": "input",
+    "\n      \"订单号\": \"SO003\",\n      \"日期\": \"2024-03-02\",\n      \"金额\": \"59.90\",\n      \"状态\": \"已取消\"\n    ": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "\n  \"action\": \"state:UpdateAbstractState\",\n  \"params\": {\n    \"text\": \"该文件为跨境电子商务数据合规指引，明确数据处理的规范要求、适用范围与监管原则。可能用于企业制定内部数据管理制度、法务合规审查或监管机构执法参考。\",\n    \"uuid\": \"fdeff01bc23d0\"\n  ": "input",
+    "current_file.内容预览": "input",
+    "\n  \"action\": \"state:UpdateAbstractState\",\n  \"params\": {\n    \"text\": \"这是一份银行流水明细文件，记录了账户的收入与支出变动。可能用于财务对账、贷款申请或税务申报。\",\n    \"uuid\": \"1234567890\"\n  ": "input",
+    "\n  \"action\": \"state:UpdateAbstractState\",\n  \"params\": {\n    \"text\": \"本项目方案从行业痛点出发，提出产品功能设计与技术架构，包含实施计划与财务预测。可能用于向投资人路演、申请项目立项或作为内部可行性研究参考。\",\n    \"uuid\": \"cc0ff0eee52cab\"\n  ": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "\n      \"sheet_name\": \"科研申报名录\",\n      \"table_head\": [\"申请单位\",\"日期\",\"申请人\",\"项目名\"]\n    ": "input",
+    "state.file_uuid": "input",
+    "\n  \"action\": \"state:UpdateTableHeadState\",\n  \"thought\": \"解析Excel文件内容，定位每个Sheet的表头行位置，提取非空列的字段名。\",\n  \"uuid\": \"accab830fffe41\",\n  \"headers\": [\n      {\n        \"sheet_name\": \"明细汇总表\",\n        \"table_head\": [\"姓名\",\"性别\",\"出生\",\"日期\",\"摘要\",\"用途\"]\n      ": "input",
+    "\n      \"sheet_name\": \"中国银行张丹丹\",\n      \"table_head\": [\"银行名称\",\"日期\",\"交易日期\",\"摘要\"]\n    ": "input",
+    "\n  \"action\": \"state:UpdateTableHeadState\",\n  \"thought\": \"遍历所有Sheet，第一个Sheet新津银行流水内容为空，标记为无；第二个Sheet科研申报名录提取到申请单位、日期、申请人、项目名四个字段。\",\n  \"uuid\": \"fe41aab045fefe2\",\n  \"headers\": [\n    {\n      \"sheet_name\": \"新津银行流水\",\n      \"table_head\": [\"无\"]\n    ": "input",
+    "state.preview_file_content": "input",
+    "\n  \"action\": \"state:UpdateTableHeadState\",\n  \"thought\": \"遍历所有Sheet，第一个Sheet为新津银行流水，表头在第二行，提取到银行名称、日期、交易日期、摘要、用途五个字段；第二个Sheet为中国银行张丹丹，表头在第二行，提取到银行名称、日期、交易日期、摘要四个字段。\",\n  \"uuid\": \"accab830fffe41\",\n  \"headers\": [\n    {\n      \"sheet_name\": \"新津银行流水\",\n      \"table_head\": [\"银行名称\",\"日期\",\"交易日期\",\"摘要\",\"用途\"]\n    ": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\用户元认知预测.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户元认知预测",
+  "文件名": "用户元认知预测.md",
+  "文件路径": "task\\用户元认知预测.md",
+  "输入参数": {
+    "\n  \"action\": \"predict:ask\"\n": "input",
+    "\n  \"action\": \"predict:task\"\n": "input",
+    "\n  \"action\": \"predict:speak\"\n": "input",
+    "\n  \"action\": \"predict:speak|predict:task|predict:clarify|predict:ask|predict:continue\"\n": "input",
+    "\n  \"action\": \"predict:continue\"\n": "input",
+    "\n  \"action\": \"predict:clarify\"\n": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\用户补充信息.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户补充信息",
+  "文件名": "用户补充信息.md",
+  "文件路径": "task\\用户补充信息.md",
+  "输入参数": {
+    "\n    \"action\": \"meta:clarify\",\n    \"task_id\": \"20260518010101\",\n    \"information\": \"出发日期：下周二\"\n": "input",
+    "\n    \"action\": \"meta:clarify\",\n    \"task_id\": \"12345678\",\n    \"information\": \"提炼后的关键信息摘要（去除冗余，保留结构化要点）\"\n": "input",
+    "\n    \"action\": \"predict:continue\"\n": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\观察用户意图.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "观察用户意图",
+  "文件名": "观察用户意图.md",
+  "文件路径": "task\\观察用户意图.md",
+  "输入参数": {
+    "\n  \"action\": \"predict:task|predict:clarify|predict:ask|predict:continue\"\n": "input"
+  }
+}
+[2026-05-18 23:14:57]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 23:14:57]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "\n  \"action\": \"下一步行动action代码\",\n  \"thought\": \"做出该决策的简短原因\",  //这是action的默认参数\n  \"response\": \"如果可以，根据用户输入，直接给出用户的回答，调用meta:speak，无需解释。\",   //这是action的默认回复参数\n  \"可选参数1\" : \"根据工具需求，直接给出恰当的参数值，无需解释\",    //这是action的可选参数\n  ...   //action的其他参数，仅当 action 需要参数时，否则省略\n": "input",
+    "state.task.task_execute_history": "input",
+    "\n  \"action\": \"meta:ask\",\n  \"thought\": \"需要用户补充账号密码信息\",\n  \"response\": \"我不知道登录的账号密码\"\n": "input",
+    "list_tools": "input"
+  }
+}
+[2026-05-18 23:14:57]: 系统提示词索引构建完成，共 22 个提示词
+[2026-05-18 23:14:59]: 开始清除所有聊天记录
+[2026-05-18 23:14:59]: 成功删除聊天记录文件: D:\pySpace\opensolver\workspace\chat\chat_20260518.md
+[2026-05-18 23:14:59]: 开始清除所有的工作任务
+[2026-05-18 23:14:59]: 开始清除所有评估建议
+[2026-05-18 23:32:09]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\policy\动态任务处理策略.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "动态任务处理策略",
+  "文件名": "动态任务处理策略.md",
+  "文件路径": "policy\\动态任务处理策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\policy\智能体核心行为策略.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体核心行为策略",
+  "文件名": "智能体核心行为策略.md",
+  "文件路径": "policy\\智能体核心行为策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\policy\智能体聊天风格策略.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体聊天风格策略",
+  "文件名": "智能体聊天风格策略.md",
+  "文件路径": "policy\\智能体聊天风格策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\system\元认知分类.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "元认知分类",
+  "文件名": "元认知分类.md",
+  "文件路径": "system\\元认知分类.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "read_prompt('智能体核心行为策略')": "input",
+    "read_prompt('智能体聊天风格策略')": "input",
+    "read_prompt('动态任务处理策略')": "input"
+  }
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\分析任务信息需求.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析任务信息需求",
+  "文件名": "分析任务信息需求.md",
+  "文件路径": "task\\分析任务信息需求.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\分析创建任务.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析创建任务",
+  "文件名": "分析创建任务.md",
+  "文件路径": "task\\分析创建任务.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v3.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v3",
+  "文件名": "分析用户对话意图v3.md",
+  "文件路径": "task\\分析用户对话意图v3.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\用户元认知预测.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户元认知预测",
+  "文件名": "用户元认知预测.md",
+  "文件路径": "task\\用户元认知预测.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\用户补充信息.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户补充信息",
+  "文件名": "用户补充信息.md",
+  "文件路径": "task\\用户补充信息.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\观察用户意图.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "观察用户意图",
+  "文件名": "观察用户意图.md",
+  "文件路径": "task\\观察用户意图.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 23:32:09]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {}
+}
+[2026-05-18 23:32:09]: 系统提示词索引构建完成，共 22 个提示词
+[2026-05-18 23:32:11]: 开始清除所有聊天记录
+[2026-05-18 23:32:11]: 成功删除聊天记录文件: D:\pySpace\opensolver\workspace\chat\chat_20260518.md
+[2026-05-18 23:32:11]: 开始清除所有的工作任务
+[2026-05-18 23:32:11]: 开始清除所有评估建议
+[2026-05-18 23:38:45]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 23:38:45]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\policy\动态任务处理策略.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "动态任务处理策略",
+  "文件名": "动态任务处理策略.md",
+  "文件路径": "policy\\动态任务处理策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\policy\智能体核心行为策略.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体核心行为策略",
+  "文件名": "智能体核心行为策略.md",
+  "文件路径": "policy\\智能体核心行为策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\policy\智能体聊天风格策略.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体聊天风格策略",
+  "文件名": "智能体聊天风格策略.md",
+  "文件路径": "policy\\智能体聊天风格策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\system\元认知分类.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "元认知分类",
+  "文件名": "元认知分类.md",
+  "文件路径": "system\\元认知分类.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "read_prompt('动态任务处理策略')": "input",
+    "read_prompt('智能体聊天风格策略')": "input",
+    "read_prompt('智能体核心行为策略')": "input"
+  }
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\分析任务信息需求.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析任务信息需求",
+  "文件名": "分析任务信息需求.md",
+  "文件路径": "task\\分析任务信息需求.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\分析创建任务.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析创建任务",
+  "文件名": "分析创建任务.md",
+  "文件路径": "task\\分析创建任务.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v3.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v3",
+  "文件名": "分析用户对话意图v3.md",
+  "文件路径": "task\\分析用户对话意图v3.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\用户元认知预测.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户元认知预测",
+  "文件名": "用户元认知预测.md",
+  "文件路径": "task\\用户元认知预测.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\用户补充信息.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户补充信息",
+  "文件名": "用户补充信息.md",
+  "文件路径": "task\\用户补充信息.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\观察用户意图.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "观察用户意图",
+  "文件名": "观察用户意图.md",
+  "文件路径": "task\\观察用户意图.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:53]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 23:38:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {}
+}
+[2026-05-18 23:38:59]: 系统提示词索引构建完成，共 22 个提示词
+[2026-05-18 23:39:00]: 开始清除所有聊天记录
+[2026-05-18 23:39:00]: 成功删除聊天记录文件: D:\pySpace\opensolver\workspace\chat\chat_20260518.md
+[2026-05-18 23:39:00]: 开始清除所有的工作任务
+[2026-05-18 23:39:00]: 开始清除所有评估建议
+[2026-05-18 23:49:16]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\policy\动态任务处理策略.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "动态任务处理策略",
+  "文件名": "动态任务处理策略.md",
+  "文件路径": "policy\\动态任务处理策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\policy\智能体核心行为策略.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体核心行为策略",
+  "文件名": "智能体核心行为策略.md",
+  "文件路径": "policy\\智能体核心行为策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\policy\智能体聊天风格策略.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体聊天风格策略",
+  "文件名": "智能体聊天风格策略.md",
+  "文件路径": "policy\\智能体聊天风格策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\system\元认知分类.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "元认知分类",
+  "文件名": "元认知分类.md",
+  "文件路径": "system\\元认知分类.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "read_prompt('智能体核心行为策略')": "input",
+    "read_prompt('动态任务处理策略')": "input",
+    "read_prompt('智能体聊天风格策略')": "input"
+  }
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\分析任务信息需求.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析任务信息需求",
+  "文件名": "分析任务信息需求.md",
+  "文件路径": "task\\分析任务信息需求.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\分析创建任务.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析创建任务",
+  "文件名": "分析创建任务.md",
+  "文件路径": "task\\分析创建任务.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v3.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v3",
+  "文件名": "分析用户对话意图v3.md",
+  "文件路径": "task\\分析用户对话意图v3.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\用户元认知预测.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户元认知预测",
+  "文件名": "用户元认知预测.md",
+  "文件路径": "task\\用户元认知预测.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\用户补充信息.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户补充信息",
+  "文件名": "用户补充信息.md",
+  "文件路径": "task\\用户补充信息.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\观察用户意图.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "观察用户意图",
+  "文件名": "观察用户意图.md",
+  "文件路径": "task\\观察用户意图.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 23:49:16]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {}
+}
+[2026-05-18 23:49:16]: 系统提示词索引构建完成，共 22 个提示词
+[2026-05-18 23:49:17]: 开始清除所有聊天记录
+[2026-05-18 23:49:17]: 成功删除聊天记录文件: D:\pySpace\opensolver\workspace\chat\chat_20260518.md
+[2026-05-18 23:49:17]: 开始清除所有的工作任务
+[2026-05-18 23:49:17]: 开始清除所有评估建议
+[2026-05-18 23:56:21]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\policy\动态任务处理策略.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "动态任务处理策略",
+  "文件名": "动态任务处理策略.md",
+  "文件路径": "policy\\动态任务处理策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\policy\智能体核心行为策略.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体核心行为策略",
+  "文件名": "智能体核心行为策略.md",
+  "文件路径": "policy\\智能体核心行为策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\policy\智能体聊天风格策略.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体聊天风格策略",
+  "文件名": "智能体聊天风格策略.md",
+  "文件路径": "policy\\智能体聊天风格策略.md",
+  "输入参数": {}
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\system\元认知分类.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "元认知分类",
+  "文件名": "元认知分类.md",
+  "文件路径": "system\\元认知分类.md",
+  "输入参数": {}
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "read_prompt('智能体核心行为策略')": "input",
+    "read_user_profile": "input",
+    "current_lunar": "input",
+    "read_agent_profile": "input",
+    "current_solar": "input",
+    "read_prompt('动态任务处理策略')": "input",
+    "read_prompt('智能体聊天风格策略')": "input"
+  }
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\分析任务信息需求.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析任务信息需求",
+  "文件名": "分析任务信息需求.md",
+  "文件路径": "task\\分析任务信息需求.md",
+  "输入参数": {
+    "\"action\": \"predict:continue\"": "input",
+    "\n    \"action\": \"predict:continue\"\n": "input"
+  }
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\分析创建任务.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析创建任务",
+  "文件名": "分析创建任务.md",
+  "文件路径": "task\\分析创建任务.md",
+  "输入参数": {
+    "\n  \"action\": \"predict:continue\"\n": "input",
+    "\n    \"action\": \"predict:continue\"\n": "input"
+  }
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v3.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v3",
+  "文件名": "分析用户对话意图v3.md",
+  "文件路径": "task\\分析用户对话意图v3.md",
+  "输入参数": {}
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_text": "input",
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_headers": "input",
+    "state.table_content": "input"
+  }
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.内容预览": "input",
+    "current_file.uuid": "input"
+  }
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.preview_file_content": "input",
+    "state.file_uuid": "input"
+  }
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\用户元认知预测.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户元认知预测",
+  "文件名": "用户元认知预测.md",
+  "文件路径": "task\\用户元认知预测.md",
+  "输入参数": {
+    "\n  \"action\": \"predict:speak\"\n": "input",
+    "\n  \"action\": \"predict:ask\"\n": "input",
+    "\n  \"action\": \"predict:continue\"\n": "input",
+    "\n  \"action\": \"predict:task\"\n": "input",
+    "\n  \"action\": \"predict:clarify\"\n": "input"
+  }
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\用户补充信息.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户补充信息",
+  "文件名": "用户补充信息.md",
+  "文件路径": "task\\用户补充信息.md",
+  "输入参数": {
+    "\n    \"action\": \"predict:continue\"\n": "input"
+  }
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\观察用户意图.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "观察用户意图",
+  "文件名": "观察用户意图.md",
+  "文件路径": "task\\观察用户意图.md",
+  "输入参数": {}
+}
+[2026-05-18 23:56:21]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-18 23:56:21]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "list_tools": "input",
+    "state.task.task_execute_history": "input"
+  }
+}
+[2026-05-18 23:56:21]: 系统提示词索引构建完成，共 22 个提示词
+[2026-05-18 23:56:22]: 开始清除所有聊天记录
+[2026-05-18 23:56:22]: 成功删除聊天记录文件: D:\pySpace\opensolver\workspace\chat\chat_20260518.md
+[2026-05-18 23:56:22]: 开始清除所有的工作任务
+[2026-05-18 23:56:22]: 开始清除所有评估建议
+[2026-05-19 00:06:53]: 开始扫描目录 ./workspace/prompts 下的所有md文件，构建提示词索引
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\meta\评估提示词设计与建议.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "评估提示词设计与建议",
+  "文件名": "评估提示词设计与建议.md",
+  "文件路径": "meta\\评估提示词设计与建议.md",
+  "输入参数": {
+    "state.prompt_to_evaluate": "input"
+  }
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\policy\动态任务处理策略.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "动态任务处理策略",
+  "文件名": "动态任务处理策略.md",
+  "文件路径": "policy\\动态任务处理策略.md",
+  "输入参数": {}
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\policy\智能体核心行为策略.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体核心行为策略",
+  "文件名": "智能体核心行为策略.md",
+  "文件路径": "policy\\智能体核心行为策略.md",
+  "输入参数": {}
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\policy\智能体聊天风格策略.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "智能体聊天风格策略",
+  "文件名": "智能体聊天风格策略.md",
+  "文件路径": "policy\\智能体聊天风格策略.md",
+  "输入参数": {}
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\system\元认知分类.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "元认知分类",
+  "文件名": "元认知分类.md",
+  "文件路径": "system\\元认知分类.md",
+  "输入参数": {}
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\system\系统提示词.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "系统提示词",
+  "文件名": "系统提示词.md",
+  "文件路径": "system\\系统提示词.md",
+  "输入参数": {
+    "current_lunar": "input",
+    "read_agent_profile": "input",
+    "read_user_profile": "input",
+    "read_prompt('智能体核心行为策略')": "input",
+    "read_prompt('智能体聊天风格策略')": "input",
+    "read_prompt('动态任务处理策略')": "input",
+    "current_solar": "input"
+  }
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\修正数据表格式.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "修正数据表格式",
+  "文件名": "修正数据表格式.md",
+  "文件路径": "task\\修正数据表格式.md",
+  "输入参数": {}
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\分发意图.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分发意图",
+  "文件名": "分发意图.md",
+  "文件路径": "task\\分发意图.md",
+  "输入参数": {}
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\分析任务信息需求.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析任务信息需求",
+  "文件名": "分析任务信息需求.md",
+  "文件路径": "task\\分析任务信息需求.md",
+  "输入参数": {
+    "\n    \"action\": \"predict:continue\"\n": "input",
+    "\"action\": \"predict:continue\"": "input"
+  }
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\分析创建任务.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析创建任务",
+  "文件名": "分析创建任务.md",
+  "文件路径": "task\\分析创建任务.md",
+  "输入参数": {
+    "\n    \"action\": \"predict:continue\"\n": "input",
+    "\n  \"action\": \"predict:continue\"\n": "input"
+  }
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图",
+  "文件名": "分析用户对话意图.md",
+  "文件路径": "task\\分析用户对话意图.md",
+  "输入参数": {}
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v1.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v1",
+  "文件名": "分析用户对话意图v1.md",
+  "文件路径": "task\\分析用户对话意图v1.md",
+  "输入参数": {
+    "get_chat_history_text": "input"
+  }
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v2.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v2",
+  "文件名": "分析用户对话意图v2.md",
+  "文件路径": "task\\分析用户对话意图v2.md",
+  "输入参数": {}
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\分析用户对话意图v3.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "分析用户对话意图v3",
+  "文件名": "分析用户对话意图v3.md",
+  "文件路径": "task\\分析用户对话意图v3.md",
+  "输入参数": {}
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\基于字段抽取JSON数据.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于字段抽取JSON数据",
+  "文件名": "基于字段抽取JSON数据.md",
+  "文件路径": "task\\基于字段抽取JSON数据.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_text": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\基于表头重构数据表.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "基于表头重构数据表",
+  "文件名": "基于表头重构数据表.md",
+  "文件路径": "task\\基于表头重构数据表.md",
+  "输入参数": {
+    "state.table_content": "input",
+    "state.table_headers": "input"
+  }
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\总结文件摘要.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "总结文件摘要",
+  "文件名": "总结文件摘要.md",
+  "文件路径": "task\\总结文件摘要.md",
+  "输入参数": {
+    "current_file.uuid": "input",
+    "current_file.内容预览": "input"
+  }
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\推测数据表头字段.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "推测数据表头字段",
+  "文件名": "推测数据表头字段.md",
+  "文件路径": "task\\推测数据表头字段.md",
+  "输入参数": {
+    "state.file_uuid": "input",
+    "state.preview_file_content": "input"
+  }
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\用户元认知预测.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户元认知预测",
+  "文件名": "用户元认知预测.md",
+  "文件路径": "task\\用户元认知预测.md",
+  "输入参数": {
+    "\n  \"action\": \"predict:speak\"\n": "input",
+    "\n  \"action\": \"predict:continue\"\n": "input",
+    "\n  \"action\": \"predict:task\"\n": "input",
+    "\n  \"action\": \"predict:ask\"\n": "input",
+    "\n  \"action\": \"predict:clarify\"\n": "input"
+  }
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\用户补充信息.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "用户补充信息",
+  "文件名": "用户补充信息.md",
+  "文件路径": "task\\用户补充信息.md",
+  "输入参数": {
+    "\n    \"action\": \"predict:continue\"\n": "input"
+  }
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\观察用户意图.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "观察用户意图",
+  "文件名": "观察用户意图.md",
+  "文件路径": "task\\观察用户意图.md",
+  "输入参数": {}
+}
+[2026-05-19 00:06:53]: 发现提示词文件: ./workspace/prompts\task\规划任务下一步动作.md
+[2026-05-19 00:06:53]: owner.prompt_index 添加提示词索引条目: 
+{
+  "名称": "规划任务下一步动作",
+  "文件名": "规划任务下一步动作.md",
+  "文件路径": "task\\规划任务下一步动作.md",
+  "输入参数": {
+    "state.task.task_execute_history": "input",
+    "list_tools": "input"
+  }
+}
+[2026-05-19 00:06:53]: 系统提示词索引构建完成，共 22 个提示词
+[2026-05-19 00:06:54]: 开始清除所有聊天记录
+[2026-05-19 00:06:54]: 成功删除聊天记录文件: D:\pySpace\opensolver\workspace\chat\chat_20260518.md
+[2026-05-19 00:06:54]: 成功删除聊天记录文件: D:\pySpace\opensolver\workspace\chat\chat_20260519.md
+[2026-05-19 00:06:54]: 开始清除所有的工作任务
+[2026-05-19 00:06:54]: 成功删除工作任务目录: D:\pySpace\opensolver\workspace\task\任务_20260519000131
+[2026-05-19 00:06:54]: 成功删除工作任务目录: D:\pySpace\opensolver\workspace\task\任务_20260519000432
+[2026-05-19 00:06:54]: 开始清除所有评估建议

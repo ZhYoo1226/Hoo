@@ -1,0 +1,3 @@
+record_delimiter: <record>
+tuple_delimiter: "||"
+entity_types: PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE

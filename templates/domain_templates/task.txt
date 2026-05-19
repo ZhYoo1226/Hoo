@@ -1,0 +1,26 @@
+以下是您的任务：
+
+## DOMAIN DESCRIPTION 
+```
+{domain_desc}
+```
+
+### TYPES
+```
+[在此插入]
+```
+
+### CONSTANTS
+```
+[在此插入]
+```
+
+### New Predicates
+```
+[在此插入]
+```
+
+### FUNCTIONS
+```
+[在此插入]
+```

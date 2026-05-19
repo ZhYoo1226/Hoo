@@ -1,0 +1,59 @@
+{
+    "task_name": "获取未知信息的操作步骤",
+    "task_description": "获取一个未知信息（数据、方案、方式方法、知识）的操作步骤",
+    "goal": "通过系统化方法获取目标信息",
+    "prerequisites": [
+        "明确信息需求范围",
+        "确定信息类型属性",
+        "获取必要访问权限"
+    ],
+    "required_info": [
+        {
+            "name": "信息类型",
+            "description": "需要获取的信息具体类别（数据/方案/方法/知识）",
+            "required": true,
+            "type": "string",
+            "example": "市场调研数据",
+            "source_hint": "用户需求描述"
+        },
+        {
+            "name": "信息来源渠道",
+            "description": "可能包含目标信息的载体或位置",
+            "required": true,
+            "type": "url",
+            "example": "https://data.gov.cn",
+            "source_hint": "信息类型决定的常规获取路径"
+        },
+        {
+            "name": "访问凭证",
+            "description": "访问受限信息所需的认证信息",
+            "required": false,
+            "type": "credential",
+            "example": "API_KEY_123",
+            "source_hint": "信息提供方单独授予"
+        },
+        {
+            "name": "检索关键词",
+            "description": "用于定位信息的搜索要素组合",
+            "required": true,
+            "type": "string",
+            "example": "人工智能 伦理规范 2023",
+            "source_hint": "信息类型+领域特征提炼"
+        },
+        {
+            "name": "验证方式",
+            "description": "确认信息有效性的校验方法",
+            "required": false,
+            "type": "string",
+            "example": "交叉验证/专家评审",
+            "source_hint": "信息类型对应的验证标准"
+        }
+    ],
+    "dependencies": [
+        "信息检索工具",
+        "权限认证系统",
+        "数据验证框架"
+    ],
+    "output": "包含获取路径、操作步骤和验证方法的完整信息获取方案",
+    "estimated_effort": "中"
+}

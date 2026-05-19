@@ -1,0 +1,8 @@
+{
+    "python_version": "3.12",
+    "paddlepaddle_cpu": "3.1.1",
+    "paddlepaddle_gpu": "3.1.1.post120",
+    "paddleocr": "3.3.3",
+    "use_gpu": false,
+    "gpu_mem": 10000
+}

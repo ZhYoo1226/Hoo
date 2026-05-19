@@ -1,0 +1,15 @@
+最终答案以“### Action Effects”和“### New Predicates”开头，后跟``` ```注释块，格式如下：
+
+### Action Effects
+```
+(and
+    (predicate_name ?t1 ?t2) ; 注释描述
+)
+```
+
+### New Predicates
+```
+- (predicate_name ?t1 - type_1 ?t2 - type_2): 'predicate_description'
+```
+
+如果没有新增谓词，则在“### New Predicates”标题后保留一个空白的``` ```注释块。

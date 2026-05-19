@@ -1,0 +1,71 @@
+[
+    {
+        "parent_type": "信息类型",
+        "children": [
+            {
+                "child_type": "数据",
+                "children": []
+            },
+            {
+                "child_type": "方案",
+                "children": []
+            },
+            {
+                "child_type": "方法",
+                "children": []
+            },
+            {
+                "child_type": "知识",
+                "children": []
+            }
+        ]
+    },
+    {
+        "parent_type": "信息来源渠道",
+        "children": [
+            {
+                "child_type": "URL",
+                "children": []
+            }
+        ]
+    },
+    {
+        "parent_type": "访问凭证",
+        "children": [
+            {
+                "child_type": "credential",
+                "children": []
+            }
+        ]
+    },
+    {
+        "parent_type": "检索关键词",
+        "children": [
+            {
+                "child_type": "string",
+                "children": []
+            }
+        ]
+    },
+    {
+        "parent_type": "验证方式",
+        "children": [
+            {
+                "child_type": "string",
+                "children": []
+            }
+        ]
+    },
+    {
+        "parent_type": "信息检索工具",
+        "children": []
+    },
+    {
+        "parent_type": "权限认证系统",
+        "children": []
+    },
+    {
+        "parent_type": "数据验证框架",
+        "children": []
+    }
+]

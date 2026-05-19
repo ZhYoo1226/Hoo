@@ -1,0 +1,4377 @@
+[2026-05-18 14:06:43]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 14:06:43]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 14:06:43]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 14:06:44]: 工具列表: [
+  {
+    "action": "read_file",
+    "description": "读取文件内容",
+    "file_path": "str,文件路径",
+    "max_read_size": "int,最大读取字节数"
+  },
+  {
+    "action": "read_mine_profile",
+    "description": "读取个人资料\n:param profile_path: 个人资料文件路径\n:param owner: 状态所有者\n:param kwargs: 其他参数\n:return: 个人资料信息字符串",
+    "profile_path": "str,个人资料文件路径"
+  },
+  {
+    "action": "read_memory",
+    "description": "读取个人信息\n:return: 个人信息字符串"
+  },
+  {
+    "action": "web_search",
+    "description": "搜索关键描述相关的信息\n:return: 搜索结果",
+    "keyword": "str,搜索相关的网页，得到网页的内容，整理成所需要的结果文本。"
+  },
+  {
+    "action": "local_retrieval",
+    "description": "从本地上下文检索信息\nreturn: 检索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "meta_speak",
+    "description": ""
+  },
+  {
+    "action": "meta_task",
+    "description": "",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务探索 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_plan",
+    "description": "",
+    "task_id": "str,任务id",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_ask",
+    "description": "",
+    "question": "str,需要用户回答澄清的问题"
+  },
+  {
+    "action": "meta_read",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:RefactorTableState",
+    "description": "基于表头字段重构原始表格数据的状态。",
+    "source_md_path": "str,",
+    "table_headers": "list,"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ScanAbstractState",
+    "description": "扫描文件摘要状态,不存在摘要，则更新摘要"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:SummaryAbstractState",
+    "description": "摘要摘要状态",
+    "empty_abstract": "DataFrame,"
+  },
+  {
+    "action": "state:UpdateAbstractState",
+    "description": "更新摘要索引表 files_abstract.parquet 中的摘要状态",
+    "text": "str,文件摘要",
+    "uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:ExampleState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LiveState",
+    "description": ""
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:EvalPromptState",
+    "description": "",
+    "prompt_full_path": "str,"
+  },
+  {
+    "action": "state:EvalState",
+    "description": ""
+  },
+  {
+    "action": "state:ExecutePromptState",
+    "description": "",
+    "prompt_file": "str,"
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:MetaAskState",
+    "description": "",
+    "question": "str,"
+  },
+  {
+    "action": "state:MetaBaseState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaListenState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaPlanState",
+    "description": "",
+    "plan": ","
+  },
+  {
+    "action": "state:MetaReadState",
+    "description": "分析文件，最后得到文件的内容初步摘要。尝试理解推测用户的需求和意图。",
+    "file_uuid": "str,FIXME 确定是uuid还是filepath，应该是uuid"
+  },
+  {
+    "action": "state:MetaSpeakState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaTaskState",
+    "description": "",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务探索 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:SendMsgState",
+    "description": "",
+    "response": "str,"
+  },
+  {
+    "action": "state:ImgOCRState",
+    "description": "图片文本 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:TableOCRState",
+    "description": "图片表格 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:_BaseOCRState",
+    "description": "",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:AutoPlanTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LoadTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:ParseExcelState",
+    "description": "解析Excel文件状态",
+    "xlsx_path": "str,"
+  },
+  {
+    "action": "state:UpdateTableHeadState",
+    "description": "更新表格头状态",
+    "headers": "list,推测数据表头字段提示词返回的params属性",
+    "uuid": "str,文件uuid"
+  }
+]
+[2026-05-18 14:08:29]: 开始分析用户对话意图
+[2026-05-18 14:08:29]: <行动>:开始思考分析用户对话意图
+[2026-05-18 14:08:44]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 14:08:44]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 14:08:44]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 14:08:44]: 加载历史聊天D:\solver\workspace\chat\chat_20260518.md,数据条数:5
+[2026-05-18 14:08:44]: 工具列表: [
+  {
+    "action": "read_file",
+    "description": "读取文件内容",
+    "file_path": "str,文件路径",
+    "max_read_size": "int,最大读取字节数"
+  },
+  {
+    "action": "read_mine_profile",
+    "description": "读取个人资料\n:param profile_path: 个人资料文件路径\n:param owner: 状态所有者\n:param kwargs: 其他参数\n:return: 个人资料信息字符串",
+    "profile_path": "str,个人资料文件路径"
+  },
+  {
+    "action": "read_memory",
+    "description": "读取个人信息\n:return: 个人信息字符串"
+  },
+  {
+    "action": "web_search",
+    "description": "搜索关键描述相关的信息\n:return: 搜索结果",
+    "keyword": "str,搜索相关的网页，得到网页的内容，整理成所需要的结果文本。"
+  },
+  {
+    "action": "local_retrieval",
+    "description": "从本地上下文检索信息\nreturn: 检索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "meta_speak",
+    "description": ""
+  },
+  {
+    "action": "meta_task",
+    "description": "",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务探索 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_plan",
+    "description": "",
+    "task_id": "str,任务id",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_ask",
+    "description": "",
+    "question": "str,需要用户回答澄清的问题"
+  },
+  {
+    "action": "meta_read",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:RefactorTableState",
+    "description": "基于表头字段重构原始表格数据的状态。",
+    "source_md_path": "str,",
+    "table_headers": "list,"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ScanAbstractState",
+    "description": "扫描文件摘要状态,不存在摘要，则更新摘要"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:SummaryAbstractState",
+    "description": "摘要摘要状态",
+    "empty_abstract": "DataFrame,"
+  },
+  {
+    "action": "state:UpdateAbstractState",
+    "description": "更新摘要索引表 files_abstract.parquet 中的摘要状态",
+    "text": "str,文件摘要",
+    "uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:ExampleState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LiveState",
+    "description": ""
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:EvalPromptState",
+    "description": "",
+    "prompt_full_path": "str,"
+  },
+  {
+    "action": "state:EvalState",
+    "description": ""
+  },
+  {
+    "action": "state:ExecutePromptState",
+    "description": "",
+    "prompt_file": "str,"
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:MetaAskState",
+    "description": "",
+    "question": "str,"
+  },
+  {
+    "action": "state:MetaBaseState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaListenState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaPlanState",
+    "description": "",
+    "plan": ","
+  },
+  {
+    "action": "state:MetaReadState",
+    "description": "分析文件，最后得到文件的内容初步摘要。尝试理解推测用户的需求和意图。",
+    "file_uuid": "str,FIXME 确定是uuid还是filepath，应该是uuid"
+  },
+  {
+    "action": "state:MetaSpeakState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaTaskState",
+    "description": "",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务探索 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:SendMsgState",
+    "description": "",
+    "response": "str,"
+  },
+  {
+    "action": "state:ImgOCRState",
+    "description": "图片文本 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:TableOCRState",
+    "description": "图片表格 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:_BaseOCRState",
+    "description": "",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:AutoPlanTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LoadTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:ParseExcelState",
+    "description": "解析Excel文件状态",
+    "xlsx_path": "str,"
+  },
+  {
+    "action": "state:UpdateTableHeadState",
+    "description": "更新表格头状态",
+    "headers": "list,推测数据表头字段提示词返回的params属性",
+    "uuid": "str,文件uuid"
+  }
+]
+[2026-05-18 14:22:44]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 14:22:44]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 14:22:44]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 14:22:45]: 工具列表: [
+  {
+    "action": "read_file",
+    "description": "读取文件内容",
+    "file_path": "str,文件路径",
+    "max_read_size": "int,最大读取字节数"
+  },
+  {
+    "action": "read_mine_profile",
+    "description": "读取个人资料\n:param profile_path: 个人资料文件路径\n:param owner: 状态所有者\n:param kwargs: 其他参数\n:return: 个人资料信息字符串",
+    "profile_path": "str,个人资料文件路径"
+  },
+  {
+    "action": "read_memory",
+    "description": "读取个人信息\n:return: 个人信息字符串"
+  },
+  {
+    "action": "web_search",
+    "description": "搜索关键描述相关的信息\n:return: 搜索结果",
+    "keyword": "str,搜索相关的网页，得到网页的内容，整理成所需要的结果文本。"
+  },
+  {
+    "action": "local_retrieval",
+    "description": "从本地上下文检索信息\nreturn: 检索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "meta_speak",
+    "description": ""
+  },
+  {
+    "action": "meta_task",
+    "description": "",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务探索 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_plan",
+    "description": "",
+    "task_id": "str,任务id",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_ask",
+    "description": "",
+    "question": "str,需要用户回答澄清的问题"
+  },
+  {
+    "action": "meta_read",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:RefactorTableState",
+    "description": "基于表头字段重构原始表格数据的状态。",
+    "source_md_path": "str,",
+    "table_headers": "list,"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ScanAbstractState",
+    "description": "扫描文件摘要状态,不存在摘要，则更新摘要"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:SummaryAbstractState",
+    "description": "摘要摘要状态",
+    "empty_abstract": "DataFrame,"
+  },
+  {
+    "action": "state:UpdateAbstractState",
+    "description": "更新摘要索引表 files_abstract.parquet 中的摘要状态",
+    "text": "str,文件摘要",
+    "uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:ExampleState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LiveState",
+    "description": ""
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:EvalPromptState",
+    "description": "",
+    "prompt_full_path": "str,"
+  },
+  {
+    "action": "state:EvalState",
+    "description": ""
+  },
+  {
+    "action": "state:ExecutePromptState",
+    "description": "",
+    "prompt_file": "str,"
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:MetaAskState",
+    "description": "",
+    "question": "str,"
+  },
+  {
+    "action": "state:MetaBaseState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaListenState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaPlanState",
+    "description": "",
+    "plan": ","
+  },
+  {
+    "action": "state:MetaReadState",
+    "description": "分析文件，最后得到文件的内容初步摘要。尝试理解推测用户的需求和意图。",
+    "file_uuid": "str,FIXME 确定是uuid还是filepath，应该是uuid"
+  },
+  {
+    "action": "state:MetaSpeakState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaTaskState",
+    "description": "",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务探索 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:SendMsgState",
+    "description": "",
+    "response": "str,"
+  },
+  {
+    "action": "state:ImgOCRState",
+    "description": "图片文本 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:TableOCRState",
+    "description": "图片表格 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:_BaseOCRState",
+    "description": "",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:AutoPlanTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LoadTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:ParseExcelState",
+    "description": "解析Excel文件状态",
+    "xlsx_path": "str,"
+  },
+  {
+    "action": "state:UpdateTableHeadState",
+    "description": "更新表格头状态",
+    "headers": "list,推测数据表头字段提示词返回的params属性",
+    "uuid": "str,文件uuid"
+  }
+]
+[2026-05-18 14:25:39]: 开始分析用户对话意图
+[2026-05-18 14:25:39]: <行动>:开始思考分析用户对话意图
+[2026-05-18 14:31:53]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 14:31:53]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 14:31:53]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 14:33:34]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 14:33:34]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 14:33:34]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 14:37:09]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 14:37:10]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 14:37:10]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 14:42:25]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 14:42:25]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 14:42:25]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 14:45:08]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 14:45:08]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 14:45:08]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 14:45:42]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 14:45:42]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 14:45:42]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 14:47:52]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 14:47:52]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 14:47:52]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 14:51:30]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 14:51:30]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 14:51:30]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 14:57:28]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 14:57:28]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 14:57:28]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 15:04:33]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 15:04:33]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 15:04:33]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 15:11:59]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 15:11:59]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 15:11:59]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 15:18:20]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 15:18:20]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 15:18:20]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 15:53:34]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 15:53:34]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 15:53:34]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 16:15:49]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 16:15:49]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 16:15:49]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 16:20:59]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 16:20:59]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 16:20:59]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 16:31:18]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 16:31:18]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 16:31:18]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+<<<<<<< .mine
+[2026-05-18 16:54:19]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 16:54:19]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 16:54:19]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+||||||| .r1784
+=======
+[2026-05-18 22:26:26]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 22:26:26]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 22:26:26]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 22:26:27]: 加载历史聊天D:\pySpace\opensolver\workspace\chat\chat_20260518.md,数据条数:5
+[2026-05-18 22:48:02]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 22:48:02]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 22:48:02]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 22:48:03]: 加载历史聊天D:\pySpace\opensolver\workspace\chat\chat_20260518.md,数据条数:5
+[2026-05-18 22:50:29]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 22:50:29]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 22:50:29]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 22:50:30]: 加载历史聊天D:\pySpace\opensolver\workspace\chat\chat_20260518.md,数据条数:5
+[2026-05-18 22:50:31]: 工具列表: [
+  {
+    "action": "read_file",
+    "description": "读取文件内容",
+    "file_path": "str,文件路径",
+    "max_read_size": "int,最大读取字节数"
+  },
+  {
+    "action": "read_mine_profile",
+    "description": "读取个人资料\n:param profile_path: 个人资料文件路径\n:param owner: 状态所有者\n:param kwargs: 其他参数\n:return: 个人资料信息字符串",
+    "profile_path": "str,个人资料文件路径"
+  },
+  {
+    "action": "read_memory",
+    "description": "读取个人信息\n:return: 个人信息字符串"
+  },
+  {
+    "action": "web_search",
+    "description": "搜索关键描述相关的信息\n:return: 搜索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "local_retrieval",
+    "description": "从本地上下文检索信息\nreturn: 检索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "meta_speak",
+    "description": "常规问答/沟通类/设计类/方案类/知识问答/情感交流/简单指令/概述回复类（需在3秒内响应）"
+  },
+  {
+    "action": "meta_task",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_clarify",
+    "description": "",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "meta_ask",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,需要用户回答澄清的问题"
+  },
+  {
+    "action": "meta_read",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,文件uuid"
+  },
+  {
+    "action": "predict_task",
+    "description": "用户提出了一个明确的、全新的、未被追踪的任务，智能体需要开始执行或管理该任务。"
+  },
+  {
+    "action": "predict_speak",
+    "description": "若本轮已完成对用户的直接回应，且无待处理任务"
+  },
+  {
+    "action": "predict_ask",
+    "description": "用户的意图或需求模糊，缺少执行必要信息，智能体必须立即提问以推进对话。"
+  },
+  {
+    "action": "predict_clarify",
+    "description": "用户正在对某个已存在的任务进行信息补充、细节说明、约束修正或澄清。"
+  },
+  {
+    "action": "predict_continue",
+    "description": "当前所有信息已被处理完毕，没有更多未处理的数据或待办项，且用户并未发出新的交互请求。智能体应主动推进流程或结束交互。"
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:RefactorTableState",
+    "description": "基于表头字段重构原始表格数据的状态。",
+    "source_md_path": "str,",
+    "table_headers": "list,"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ScanAbstractState",
+    "description": "扫描文件摘要状态,不存在摘要，则更新摘要"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:SummaryAbstractState",
+    "description": "摘要摘要状态",
+    "empty_abstract": "DataFrame,"
+  },
+  {
+    "action": "state:UpdateAbstractState",
+    "description": "更新摘要索引表 files_abstract.parquet 中的摘要状态",
+    "text": "str,文件摘要",
+    "uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:ExampleState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LiveState",
+    "description": ""
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:EvalPromptState",
+    "description": "",
+    "prompt_full_path": "str,"
+  },
+  {
+    "action": "state:EvalState",
+    "description": ""
+  },
+  {
+    "action": "state:ExecutePromptState",
+    "description": "",
+    "prompt_file": "str,"
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:MetaAskState",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,"
+  },
+  {
+    "action": "state:MetaBaseState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaClarifyState",
+    "description": "用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。提出的问题要直接针对模糊点，且不能反复询问同一个问题。",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "state:MetaListenState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaReadState",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,FIXME 确定是uuid还是filepath，应该是uuid"
+  },
+  {
+    "action": "state:MetaSpeakState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaTaskState",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:SendMsgState",
+    "description": "",
+    "response": "str,"
+  },
+  {
+    "action": "state:ImgOCRState",
+    "description": "图片文本 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:TableOCRState",
+    "description": "图片表格 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:_BaseOCRState",
+    "description": "",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:GetURLDataState",
+    "description": "获取URL数据状态\n\n    通过 URL 获取数据，返回包含 action、thought、data 字段的 action_json 数据结构。"
+  },
+  {
+    "action": "state:WebSearchState",
+    "description": "网络搜索状态\n    \n    通过关键词执行网络搜索，返回包含 action、thought、data 字段的 action_json 数据结构。",
+    "keyword": "str,",
+    "searx_host": "str,",
+    "num_results": "int,"
+  },
+  {
+    "action": "state:AutoPlanTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LoadTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:ParseExcelState",
+    "description": "解析Excel文件状态",
+    "xlsx_path": "str,"
+  },
+  {
+    "action": "state:UpdateTableHeadState",
+    "description": "更新表格头状态",
+    "headers": "list,推测数据表头字段提示词返回的params属性",
+    "uuid": "str,文件uuid"
+  }
+]
+[2026-05-18 22:52:23]: 开始分析用户对话意图
+[2026-05-18 22:52:23]: <行动>:开始思考观察用户意图
+[2026-05-18 22:52:45]: <行动>:开始思考分析创建任务
+[2026-05-18 22:56:58]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 22:56:58]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 22:56:58]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 22:57:28]: 工具列表: [
+  {
+    "action": "read_file",
+    "description": "读取文件内容",
+    "file_path": "str,文件路径",
+    "max_read_size": "int,最大读取字节数"
+  },
+  {
+    "action": "read_mine_profile",
+    "description": "读取个人资料\n:param profile_path: 个人资料文件路径\n:param owner: 状态所有者\n:param kwargs: 其他参数\n:return: 个人资料信息字符串",
+    "profile_path": "str,个人资料文件路径"
+  },
+  {
+    "action": "read_memory",
+    "description": "读取个人信息\n:return: 个人信息字符串"
+  },
+  {
+    "action": "web_search",
+    "description": "搜索关键描述相关的信息\n:return: 搜索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "local_retrieval",
+    "description": "从本地上下文检索信息\nreturn: 检索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "meta_speak",
+    "description": "常规问答/沟通类/设计类/方案类/知识问答/情感交流/简单指令/概述回复类（需在3秒内响应）"
+  },
+  {
+    "action": "meta_task",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_clarify",
+    "description": "",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "meta_ask",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,需要用户回答澄清的问题"
+  },
+  {
+    "action": "meta_read",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,文件uuid"
+  },
+  {
+    "action": "predict_task",
+    "description": "用户提出了一个明确的、全新的、未被追踪的任务，智能体需要开始执行或管理该任务。"
+  },
+  {
+    "action": "predict_speak",
+    "description": "若本轮已完成对用户的直接回应，且无待处理任务"
+  },
+  {
+    "action": "predict_ask",
+    "description": "用户的意图或需求模糊，缺少执行必要信息，智能体必须立即提问以推进对话。"
+  },
+  {
+    "action": "predict_clarify",
+    "description": "用户正在对某个已存在的任务进行信息补充、细节说明、约束修正或澄清。"
+  },
+  {
+    "action": "predict_continue",
+    "description": "当前所有信息已被处理完毕，没有更多未处理的数据或待办项，且用户并未发出新的交互请求。智能体应主动推进流程或结束交互。"
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:RefactorTableState",
+    "description": "基于表头字段重构原始表格数据的状态。",
+    "source_md_path": "str,",
+    "table_headers": "list,"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ScanAbstractState",
+    "description": "扫描文件摘要状态,不存在摘要，则更新摘要"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:SummaryAbstractState",
+    "description": "摘要摘要状态",
+    "empty_abstract": "DataFrame,"
+  },
+  {
+    "action": "state:UpdateAbstractState",
+    "description": "更新摘要索引表 files_abstract.parquet 中的摘要状态",
+    "text": "str,文件摘要",
+    "uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:ExampleState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LiveState",
+    "description": ""
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:EvalPromptState",
+    "description": "",
+    "prompt_full_path": "str,"
+  },
+  {
+    "action": "state:EvalState",
+    "description": ""
+  },
+  {
+    "action": "state:ExecutePromptState",
+    "description": "",
+    "prompt_file": "str,"
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:MetaAskState",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,"
+  },
+  {
+    "action": "state:MetaBaseState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaClarifyState",
+    "description": "用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。提出的问题要直接针对模糊点，且不能反复询问同一个问题。",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "state:MetaListenState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaReadState",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,FIXME 确定是uuid还是filepath，应该是uuid"
+  },
+  {
+    "action": "state:MetaSpeakState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaTaskState",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:SendMsgState",
+    "description": "",
+    "response": "str,"
+  },
+  {
+    "action": "state:ImgOCRState",
+    "description": "图片文本 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:TableOCRState",
+    "description": "图片表格 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:_BaseOCRState",
+    "description": "",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:GetURLDataState",
+    "description": "获取URL数据状态\n\n    通过 URL 获取数据，返回包含 action、thought、data 字段的 action_json 数据结构。"
+  },
+  {
+    "action": "state:WebSearchState",
+    "description": "网络搜索状态\n    \n    通过关键词执行网络搜索，返回包含 action、thought、data 字段的 action_json 数据结构。",
+    "keyword": "str,",
+    "searx_host": "str,",
+    "num_results": "int,"
+  },
+  {
+    "action": "state:AutoPlanTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LoadTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:ParseExcelState",
+    "description": "解析Excel文件状态",
+    "xlsx_path": "str,"
+  },
+  {
+    "action": "state:UpdateTableHeadState",
+    "description": "更新表格头状态",
+    "headers": "list,推测数据表头字段提示词返回的params属性",
+    "uuid": "str,文件uuid"
+  }
+]
+[2026-05-18 22:59:26]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 22:59:26]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 22:59:26]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 22:59:31]: 工具列表: [
+  {
+    "action": "read_file",
+    "description": "读取文件内容",
+    "file_path": "str,文件路径",
+    "max_read_size": "int,最大读取字节数"
+  },
+  {
+    "action": "read_mine_profile",
+    "description": "读取个人资料\n:param profile_path: 个人资料文件路径\n:param owner: 状态所有者\n:param kwargs: 其他参数\n:return: 个人资料信息字符串",
+    "profile_path": "str,个人资料文件路径"
+  },
+  {
+    "action": "read_memory",
+    "description": "读取个人信息\n:return: 个人信息字符串"
+  },
+  {
+    "action": "web_search",
+    "description": "搜索关键描述相关的信息\n:return: 搜索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "local_retrieval",
+    "description": "从本地上下文检索信息\nreturn: 检索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "meta_speak",
+    "description": "常规问答/沟通类/设计类/方案类/知识问答/情感交流/简单指令/概述回复类（需在3秒内响应）"
+  },
+  {
+    "action": "meta_task",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_clarify",
+    "description": "",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "meta_ask",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,需要用户回答澄清的问题"
+  },
+  {
+    "action": "meta_read",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,文件uuid"
+  },
+  {
+    "action": "predict_task",
+    "description": "用户提出了一个明确的、全新的、未被追踪的任务，智能体需要开始执行或管理该任务。"
+  },
+  {
+    "action": "predict_speak",
+    "description": "若本轮已完成对用户的直接回应，且无待处理任务"
+  },
+  {
+    "action": "predict_ask",
+    "description": "用户的意图或需求模糊，缺少执行必要信息，智能体必须立即提问以推进对话。"
+  },
+  {
+    "action": "predict_clarify",
+    "description": "用户正在对某个已存在的任务进行信息补充、细节说明、约束修正或澄清。"
+  },
+  {
+    "action": "predict_continue",
+    "description": "当前所有信息已被处理完毕，没有更多未处理的数据或待办项，且用户并未发出新的交互请求。智能体应主动推进流程或结束交互。"
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:RefactorTableState",
+    "description": "基于表头字段重构原始表格数据的状态。",
+    "source_md_path": "str,",
+    "table_headers": "list,"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ScanAbstractState",
+    "description": "扫描文件摘要状态,不存在摘要，则更新摘要"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:SummaryAbstractState",
+    "description": "摘要摘要状态",
+    "empty_abstract": "DataFrame,"
+  },
+  {
+    "action": "state:UpdateAbstractState",
+    "description": "更新摘要索引表 files_abstract.parquet 中的摘要状态",
+    "text": "str,文件摘要",
+    "uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:ExampleState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LiveState",
+    "description": ""
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:EvalPromptState",
+    "description": "",
+    "prompt_full_path": "str,"
+  },
+  {
+    "action": "state:EvalState",
+    "description": ""
+  },
+  {
+    "action": "state:ExecutePromptState",
+    "description": "",
+    "prompt_file": "str,"
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:MetaAskState",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,"
+  },
+  {
+    "action": "state:MetaBaseState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaClarifyState",
+    "description": "用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。提出的问题要直接针对模糊点，且不能反复询问同一个问题。",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "state:MetaListenState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaReadState",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,FIXME 确定是uuid还是filepath，应该是uuid"
+  },
+  {
+    "action": "state:MetaSpeakState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaTaskState",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:SendMsgState",
+    "description": "",
+    "response": "str,"
+  },
+  {
+    "action": "state:ImgOCRState",
+    "description": "图片文本 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:TableOCRState",
+    "description": "图片表格 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:_BaseOCRState",
+    "description": "",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:GetURLDataState",
+    "description": "获取URL数据状态\n\n    通过 URL 获取数据，返回包含 action、thought、data 字段的 action_json 数据结构。"
+  },
+  {
+    "action": "state:WebSearchState",
+    "description": "网络搜索状态\n    \n    通过关键词执行网络搜索，返回包含 action、thought、data 字段的 action_json 数据结构。",
+    "keyword": "str,",
+    "searx_host": "str,",
+    "num_results": "int,"
+  },
+  {
+    "action": "state:AutoPlanTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LoadTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:ParseExcelState",
+    "description": "解析Excel文件状态",
+    "xlsx_path": "str,"
+  },
+  {
+    "action": "state:UpdateTableHeadState",
+    "description": "更新表格头状态",
+    "headers": "list,推测数据表头字段提示词返回的params属性",
+    "uuid": "str,文件uuid"
+  }
+]
+[2026-05-18 23:02:09]: 开始分析用户对话意图
+[2026-05-18 23:02:09]: <行动>:开始思考观察用户意图
+[2026-05-18 23:02:53]: 继续推进流程...
+[2026-05-18 23:11:32]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 23:11:32]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 23:11:32]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 23:11:36]: 工具列表: [
+  {
+    "action": "read_file",
+    "description": "读取文件内容",
+    "file_path": "str,文件路径",
+    "max_read_size": "int,最大读取字节数"
+  },
+  {
+    "action": "read_mine_profile",
+    "description": "读取个人资料\n:param profile_path: 个人资料文件路径\n:param owner: 状态所有者\n:param kwargs: 其他参数\n:return: 个人资料信息字符串",
+    "profile_path": "str,个人资料文件路径"
+  },
+  {
+    "action": "read_memory",
+    "description": "读取个人信息\n:return: 个人信息字符串"
+  },
+  {
+    "action": "web_search",
+    "description": "搜索关键描述相关的信息\n:return: 搜索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "local_retrieval",
+    "description": "从本地上下文检索信息\nreturn: 检索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "meta_speak",
+    "description": "常规问答/沟通类/设计类/方案类/知识问答/情感交流/简单指令/概述回复类（需在3秒内响应）"
+  },
+  {
+    "action": "meta_task",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_clarify",
+    "description": "",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "meta_ask",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,需要用户回答澄清的问题"
+  },
+  {
+    "action": "meta_read",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,文件uuid"
+  },
+  {
+    "action": "predict_task",
+    "description": "用户提出了一个明确的、全新的、未被追踪的任务，智能体需要开始执行或管理该任务。"
+  },
+  {
+    "action": "predict_speak",
+    "description": "若本轮已完成对用户的直接回应，且无待处理任务"
+  },
+  {
+    "action": "predict_ask",
+    "description": "用户的意图或需求模糊，缺少执行必要信息，智能体必须立即提问以推进对话。"
+  },
+  {
+    "action": "predict_clarify",
+    "description": "用户正在对某个已存在的任务进行信息补充、细节说明、约束修正或澄清。"
+  },
+  {
+    "action": "predict_continue",
+    "description": "当前所有信息已被处理完毕，没有更多未处理的数据或待办项，且用户并未发出新的交互请求。智能体应主动推进流程或结束交互。"
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:RefactorTableState",
+    "description": "基于表头字段重构原始表格数据的状态。",
+    "source_md_path": "str,",
+    "table_headers": "list,"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ScanAbstractState",
+    "description": "扫描文件摘要状态,不存在摘要，则更新摘要"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:SummaryAbstractState",
+    "description": "摘要摘要状态",
+    "empty_abstract": "DataFrame,"
+  },
+  {
+    "action": "state:UpdateAbstractState",
+    "description": "更新摘要索引表 files_abstract.parquet 中的摘要状态",
+    "text": "str,文件摘要",
+    "uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:ExampleState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LiveState",
+    "description": ""
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:EvalPromptState",
+    "description": "",
+    "prompt_full_path": "str,"
+  },
+  {
+    "action": "state:EvalState",
+    "description": ""
+  },
+  {
+    "action": "state:ExecutePromptState",
+    "description": "",
+    "prompt_file": "str,"
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:MetaAskState",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,"
+  },
+  {
+    "action": "state:MetaBaseState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaClarifyState",
+    "description": "用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。提出的问题要直接针对模糊点，且不能反复询问同一个问题。",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "state:MetaListenState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaReadState",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,FIXME 确定是uuid还是filepath，应该是uuid"
+  },
+  {
+    "action": "state:MetaSpeakState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaTaskState",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:SendMsgState",
+    "description": "",
+    "response": "str,"
+  },
+  {
+    "action": "state:ImgOCRState",
+    "description": "图片文本 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:TableOCRState",
+    "description": "图片表格 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:_BaseOCRState",
+    "description": "",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:GetURLDataState",
+    "description": "获取URL数据状态\n\n    通过 URL 获取数据，返回包含 action、thought、data 字段的 action_json 数据结构。"
+  },
+  {
+    "action": "state:WebSearchState",
+    "description": "网络搜索状态\n    \n    通过关键词执行网络搜索，返回包含 action、thought、data 字段的 action_json 数据结构。",
+    "keyword": "str,",
+    "searx_host": "str,",
+    "num_results": "int,"
+  },
+  {
+    "action": "state:AutoPlanTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LoadTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:ParseExcelState",
+    "description": "解析Excel文件状态",
+    "xlsx_path": "str,"
+  },
+  {
+    "action": "state:UpdateTableHeadState",
+    "description": "更新表格头状态",
+    "headers": "list,推测数据表头字段提示词返回的params属性",
+    "uuid": "str,文件uuid"
+  }
+]
+[2026-05-18 23:14:57]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 23:14:57]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 23:14:57]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 23:15:00]: 工具列表: [
+  {
+    "action": "read_file",
+    "description": "读取文件内容",
+    "file_path": "str,文件路径",
+    "max_read_size": "int,最大读取字节数"
+  },
+  {
+    "action": "read_mine_profile",
+    "description": "读取个人资料\n:param profile_path: 个人资料文件路径\n:param owner: 状态所有者\n:param kwargs: 其他参数\n:return: 个人资料信息字符串",
+    "profile_path": "str,个人资料文件路径"
+  },
+  {
+    "action": "read_memory",
+    "description": "读取个人信息\n:return: 个人信息字符串"
+  },
+  {
+    "action": "web_search",
+    "description": "搜索关键描述相关的信息\n:return: 搜索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "local_retrieval",
+    "description": "从本地上下文检索信息\nreturn: 检索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "meta_speak",
+    "description": "常规问答/沟通类/设计类/方案类/知识问答/情感交流/简单指令/概述回复类（需在3秒内响应）"
+  },
+  {
+    "action": "meta_task",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_clarify",
+    "description": "",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "meta_ask",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,需要用户回答澄清的问题"
+  },
+  {
+    "action": "meta_read",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,文件uuid"
+  },
+  {
+    "action": "predict_task",
+    "description": "用户提出了一个明确的、全新的、未被追踪的任务，智能体需要开始执行或管理该任务。"
+  },
+  {
+    "action": "predict_speak",
+    "description": "若本轮已完成对用户的直接回应，且无待处理任务"
+  },
+  {
+    "action": "predict_ask",
+    "description": "用户的意图或需求模糊，缺少执行必要信息，智能体必须立即提问以推进对话。"
+  },
+  {
+    "action": "predict_clarify",
+    "description": "用户正在对某个已存在的任务进行信息补充、细节说明、约束修正或澄清。"
+  },
+  {
+    "action": "predict_continue",
+    "description": "当前所有信息已被处理完毕，没有更多未处理的数据或待办项，且用户并未发出新的交互请求。智能体应主动推进流程或结束交互。"
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:RefactorTableState",
+    "description": "基于表头字段重构原始表格数据的状态。",
+    "source_md_path": "str,",
+    "table_headers": "list,"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ScanAbstractState",
+    "description": "扫描文件摘要状态,不存在摘要，则更新摘要"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:SummaryAbstractState",
+    "description": "摘要摘要状态",
+    "empty_abstract": "DataFrame,"
+  },
+  {
+    "action": "state:UpdateAbstractState",
+    "description": "更新摘要索引表 files_abstract.parquet 中的摘要状态",
+    "text": "str,文件摘要",
+    "uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:ExampleState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LiveState",
+    "description": ""
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:EvalPromptState",
+    "description": "",
+    "prompt_full_path": "str,"
+  },
+  {
+    "action": "state:EvalState",
+    "description": ""
+  },
+  {
+    "action": "state:ExecutePromptState",
+    "description": "",
+    "prompt_file": "str,"
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:MetaAskState",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,"
+  },
+  {
+    "action": "state:MetaBaseState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaClarifyState",
+    "description": "用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。提出的问题要直接针对模糊点，且不能反复询问同一个问题。",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "state:MetaListenState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaReadState",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,FIXME 确定是uuid还是filepath，应该是uuid"
+  },
+  {
+    "action": "state:MetaSpeakState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaTaskState",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:SendMsgState",
+    "description": "",
+    "response": "str,"
+  },
+  {
+    "action": "state:ImgOCRState",
+    "description": "图片文本 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:TableOCRState",
+    "description": "图片表格 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:_BaseOCRState",
+    "description": "",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:GetURLDataState",
+    "description": "获取URL数据状态\n\n    通过 URL 获取数据，返回包含 action、thought、data 字段的 action_json 数据结构。"
+  },
+  {
+    "action": "state:WebSearchState",
+    "description": "网络搜索状态\n    \n    通过关键词执行网络搜索，返回包含 action、thought、data 字段的 action_json 数据结构。",
+    "keyword": "str,",
+    "searx_host": "str,",
+    "num_results": "int,"
+  },
+  {
+    "action": "state:AutoPlanTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LoadTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:ParseExcelState",
+    "description": "解析Excel文件状态",
+    "xlsx_path": "str,"
+  },
+  {
+    "action": "state:UpdateTableHeadState",
+    "description": "更新表格头状态",
+    "headers": "list,推测数据表头字段提示词返回的params属性",
+    "uuid": "str,文件uuid"
+  }
+]
+[2026-05-18 23:17:27]: 开始分析用户对话意图
+[2026-05-18 23:17:27]: 新任务:owner,对象owner找不到参数 
+  "action": "predict:task|predict:clarify|predict:ask|predict:continue"
+，创建属性存储对应数据。
+[2026-05-18 23:17:27]: <行动>:开始思考观察用户意图
+[2026-05-18 23:32:09]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 23:32:09]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 23:32:09]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 23:32:12]: 工具列表: [
+  {
+    "action": "read_file",
+    "description": "读取文件内容",
+    "file_path": "str,文件路径",
+    "max_read_size": "int,最大读取字节数"
+  },
+  {
+    "action": "read_mine_profile",
+    "description": "读取个人资料\n:param profile_path: 个人资料文件路径\n:param owner: 状态所有者\n:param kwargs: 其他参数\n:return: 个人资料信息字符串",
+    "profile_path": "str,个人资料文件路径"
+  },
+  {
+    "action": "read_memory",
+    "description": "读取个人信息\n:return: 个人信息字符串"
+  },
+  {
+    "action": "web_search",
+    "description": "搜索关键描述相关的信息\n:return: 搜索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "local_retrieval",
+    "description": "从本地上下文检索信息\nreturn: 检索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "meta_speak",
+    "description": "常规问答/沟通类/设计类/方案类/知识问答/情感交流/简单指令/概述回复类（需在3秒内响应）"
+  },
+  {
+    "action": "meta_task",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_clarify",
+    "description": "",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "meta_ask",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,需要用户回答澄清的问题"
+  },
+  {
+    "action": "meta_read",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,文件uuid"
+  },
+  {
+    "action": "predict_task",
+    "description": "用户提出了一个明确的、全新的、未被追踪的任务，智能体需要开始执行或管理该任务。"
+  },
+  {
+    "action": "predict_speak",
+    "description": "若本轮已完成对用户的直接回应，且无待处理任务"
+  },
+  {
+    "action": "predict_ask",
+    "description": "用户的意图或需求模糊，缺少执行必要信息，智能体必须立即提问以推进对话。"
+  },
+  {
+    "action": "predict_clarify",
+    "description": "用户正在对某个已存在的任务进行信息补充、细节说明、约束修正或澄清。"
+  },
+  {
+    "action": "predict_continue",
+    "description": "当前所有信息已被处理完毕，没有更多未处理的数据或待办项，且用户并未发出新的交互请求。智能体应主动推进流程或结束交互。"
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:RefactorTableState",
+    "description": "基于表头字段重构原始表格数据的状态。",
+    "source_md_path": "str,",
+    "table_headers": "list,"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ScanAbstractState",
+    "description": "扫描文件摘要状态,不存在摘要，则更新摘要"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:SummaryAbstractState",
+    "description": "摘要摘要状态",
+    "empty_abstract": "DataFrame,"
+  },
+  {
+    "action": "state:UpdateAbstractState",
+    "description": "更新摘要索引表 files_abstract.parquet 中的摘要状态",
+    "text": "str,文件摘要",
+    "uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:ExampleState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LiveState",
+    "description": ""
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:EvalPromptState",
+    "description": "",
+    "prompt_full_path": "str,"
+  },
+  {
+    "action": "state:EvalState",
+    "description": ""
+  },
+  {
+    "action": "state:ExecutePromptState",
+    "description": "",
+    "prompt_file": "str,"
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:MetaAskState",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,"
+  },
+  {
+    "action": "state:MetaBaseState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaClarifyState",
+    "description": "用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。提出的问题要直接针对模糊点，且不能反复询问同一个问题。",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "state:MetaListenState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaReadState",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,FIXME 确定是uuid还是filepath，应该是uuid"
+  },
+  {
+    "action": "state:MetaSpeakState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaTaskState",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:SendMsgState",
+    "description": "",
+    "response": "str,"
+  },
+  {
+    "action": "state:ImgOCRState",
+    "description": "图片文本 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:TableOCRState",
+    "description": "图片表格 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:_BaseOCRState",
+    "description": "",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:GetURLDataState",
+    "description": "获取URL数据状态\n\n    通过 URL 获取数据，返回包含 action、thought、data 字段的 action_json 数据结构。"
+  },
+  {
+    "action": "state:WebSearchState",
+    "description": "网络搜索状态\n    \n    通过关键词执行网络搜索，返回包含 action、thought、data 字段的 action_json 数据结构。",
+    "keyword": "str,",
+    "searx_host": "str,",
+    "num_results": "int,"
+  },
+  {
+    "action": "state:AutoPlanTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LoadTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:ParseExcelState",
+    "description": "解析Excel文件状态",
+    "xlsx_path": "str,"
+  },
+  {
+    "action": "state:UpdateTableHeadState",
+    "description": "更新表格头状态",
+    "headers": "list,推测数据表头字段提示词返回的params属性",
+    "uuid": "str,文件uuid"
+  }
+]
+[2026-05-18 23:36:00]: 开始分析用户对话意图
+[2026-05-18 23:36:06]: <行动>:开始思考观察用户意图
+[2026-05-18 23:38:59]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 23:38:59]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 23:38:59]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 23:39:04]: 工具列表: [
+  {
+    "action": "read_file",
+    "description": "读取文件内容",
+    "file_path": "str,文件路径",
+    "max_read_size": "int,最大读取字节数"
+  },
+  {
+    "action": "read_mine_profile",
+    "description": "读取个人资料\n:param profile_path: 个人资料文件路径\n:param owner: 状态所有者\n:param kwargs: 其他参数\n:return: 个人资料信息字符串",
+    "profile_path": "str,个人资料文件路径"
+  },
+  {
+    "action": "read_memory",
+    "description": "读取个人信息\n:return: 个人信息字符串"
+  },
+  {
+    "action": "web_search",
+    "description": "搜索关键描述相关的信息\n:return: 搜索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "local_retrieval",
+    "description": "从本地上下文检索信息\nreturn: 检索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "meta_speak",
+    "description": "常规问答/沟通类/设计类/方案类/知识问答/情感交流/简单指令/概述回复类（需在3秒内响应）"
+  },
+  {
+    "action": "meta_task",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_clarify",
+    "description": "",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "meta_ask",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,需要用户回答澄清的问题"
+  },
+  {
+    "action": "meta_read",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,文件uuid"
+  },
+  {
+    "action": "predict_task",
+    "description": "用户提出了一个明确的、全新的、未被追踪的任务，智能体需要开始执行或管理该任务。"
+  },
+  {
+    "action": "predict_speak",
+    "description": "若本轮已完成对用户的直接回应，且无待处理任务"
+  },
+  {
+    "action": "predict_ask",
+    "description": "用户的意图或需求模糊，缺少执行必要信息，智能体必须立即提问以推进对话。"
+  },
+  {
+    "action": "predict_clarify",
+    "description": "用户正在对某个已存在的任务进行信息补充、细节说明、约束修正或澄清。"
+  },
+  {
+    "action": "predict_continue",
+    "description": "当前所有信息已被处理完毕，没有更多未处理的数据或待办项，且用户并未发出新的交互请求。智能体应主动推进流程或结束交互。"
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:RefactorTableState",
+    "description": "基于表头字段重构原始表格数据的状态。",
+    "source_md_path": "str,",
+    "table_headers": "list,"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ScanAbstractState",
+    "description": "扫描文件摘要状态,不存在摘要，则更新摘要"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:SummaryAbstractState",
+    "description": "摘要摘要状态",
+    "empty_abstract": "DataFrame,"
+  },
+  {
+    "action": "state:UpdateAbstractState",
+    "description": "更新摘要索引表 files_abstract.parquet 中的摘要状态",
+    "text": "str,文件摘要",
+    "uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:ExampleState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LiveState",
+    "description": ""
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:EvalPromptState",
+    "description": "",
+    "prompt_full_path": "str,"
+  },
+  {
+    "action": "state:EvalState",
+    "description": ""
+  },
+  {
+    "action": "state:ExecutePromptState",
+    "description": "",
+    "prompt_file": "str,"
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:MetaAskState",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,"
+  },
+  {
+    "action": "state:MetaBaseState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaClarifyState",
+    "description": "用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。提出的问题要直接针对模糊点，且不能反复询问同一个问题。",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "state:MetaListenState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaReadState",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,FIXME 确定是uuid还是filepath，应该是uuid"
+  },
+  {
+    "action": "state:MetaSpeakState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaTaskState",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:SendMsgState",
+    "description": "",
+    "response": "str,"
+  },
+  {
+    "action": "state:ImgOCRState",
+    "description": "图片文本 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:TableOCRState",
+    "description": "图片表格 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:_BaseOCRState",
+    "description": "",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:GetURLDataState",
+    "description": "获取URL数据状态\n\n    通过 URL 获取数据，返回包含 action、thought、data 字段的 action_json 数据结构。"
+  },
+  {
+    "action": "state:WebSearchState",
+    "description": "网络搜索状态\n    \n    通过关键词执行网络搜索，返回包含 action、thought、data 字段的 action_json 数据结构。",
+    "keyword": "str,",
+    "searx_host": "str,",
+    "num_results": "int,"
+  },
+  {
+    "action": "state:AutoPlanTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LoadTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:ParseExcelState",
+    "description": "解析Excel文件状态",
+    "xlsx_path": "str,"
+  },
+  {
+    "action": "state:UpdateTableHeadState",
+    "description": "更新表格头状态",
+    "headers": "list,推测数据表头字段提示词返回的params属性",
+    "uuid": "str,文件uuid"
+  }
+]
+[2026-05-18 23:49:16]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 23:49:16]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 23:49:16]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 23:49:18]: 工具列表: [
+  {
+    "action": "read_file",
+    "description": "读取文件内容",
+    "file_path": "str,文件路径",
+    "max_read_size": "int,最大读取字节数"
+  },
+  {
+    "action": "read_mine_profile",
+    "description": "读取个人资料\n:param profile_path: 个人资料文件路径\n:param owner: 状态所有者\n:param kwargs: 其他参数\n:return: 个人资料信息字符串",
+    "profile_path": "str,个人资料文件路径"
+  },
+  {
+    "action": "read_memory",
+    "description": "读取个人信息\n:return: 个人信息字符串"
+  },
+  {
+    "action": "web_search",
+    "description": "搜索关键描述相关的信息\n:return: 搜索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "local_retrieval",
+    "description": "从本地上下文检索信息\nreturn: 检索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "meta_speak",
+    "description": "常规问答/沟通类/设计类/方案类/知识问答/情感交流/简单指令/概述回复类（需在3秒内响应）"
+  },
+  {
+    "action": "meta_task",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_clarify",
+    "description": "",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "meta_ask",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,需要用户回答澄清的问题"
+  },
+  {
+    "action": "meta_read",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,文件uuid"
+  },
+  {
+    "action": "predict_task",
+    "description": "用户提出了一个明确的、全新的、未被追踪的任务，智能体需要开始执行或管理该任务。"
+  },
+  {
+    "action": "predict_speak",
+    "description": "若本轮已完成对用户的直接回应，且无待处理任务"
+  },
+  {
+    "action": "predict_ask",
+    "description": "用户的意图或需求模糊，缺少执行必要信息，智能体必须立即提问以推进对话。"
+  },
+  {
+    "action": "predict_clarify",
+    "description": "用户正在对某个已存在的任务进行信息补充、细节说明、约束修正或澄清。"
+  },
+  {
+    "action": "predict_continue",
+    "description": "当前所有信息已被处理完毕，没有更多未处理的数据或待办项，且用户并未发出新的交互请求。智能体应主动推进流程或结束交互。"
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:RefactorTableState",
+    "description": "基于表头字段重构原始表格数据的状态。",
+    "source_md_path": "str,",
+    "table_headers": "list,"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ScanAbstractState",
+    "description": "扫描文件摘要状态,不存在摘要，则更新摘要"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:SummaryAbstractState",
+    "description": "摘要摘要状态",
+    "empty_abstract": "DataFrame,"
+  },
+  {
+    "action": "state:UpdateAbstractState",
+    "description": "更新摘要索引表 files_abstract.parquet 中的摘要状态",
+    "text": "str,文件摘要",
+    "uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:ExampleState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LiveState",
+    "description": ""
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:EvalPromptState",
+    "description": "",
+    "prompt_full_path": "str,"
+  },
+  {
+    "action": "state:EvalState",
+    "description": ""
+  },
+  {
+    "action": "state:ExecutePromptState",
+    "description": "",
+    "prompt_file": "str,"
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:MetaAskState",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,"
+  },
+  {
+    "action": "state:MetaBaseState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaClarifyState",
+    "description": "用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。提出的问题要直接针对模糊点，且不能反复询问同一个问题。",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "state:MetaListenState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaReadState",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,FIXME 确定是uuid还是filepath，应该是uuid"
+  },
+  {
+    "action": "state:MetaSpeakState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaTaskState",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:SendMsgState",
+    "description": "",
+    "response": "str,"
+  },
+  {
+    "action": "state:ImgOCRState",
+    "description": "图片文本 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:TableOCRState",
+    "description": "图片表格 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:_BaseOCRState",
+    "description": "",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:GetURLDataState",
+    "description": "获取URL数据状态\n\n    通过 URL 获取数据，返回包含 action、thought、data 字段的 action_json 数据结构。"
+  },
+  {
+    "action": "state:WebSearchState",
+    "description": "网络搜索状态\n    \n    通过关键词执行网络搜索，返回包含 action、thought、data 字段的 action_json 数据结构。",
+    "keyword": "str,",
+    "searx_host": "str,",
+    "num_results": "int,"
+  },
+  {
+    "action": "state:AutoPlanTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LoadTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:ParseExcelState",
+    "description": "解析Excel文件状态",
+    "xlsx_path": "str,"
+  },
+  {
+    "action": "state:UpdateTableHeadState",
+    "description": "更新表格头状态",
+    "headers": "list,推测数据表头字段提示词返回的params属性",
+    "uuid": "str,文件uuid"
+  }
+]
+[2026-05-18 23:52:13]: 开始分析用户对话意图
+[2026-05-18 23:52:13]: <行动>:开始思考观察用户意图
+[2026-05-18 23:53:05]: 继续推进流程...
+[2026-05-18 23:56:21]: 设置owner属性:record_delimiter=<record>
+[2026-05-18 23:56:21]: 设置owner属性:tuple_delimiter=||
+[2026-05-18 23:56:21]: 设置owner属性:entity_types=PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+[2026-05-18 23:56:22]: 工具列表: [
+  {
+    "action": "read_file",
+    "description": "读取文件内容",
+    "file_path": "str,文件路径",
+    "max_read_size": "int,最大读取字节数"
+  },
+  {
+    "action": "read_mine_profile",
+    "description": "读取个人资料\n:param profile_path: 个人资料文件路径\n:param owner: 状态所有者\n:param kwargs: 其他参数\n:return: 个人资料信息字符串",
+    "profile_path": "str,个人资料文件路径"
+  },
+  {
+    "action": "read_memory",
+    "description": "读取个人信息\n:return: 个人信息字符串"
+  },
+  {
+    "action": "web_search",
+    "description": "搜索关键描述相关的信息\n:return: 搜索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "local_retrieval",
+    "description": "从本地上下文检索信息\nreturn: 检索结果",
+    "keyword": "str,信息关键词"
+  },
+  {
+    "action": "meta_speak",
+    "description": "常规问答/沟通类/设计类/方案类/知识问答/情感交流/简单指令/概述回复类（需在3秒内响应）"
+  },
+  {
+    "action": "meta_task",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "meta_clarify",
+    "description": "",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "meta_ask",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,需要用户回答澄清的问题"
+  },
+  {
+    "action": "meta_read",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,文件uuid"
+  },
+  {
+    "action": "predict_task",
+    "description": "用户提出了一个明确的、全新的、未被追踪的任务，智能体需要开始执行或管理该任务。"
+  },
+  {
+    "action": "predict_speak",
+    "description": "若本轮已完成对用户的直接回应，且无待处理任务"
+  },
+  {
+    "action": "predict_ask",
+    "description": "用户的意图或需求模糊，缺少执行必要信息，智能体必须立即提问以推进对话。"
+  },
+  {
+    "action": "predict_clarify",
+    "description": "用户正在对某个已存在的任务进行信息补充、细节说明、约束修正或澄清。"
+  },
+  {
+    "action": "predict_continue",
+    "description": "当前所有信息已被处理完毕，没有更多未处理的数据或待办项，且用户并未发出新的交互请求。智能体应主动推进流程或结束交互。"
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:RefactorTableState",
+    "description": "基于表头字段重构原始表格数据的状态。",
+    "source_md_path": "str,",
+    "table_headers": "list,"
+  },
+  {
+    "action": "state:Doc2DocxState",
+    "description": "doc → docx 转换 (依赖 LibreOffice)",
+    "doc_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Docx2TextState",
+    "description": "从 docx 提取全文",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Pdf2DocxState",
+    "description": "pdf → docx 转换 + 扫描件检测",
+    "pdf_path": "str,",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:Text2ChunksState",
+    "description": "按标题层级切分文本",
+    "docx_path": "str,",
+    "full_text": "str,"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:ExtractDocxImagesState",
+    "description": "从 docx 提取图片",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ExtractDocxTablesState",
+    "description": "从 docx 提取表格",
+    "docx_path": "str,"
+  },
+  {
+    "action": "state:ScanAbstractState",
+    "description": "扫描文件摘要状态,不存在摘要，则更新摘要"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:SummaryAbstractState",
+    "description": "摘要摘要状态",
+    "empty_abstract": "DataFrame,"
+  },
+  {
+    "action": "state:UpdateAbstractState",
+    "description": "更新摘要索引表 files_abstract.parquet 中的摘要状态",
+    "text": "str,文件摘要",
+    "uuid": "str,文件uuid"
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearChatState",
+    "description": ""
+  },
+  {
+    "action": "state:ClearEvalAdviceState",
+    "description": "清除评估建议状态"
+  },
+  {
+    "action": "state:ClearTaskState",
+    "description": "清除工作任务状态"
+  },
+  {
+    "action": "state:ExampleState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LiveState",
+    "description": ""
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:WaitInputState",
+    "description": ""
+  },
+  {
+    "action": "state:EvalPromptState",
+    "description": "",
+    "prompt_full_path": "str,"
+  },
+  {
+    "action": "state:EvalState",
+    "description": ""
+  },
+  {
+    "action": "state:ExecutePromptState",
+    "description": "",
+    "prompt_file": "str,"
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:MetaAskState",
+    "description": "向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。",
+    "question": "str,"
+  },
+  {
+    "action": "state:MetaBaseState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaClarifyState",
+    "description": "用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。提出的问题要直接针对模糊点，且不能反复询问同一个问题。",
+    "task_id": "str,任务id",
+    "information": "str,用户澄清的关键信息"
+  },
+  {
+    "action": "state:MetaListenState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaReadState",
+    "description": "根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。",
+    "file_uuid": "str,FIXME 确定是uuid还是filepath，应该是uuid"
+  },
+  {
+    "action": "state:MetaSpeakState",
+    "description": ""
+  },
+  {
+    "action": "state:MetaTaskState",
+    "description": "生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等",
+    "name": "str,任务名称",
+    "task": "str,任务内容描述",
+    "goal": "str,任务最终要达成的目标",
+    "type": "str,任务类型->(查询统计 | 业务办理 | 搜索问答)",
+    "steps": "list,步骤1,步骤2,...(任务规划步骤)"
+  },
+  {
+    "action": "state:ScanFileState",
+    "description": "扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，\n    建立文件摘要索引表 files_abstract.parquet\n    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间"
+  },
+  {
+    "action": "state:WordParseState",
+    "description": "",
+    "source_path": "str,",
+    "output_root": "Optional,"
+  },
+  {
+    "action": "state:SendMsgState",
+    "description": "",
+    "response": "str,"
+  },
+  {
+    "action": "state:ImgOCRState",
+    "description": "图片文本 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:TableOCRState",
+    "description": "图片表格 OCR 状态机",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:_BaseOCRState",
+    "description": "",
+    "source_path": "str,",
+    "auto_install": "bool,",
+    "use_textline_orientation": "bool,",
+    "lang": "str,",
+    "batch_index": "int,"
+  },
+  {
+    "action": "state:GetURLDataState",
+    "description": "获取URL数据状态\n\n    通过 URL 获取数据，返回包含 action、thought、data 字段的 action_json 数据结构。"
+  },
+  {
+    "action": "state:WebSearchState",
+    "description": "网络搜索状态\n    \n    通过关键词执行网络搜索，返回包含 action、thought、data 字段的 action_json 数据结构。",
+    "keyword": "str,",
+    "searx_host": "str,",
+    "num_results": "int,"
+  },
+  {
+    "action": "state:AutoPlanTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ExecuteTaskState",
+    "description": "执行具体的任务: 查看用户任务列表，激活任务的下一步。",
+    "task_id": ","
+  },
+  {
+    "action": "state:LoadTaskState",
+    "description": "",
+    "text": ","
+  },
+  {
+    "action": "state:ScanTaskState",
+    "description": ""
+  },
+  {
+    "action": "state:ParseExcelState",
+    "description": "解析Excel文件状态",
+    "xlsx_path": "str,"
+  },
+  {
+    "action": "state:UpdateTableHeadState",
+    "description": "更新表格头状态",
+    "headers": "list,推测数据表头字段提示词返回的params属性",
+    "uuid": "str,文件uuid"
+  }
+]
+[2026-05-18 23:59:26]: 开始分析用户对话意图
+[2026-05-18 23:59:26]: <行动>:开始思考观察用户意图
+>>>>>>> .r1786

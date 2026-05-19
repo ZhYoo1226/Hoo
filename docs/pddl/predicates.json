@@ -1,0 +1,111 @@
+[
+    {
+        "name": "明确信息需求范围",
+        "desc": "明确信息需求范围",
+        "raw": "- (明确信息需求范围 ?scope - string): '明确信息需求范围'",
+        "params": {
+            "?scope": "string"
+        },
+        "clean": "(明确信息需求范围 ?scope - string)"
+    },
+    {
+        "name": "确定信息类型属性",
+        "desc": "确定信息类型属性",
+        "raw": "- (确定信息类型属性 ?attribute - string): '确定信息类型属性'",
+        "params": {
+            "?attribute": "string"
+        },
+        "clean": "(确定信息类型属性 ?attribute - string)"
+    },
+    {
+        "name": "获取必要访问权限",
+        "desc": "获取必要访问权限",
+        "raw": "- (获取必要访问权限 ?permissions - permission): '获取必要访问权限'",
+        "params": {
+            "?permissions": "permission"
+        },
+        "clean": "(获取必要访问权限 ?permissions - permission)"
+    },
+    {
+        "name": "信息类型",
+        "desc": "信息类型",
+        "raw": "- (信息类型 ?info_type - string): '信息类型'",
+        "params": {
+            "?info_type": "string"
+        },
+        "clean": "(信息类型 ?info_type - string)"
+    },
+    {
+        "name": "信息来源渠道",
+        "desc": "信息来源渠道",
+        "raw": "- (信息来源渠道 ?source_channel - url): '信息来源渠道'",
+        "params": {
+            "?source_channel": "url"
+        },
+        "clean": "(信息来源渠道 ?source_channel - url)"
+    },
+    {
+        "name": "访问凭证",
+        "desc": "访问凭证",
+        "raw": "- (访问凭证 ?access_credential - credential): '访问凭证'",
+        "params": {
+            "?access_credential": "credential"
+        },
+        "clean": "(访问凭证 ?access_credential - credential)"
+    },
+    {
+        "name": "检索关键词",
+        "desc": "检索关键词",
+        "raw": "- (检索关键词 ?keywords - string): '检索关键词'",
+        "params": {
+            "?keywords": "string"
+        },
+        "clean": "(检索关键词 ?keywords - string)"
+    },
+    {
+        "name": "验证方式",
+        "desc": "验证方式",
+        "raw": "- (验证方式 ?verification_method - string): '验证方式'",
+        "params": {
+            "?verification_method": "string"
+        },
+        "clean": "(验证方式 ?verification_method - string)"
+    },
+    {
+        "name": "信息获取方案",
+        "desc": "输出的信息获取方案",
+        "raw": "- (信息获取方案 ?solution - solution): '输出的信息获取方案'",
+        "params": {
+            "?solution": "solution"
+        },
+        "clean": "(信息获取方案 ?solution - solution)"
+    },
+    {
+        "name": "明确信息需求范围",
+        "desc": "明确信息需求范围的描述（字符串类型）",
+        "raw": "- (明确信息需求范围 ?scope - string): '明确信息需求范围的描述（字符串类型）'",
+        "params": {
+            "?scope": "string"
+        },
+        "clean": "(明确信息需求范围 ?scope - string)"
+    },
+    {
+        "name": "验证信息有效性通过",
+        "desc": "验证信息有效性通过",
+        "raw": "- (验证信息有效性通过 ?solution - solution ?verification_method - string): '验证信息有效性通过'",
+        "params": {
+            "?solution": "solution",
+            "?verification_method": "string"
+        },
+        "clean": "(验证信息有效性通过 ?solution - solution ?verification_method - string)"
+    },
+    {
+        "name": "信息获取方案",
+        "desc": "输出的信息获取方案",
+        "raw": "- (信息获取方案 ?solution - solution): '输出的信息获取方案'",
+        "params": {
+            "?solution": "solution"
+        },
+        "clean": "(信息获取方案 ?solution - solution)"
+    }
+]

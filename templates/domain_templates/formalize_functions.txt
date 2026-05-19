@@ -1,0 +1,10 @@
+单独列出函数变量类型。即使它们共享相同的类型，也不要合并。
+
+最终答案以“### FUNCTIONS”开头，后跟``` ```注释块，格式如下：
+
+### FUNCTIONS
+```
+- (function_name_1 ?t1 - type_1 ?t2 - type_2): 'function_description'
+- (function_name_2 ?t3 - type_3 ?t4 - type_4): 'function_description'
+- (function_name_3 ?t5 - type_5): 'function_description'
+```

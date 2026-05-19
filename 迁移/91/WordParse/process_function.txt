@@ -1,0 +1,138 @@
+import tempfile
+import os
+import asyncio
+import zipfile
+import re
+from xml.etree import ElementTree
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from typing import Optional
+from io import BytesIO
+import fitz  # PyMuPDF
+import subprocess
+from docx import Document
+CHUNK_SIZE = 8192
+TEMP_DIR = ""
+
+
+def extract_text_from_docx_xml(xml_content: bytes) -> str:
+    """直接从 docx 的 xml 中提取文本（轻量级方案）"""
+    try:
+        ns = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
+        root = ElementTree.fromstring(xml_content)
+        
+        # 提取所有段落文本
+        paragraphs = root.findall('.//w:p', ns)
+        texts = []
+        for p in paragraphs:
+            texts_in_p = []
+            for t in p.findall('.//w:t', ns):
+                if t.text:
+                    texts_in_p.append(t.text)
+            if texts_in_p:
+                texts.append(''.join(texts_in_p))
+        
+        return '\n'.join(texts)
+    except Exception as e:
+        raise RuntimeError(f"XML 解析失败: {e}")
+
+
+async def process_docx_zipfile(file: UploadFile) -> str:
+    """轻量级 docx 处理：直接用 zipfile 读取 xml"""
+    contents = await file.read()
+    
+    try:
+        with zipfile.ZipFile(BytesIO(contents)) as zf:
+            # 读取主文档内容
+            xml_content = zf.read('word/document.xml')
+            return extract_text_from_docx_xml(xml_content)
+    except zipfile.BadZipFile:
+        raise ValueError("不是有效的 zip 文件")
+    except KeyError:
+        raise ValueError("docx 文件结构损坏，缺少 word/document.xml")
+
+
+#处理docx
+async def process_docx_in_memory(file: UploadFile) -> dict:
+    contents = await file.read()
+    doc = await asyncio.to_thread(Document, BytesIO(contents))
+    paragraphs = await asyncio.to_thread(
+        lambda d: [p.text for p in d.paragraphs], doc
+    )
+    return "\n".join(paragraphs)
+
+#处理大docx
+async def process_docx_with_tempfile(file: UploadFile, ext: str) -> dict:
+    with tempfile.NamedTemporaryFile(suffix=ext, delete=False, dir=TEMP_DIR) as temp_file:
+        while chunk := await file.read(CHUNK_SIZE):
+            temp_file.write(chunk)
+        temp_path = temp_file.name
+        
+    try:
+        doc = await asyncio.to_thread(Document, temp_path)
+        paragraphs = await asyncio.to_thread(
+            lambda d: [p.text for p in d.paragraphs], doc
+        )
+        return "\n".join(paragraphs)
+    finally:
+        os.unlink(temp_path)
+        
+#处理pdf
+async def process_pdf_in_memory(file: UploadFile) -> dict:
+    contents = await file.read()
+    doc = await asyncio.to_thread(fitz.open, "pdf", contents)
+    try:
+        text = ""
+        for page in doc:
+            text += await asyncio.to_thread(page.get_text)
+        return text
+    finally:
+        await asyncio.to_thread(doc.close)
+        
+#处理大pdf
+async def process_pdf_with_tempfile(file: UploadFile, ext: str) -> dict:
+    with tempfile.NamedTemporaryFile(suffix=ext, delete=False, dir=TEMP_DIR) as temp_file:
+        while chunk := await file.read(CHUNK_SIZE):
+            temp_file.write(chunk)
+        temp_path = temp_file.name
+        
+    try:
+        doc = await asyncio.to_thread(fitz.open, temp_path)
+        try:
+            text = ""
+            for page in doc:
+                text += await asyncio.to_thread(page.get_text)
+            return text
+        finally:
+            await asyncio.to_thread(doc.close)
+    finally:
+        os.unlink(temp_path)
+
+              
+async def convert_doc_to_text(file_path: str) -> str:
+    try:
+        result = await asyncio.to_thread(
+            subprocess.run,
+            ["antiword", file_path],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return result.stdout
+    except subprocess.CalledProcessError as e:
+        print(f"Antiword 错误: {e.stderr}")
+        raise
+    except FileNotFoundError:
+        raise RuntimeError("未找到 antiword 命令，请确保已安装")
+
+#处理doc   
+async def process_doc_file(file: UploadFile, ext: str) -> str:
+    with tempfile.NamedTemporaryFile(suffix=ext, delete=False, dir=TEMP_DIR) as temp_file:
+        while chunk := await file.read(CHUNK_SIZE):
+            temp_file.write(chunk)
+        temp_path = temp_file.name
+        
+    try:
+        text = await convert_doc_to_text(temp_path)
+        return text
+    finally:
+        os.unlink(temp_path)

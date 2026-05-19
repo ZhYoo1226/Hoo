@@ -1,0 +1,27 @@
+最终答案放在以下标题下方：'### Action Parameters'、'### Action Preconditions'、'### Action Effects' 和 '### New Predicates'，使用 ``` ``` 注释块，PDDL格式如下：
+
+### Action Parameters
+```
+- ?t - type: '参数描述（用中文）'
+```
+
+### Action Preconditions
+```
+(and
+    (谓词_名称 ?t1 ?t2) ; 注释描述
+)
+```
+
+### Action Effects
+```
+(and
+    (谓词_名称 ?t1 ?t2) ; 注释描述
+)
+```
+
+### New Predicates
+```
+- (谓词_名称 ?t1 - type_1 ?t2 - type_2): '谓词描述（用中文）'
+```
+
+如果没有新增谓词，则在“### New Predicates”标题后保留一个空白的 ``` ``` 注释块。

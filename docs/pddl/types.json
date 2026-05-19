@@ -1,0 +1,7 @@
+{
+    "information_type": "需要获取的信息具体类别（数据/方案/方法/知识）",
+    "information_source": "可能包含目标信息的载体或位置",
+    "access_credential": "访问受限信息所需的认证信息",
+    "search_keywords": "用于定位信息的搜索要素组合",
+    "verification_method": "确认信息有效性的校验方法"
+}

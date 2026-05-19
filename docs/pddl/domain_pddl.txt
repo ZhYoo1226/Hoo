@@ -1,0 +1,148 @@
+(define (domain server-admin)
+   (:requirements
+      :strips :typing)
+
+   (:types 
+      access_credential
+      information_source
+      information_type
+      search_keywords
+      verification_method
+   )
+
+   (:predicates 
+      (明确信息需求范围 ?scope - string)
+      (确定信息类型属性 ?attribute - string)
+      (获取必要访问权限 ?permissions - permission)
+      (信息类型 ?info_type - string)
+      (信息来源渠道 ?source_channel - url)
+      (访问凭证 ?access_credential - credential)
+      (检索关键词 ?keywords - string)
+      (验证方式 ?verification_method - string)
+      (信息获取方案 ?solution - solution)
+      (验证信息有效性通过 ?solution - solution ?verification_method - string)
+   )
+
+   (:action 明确信息需求范围
+      :parameters (
+         ?scope - type
+      )
+      :precondition
+         (and
+             (明确信息需求范围 ?scope) ; 确保已明确信息需求范围
+         )
+      :effect
+         (and
+             (信息类型 ?info_type) ; 标识明确的信息类型
+             (信息来源渠道 ?source_channel) ; 标识明确的信息来源渠道
+         )
+   )
+
+   (:action 确定信息类型属性
+      :parameters (
+         ?attribute - type
+      )
+      :precondition
+         (and
+             (明确信息需求范围 ?scope) ; 确保已明确信息需求范围
+         )
+      :effect
+         (and
+             (确定信息类型属性 ?attribute) ; 确定信息类型的具体属性
+         )
+   )
+
+   (:action 获取访问权限
+      :parameters (
+         ?permissions - permission
+      )
+      :precondition
+         (and
+             (信息类型 ?info_type) ; 需要已确定信息类型
+             (信息来源渠道 ?source_channel) ; 需要已明确信息来源渠道
+         )
+      :effect
+         (and
+             (获取必要访问权限 ?permissions) ; 获取对应访问权限
+         )
+   )
+
+   (:action 选择信息来源渠道
+      :parameters (
+         ?source_channel - type
+      )
+      :precondition
+         (and
+             (明确信息需求范围 ?scope) ; 确保已明确信息需求范围
+             (信息类型 ?info_type) ; 需要已确定信息类型
+         )
+      :effect
+         (and
+             (信息来源渠道 ?source_channel) ; 选择并确认具体信息来源渠道
+         )
+   )
+
+   (:action 构建检索关键词组合
+      :parameters (
+         ?keywords - type
+      )
+      :precondition
+         (and
+             (信息类型 ?info_type) ; 需要已确定信息类型
+             (信息来源渠道 ?source_channel) ; 需要已明确信息来源渠道
+         )
+      :effect
+         (and
+             (检索关键词 ?keywords) ; 生成对应的检索关键词组合
+         )
+   )
+
+   (:action 执行信息检索
+      :parameters (
+         ?solution - solution
+      )
+      :precondition
+         (and
+             (信息类型 ?info_type) ; 需要已确定信息类型
+             (信息来源渠道 ?source_channel) ; 需要已明确信息来源渠道
+             (获取必要访问权限 ?permissions) ; 需要已获取访问权限
+             (检索关键词 ?keywords) ; 需要已构建检索关键词组合
+         )
+      :effect
+         (and
+             (信息获取方案 ?solution) ; 生成最终的信息获取方案
+         )
+   )
+
+   (:action 验证信息有效性
+      :parameters (
+         ?verification_method - string
+      )
+      :precondition
+         (and
+             (信息获取方案 ?solution) ; 需要已生成信息获取方案
+             (验证方式 ?verification_method) ; 需要已确定验证方式
+         )
+      :effect
+         (and
+             (验证信息有效性通过 ?solution ?verification_method) ; 标记信息有效性验证完成
+         )
+   )
+
+   (:action 生成获取方案
+      :parameters (
+         ?solution - solution
+      )
+      :precondition
+         (and
+             (信息类型 ?info_type) ; 需要已确定信息类型
+             (信息来源渠道 ?source_channel) ; 需要已明确信息来源渠道
+             (获取必要访问权限 ?permissions) ; 需要已获取访问权限
+             (检索关键词 ?keywords) ; 需要已构建检索关键词组合
+         )
+      :effect
+         (and
+             (信息获取方案 ?solution) ; 生成最终的信息获取方案
+         )
+   )
+)

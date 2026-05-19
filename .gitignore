@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+.venv*/
+venv*/
+env/
+
+# IDE - JetBrains
+.idea/
+
+# IDE - VS Code (keep workspace-level settings, ignore user prefs)
+.vscode/settings.json
+
+# Claude Code - user-specific settings (contains personal paths)
+.claude/settings.json
+.claude/settings.local.json
+
+# Superpowers
+.superpowers/
+
+# SVN metadata (should never be in git)
+.svn/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+logs/
