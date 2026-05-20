@@ -11,6 +11,7 @@ from PIL import Image, ImageFilter, ImageOps
 from .ocr_worker import (
     OCR_INSTALL_COMMANDS,
     PersistentOCRPool,
+    USE_GPU,
 )
 from .base_state import BaseState
 
@@ -96,6 +97,8 @@ class _BaseOCRState(BaseState):
 
             cpu_count = os.cpu_count() or 1
             n_workers = max(1, min(total_images // 2, 4, max(1, cpu_count // 2)))
+            if USE_GPU:
+                n_workers = 1  # GPU 显存放不下多套模型，单 worker 即可
             pool = PersistentOCRPool(n_workers, self.auto_install, self.lang, self.use_textline_orientation)
             try:
                 owner.sys_breathe_log(f"批次{self.batch_index}: 预处理完成，增强={len(enhanced_images)}")

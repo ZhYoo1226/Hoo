@@ -20,6 +20,10 @@ USE_GPU: bool = _DEPS.get("use_gpu", False)
 GPU_MEM: int = _DEPS.get("gpu_mem", 10000)                # 单卡显存上限 MB
 os.environ.setdefault("FLAGS_gpu_memory_limit_mb", str(GPU_MEM))
 
+# GPU 模式下必须用 spawn 启动子进程，CUDA 不支持 fork
+if USE_GPU:
+    multiprocessing.set_start_method("spawn", force=True)
+
 # 根据 use_gpu 自动选取对应的 Paddle 版本和模型组
 _paddle_ver_key = "paddlepaddle_gpu" if USE_GPU else "paddlepaddle_cpu"
 PINNED_PADDLE_VERSION: str = _DEPS[_paddle_ver_key]       # pip install 用到的版本号
