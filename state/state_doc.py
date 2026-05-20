@@ -2,13 +2,13 @@ import hashlib
 import json
 import os
 import re
-import shutil
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional, Sequence
 
 import pandas as pd
 
+from common import GlobalFunction
 from .base_state import BaseState
 from .state_file import COL_HASH, COL_PATH, FILES_ABSTRACT_NAME
 
@@ -136,7 +136,6 @@ class WordParseState(BaseState):
         self._text_dir: Optional[Path] = None
         self._full_text_path: Optional[Path] = None
         self._document_dir: Optional[Path] = None
-        self._normalized_docx_path: Optional[Path] = None
         self._tables: List[DocxTable] = []
         self._images: List[DocxImage] = []
         self._full_text = ""
@@ -150,7 +149,7 @@ class WordParseState(BaseState):
 
         source = Path(self.source_path).expanduser().resolve()
         if not source.exists():
-            owner.log("解析错误", f"源文件不存在: {source}")
+            GlobalFunction.log("解析错误", f"源文件不存在: {source}")
             self._done = True
             return
 
@@ -159,7 +158,6 @@ class WordParseState(BaseState):
             self._document_dir = Path(self.output_root).expanduser().resolve()
         else:
             self._document_dir = source.parent
-        self._normalized_docx_path = self._document_dir / f"{source.stem}.docx"
         self._parsed_root = self._document_dir / f"{source.stem}{PARSE_DIR_SUFFIX}"
         self._image_dir = self._parsed_root / "图"
         self._table_dir = self._parsed_root / "表"
@@ -185,10 +183,10 @@ class WordParseState(BaseState):
 
         # 等待子状态完成
         if (
-            self._current_sub_state is not None 
-            and
-            self._current_sub_state in owner._states
-            ):
+                self._current_sub_state is not None
+                and
+                self._current_sub_state in owner._states
+        ):
             return
 
         if self._stage == self.STAGE_INIT:
@@ -212,35 +210,36 @@ class WordParseState(BaseState):
     # --------------------------------------------------------------------------
 
     def _advance_from_init(self, owner):
-        # 根据源文件类型分发：docx 直接提取表格，pdf/doc 先转为 docx
         source_ext = Path(self.source_path).suffix.lower()
-        docx_path = str(self._normalized_docx_path)
+        source_stem = Path(self.source_path).stem
 
         if source_ext == ".docx":
-            source = Path(self.source_path).expanduser().resolve()
-            if source.resolve() != self._normalized_docx_path.resolve():
-                shutil.copy2(source, self._normalized_docx_path)
-            self._docx_path = docx_path
-            self._add_sub_state(owner, ExtractDocxTablesState(docx_path))
+            # 本身就是 docx，直接使用原始路径，不产生新文件
+            self._docx_path = self.source_path
+            self._add_sub_state(owner, ExtractDocxTablesState(self._docx_path))
             self._stage = self.STAGE_TABLES
         elif source_ext == ".pdf":
+            # pdf → docx 产物放在解析目录内
+            docx_path = str(self._parsed_root / f"{source_stem}.docx")
             self._add_sub_state(owner, Pdf2DocxState(self.source_path, docx_path))
             self._stage = self.STAGE_NORMALIZE
         elif source_ext == ".doc":
+            # doc → docx 产物放在解析目录内
+            docx_path = str(self._parsed_root / f"{source_stem}.docx")
             self._add_sub_state(owner, Doc2DocxState(self.source_path, docx_path))
             self._stage = self.STAGE_NORMALIZE
         else:
-            owner.log("解析错误", f"暂不支持的文件类型: {source_ext}")
+            GlobalFunction.log("解析错误", f"暂不支持的文件类型: {source_ext}")
             self._done = True
 
     def _advance_from_normalize(self, owner):
-        # pdf/doc 已转为 docx，检查转换结果，推进到表格提取
         sub_state = self._current_sub_state
         if sub_state._error is not None:
-            owner.log("解析错误", f"pdf/doc → docx 转换失败: {sub_state._error}")
+            GlobalFunction.log("解析错误", f"pdf/doc → docx 转换失败: {sub_state._error}")
             self._done = True
             return
-        self._docx_path = str(self._normalized_docx_path)
+        source_stem = Path(self.source_path).stem
+        self._docx_path = str(self._parsed_root / f"{source_stem}.docx")
         self._add_sub_state(owner, ExtractDocxTablesState(self._docx_path))
         self._stage = self.STAGE_TABLES
 
@@ -308,7 +307,9 @@ class WordParseState(BaseState):
         # 3. 磁盘产物完整性：防止手误删除
         if not self._parsed_root.exists():
             return False
-        if not self._normalized_docx_path.exists():
+        source = Path(self.source_path)
+        docx_path = source if source.suffix.lower() == ".docx" else (self._parsed_root / f"{source.stem}.docx")
+        if not docx_path.exists():
             return False
         if not self._full_text_path.exists():
             return False
@@ -386,7 +387,7 @@ class WordParseState(BaseState):
             self._write_chunk_tree(child, chunk_dir)
 
     def _append_heading_children(
-        self, chunk: HeadingChunk, level2_lines: List[str], level3_lines: List[str]
+            self, chunk: HeadingChunk, level2_lines: List[str], level3_lines: List[str]
     ) -> None:
         # 提取节点的二级子标题，追加到目录行列表
         level2_children = [child for child in chunk.children if child.level == 2]
@@ -397,10 +398,10 @@ class WordParseState(BaseState):
                 self._append_heading_grandchildren(child, level3_lines, chunk.title)
 
     def _append_heading_grandchildren(
-        self,
-        chunk: HeadingChunk,
-        level3_lines: List[str],
-        level1_title: str = "",
+            self,
+            chunk: HeadingChunk,
+            level3_lines: List[str],
+            level1_title: str = "",
     ) -> None:
         # 提取节点的三级子标题，追加到目录行列表
         level3_children = [child for child in chunk.children if child.level == 3]
@@ -481,7 +482,8 @@ class WordParseState(BaseState):
             self._write_chunk_tree(chunk, self._text_dir)
 
         manifest_source = self._relative_manifest_path(self._parsed_root / "parse_manifest.md", Path(self.source_path))
-        manifest_docx = self._relative_manifest_path(self._parsed_root / "parse_manifest.md", self._normalized_docx_path)
+        manifest_docx = self._relative_manifest_path(self._parsed_root / "parse_manifest.md",
+                                                     Path(self._docx_path))
         (self._parsed_root / "parse_manifest.md").write_text(
             "\n".join([
                 f"source_hash: {self._source_hash}",
@@ -492,4 +494,4 @@ class WordParseState(BaseState):
         )
 
 
-__all__ = ["WordParseState",]
+__all__ = ["WordParseState", ]
