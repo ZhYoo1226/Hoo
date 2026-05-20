@@ -2,6 +2,7 @@ import ast
 import inspect
 import io
 import json
+import logging
 import os
 import re
 import textwrap
@@ -13,6 +14,16 @@ from .config import g_yaml_config
 
 
 class GlobalFunction:
+    _work_file_map: dict = {}  # uuid → WorkFile
+
+    @classmethod
+    def register_work_files(cls, df: "pd.DataFrame"):
+        """从 files_abstract.parquet 的 DataFrame 注册 WorkFile 对象"""
+        from .entities import WorkFile
+        cls._work_file_map.clear()
+        for _, row in df.iterrows():
+            wf = WorkFile(row.to_dict())
+            cls._work_file_map[wf.uuid] = wf
 
     @staticmethod
     def show_file_structure():
@@ -51,6 +62,41 @@ class GlobalFunction:
         return= test
         """
         return os.path.basename(file_path).split(".")[0]
+
+    @staticmethod
+    def uuid_to_file_path(file_uuid: str):
+        """根据文件uuid，返回文件路径"""
+        wf = GlobalFunction.uuid_to_work_file(file_uuid)
+        return wf.file_path if wf else None
+
+    @staticmethod
+    def uuid_to_work_file(uuid: str) -> "WorkFile":
+        """根据文件uuid，返回 WorkFile 对象"""
+        return GlobalFunction._work_file_map.get(uuid)
+
+    @staticmethod
+    def file_to_work_file(file_path: str) -> "WorkFile":
+        """根据文件路径，返回 WorkFile 对象"""
+        for wf in GlobalFunction._work_file_map.values():
+            if wf.file_path == file_path:
+                return wf
+        return None
+
+    @staticmethod
+    def uuid_to_file_abstract(uuid: str):
+        """根据文件uuid，返回文件摘要"""
+        # FIXME mim，通过文件uuid，转换为文件摘要信息dict对象。
+        # 假设是这个对象
+        return {
+            "uuid": uuid,
+            "文件路径": os.path.join("./workspace/user/files/test", uuid),
+            "文件名称": uuid,
+            "hash值": "",
+            "更新时间": "",
+            "文件预览": "",
+            "文件摘要": "",
+            "关键实体": "",
+        }
 
     @staticmethod
     def file_to_parse_path(file_path: str):
@@ -161,14 +207,16 @@ class GlobalFunction:
 
     @staticmethod
     def parse_llm_reply(response: str):
-        """解析LLM输出文本中的reply内容"""
-        """提取</think>之后的内容"""
-        reply_match = re.search(r'(?:.*?</think>)?(.*)', response, re.DOTALL)
-        if reply_match:
-            reply_text = reply_match.group(1) if reply_match else ""
-            return reply_text
+        """解析LLM输出文本中的reply内容:提取</think>之后的内容。否则返回原文"""
+        if "</think>" in response:
+            reply_match = re.search(r'(?:.*?</think>)?(.*)', response, re.DOTALL)
+            if reply_match:
+                reply_text = reply_match.group(1) if reply_match else ""
+                return reply_text
+            else:
+                return response
         else:
-            return None
+            return response
 
     @staticmethod
     def extract_action_json(response: str):
@@ -235,9 +283,9 @@ class GlobalFunction:
                             if content.startswith('{') or content.startswith('['):
                                 parsed_results.append(json.loads(content))
                             else:
-                                parsed_results.append({"outer_name": content})
+                                parsed_results.append({outer_name: content})
                         else:
-                            parsed_results.append({"outer_name": content})
+                            parsed_results.append({outer_name: content})
                 i += 1
                 continue
             i += 1
@@ -318,3 +366,28 @@ class GlobalFunction:
         }
         tool.update(parameters)
         return tool
+
+    @staticmethod
+    def log(name: str, msg: str) -> logging.Logger:
+        """初始化系统日志记录器"""
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.INFO)
+
+        # 避免重复添加handler
+        if not logger.handlers:
+            # 创建按日期命名的日志文件
+            log_file = os.path.join(GlobalFunction.log_path(), f"{name}.log")
+            os.makedirs(os.path.dirname(log_file), exist_ok=True)
+            # 创建文件handler
+            file_handler = logging.FileHandler(log_file, encoding='utf-8')
+            # 创建控制台handler
+            console_handler = logging.StreamHandler()
+            # 设置日志格式
+            formatter = logging.Formatter('[%(asctime)s]: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+            file_handler.setFormatter(formatter)
+            console_handler.setFormatter(formatter)
+            # 添加handler到logger
+            logger.addHandler(file_handler)
+            # logger.addHandler(console_handler)
+        logger.info(msg)
+        return logger

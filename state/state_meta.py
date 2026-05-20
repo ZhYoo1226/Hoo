@@ -2,33 +2,10 @@ import os
 from datetime import datetime
 
 from common import GlobalFunction
-from common.register import g_tool_registry
 from state import BaseState, StateOwner
 from state.state_doc import WordParseState
 from state.state_file import ScanFileState
 from state.state_task import ExecuteTaskState
-
-"""
-命令注册器需要在app.py中初始化
-{
-  "action": "meta:speak | meta:task | meta:plan | meta:listen | meta:ask",
-  "think": "做出该决策的简短思考或任务分解过程",
-  "response": "根据 action 生成的文本回复（具体规则见下方）",
-  "plan": {  // 仅当 action 为 meta:plan 时需要，否则省略
-    "task": "重新根据背景信息总结任务描述。",
-    "task_id": "123456789", // 任务 ID，用于关联任务和历史记录
-    "confidence": 0.0-1.0,  // 当前方案与历史方案的匹配置信度，决定是否搜索知识库
-    "steps": ["重新规划的步骤1", "步骤2", ...]
-  },
-  "task": {  // 仅当 action 为 meta:task 时需要，否则省略
-    "name": "任务名称",
-    "task": "任务的具体需求描述",
-    "goal": "任务最终要达成的目标",
-    "type": "查询统计 | 业务探索 | 搜索问答",
-    "steps": ["重新规划的步骤1", "步骤2", ...]
-  }
-}
-"""
 
 
 # 元认知
@@ -73,13 +50,13 @@ class MetaSpeakState(MetaBaseState):
         owner.remove_state(self)
 
 
-@g_tool_registry.register("meta:speak")
-def meta_speak(owner: StateOwner, **kwargs):
-    """
-    常规问答/沟通类/设计类/方案类/知识问答/情感交流/简单指令/概述回复类（需在3秒内响应）
-    """
-    print("响应QA直接回复状态")
-    return owner.add_state(MetaSpeakState(**kwargs))
+# @g_tool_registry.register("meta:speak")
+# def meta_speak(owner: StateOwner, **kwargs):
+#     """
+#     常规问答/沟通类/设计类/方案类/知识问答/情感交流/简单指令/概述回复类（需在3秒内响应）
+#     """
+#     print("响应QA直接回复状态")
+#     return owner.add_state(MetaSpeakState(**kwargs))
 
 
 class MetaTaskState(MetaBaseState):
@@ -87,16 +64,17 @@ class MetaTaskState(MetaBaseState):
     生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等
     """
     stateName = "MetaTaskState"
+    # 注册的动作或者工具tool的名称
+    actionName = "meta:task"
 
     def __init__(self,
                  name: str,  # 任务名称
                  task: str,  # 任务内容描述
                  goal: str,  # 任务最终要达成的目标
                  type: str,  # 任务类型->(查询统计 | 业务办理 | 搜索问答)
-                 steps: list,  # 步骤1,步骤2,...(任务规划步骤)
                  **kwargs):
         self.name = name
-        self.task = {'name': name, 'task': task, 'goal': goal, 'type': type, 'steps': steps}
+        self.task = {'name': name, 'task': task, 'goal': goal, 'type': type}
         current_time = datetime.now()
         self.task_id = current_time.strftime("%Y%m%d%H%M%S")
         self.create_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
@@ -116,26 +94,12 @@ class MetaTaskState(MetaBaseState):
             self.task['create_time'] = self.create_time
             self.task['finished'] = False
             # 记录chat历史
-            owner.record_role_chat("行动", f"创建任务->{self.task['name']}(task_id:{self.task['task_id']})")
+            owner.record_role_chat("行动", f"创建任务：{self.task['name']}(task_id:{self.task['task_id']})")
             # 创建任务对象
             work_task = owner.create_task(self.task)
             # 更新任务记录到文件
             work_task.update_task_record()
         owner.remove_state(self)
-
-
-@g_tool_registry.register("meta:task")
-def meta_task(
-        name: str,  # 任务名称
-        task: str,  # 任务内容描述
-        goal: str,  # 任务最终要达成的目标
-        type: str,  # 任务类型->(查询统计 | 业务办理 | 搜索问答)
-        steps: list,  # 步骤1,步骤2,...(任务规划步骤)
-        owner: StateOwner, **kwargs):
-    """
-    生成需要多步推理的动态任务，例如：查询动态信息、统计实时数据、业务办理等
-    """
-    return owner.add_state(MetaTaskState(name=name, task=task, goal=goal, type=type, steps=steps, **kwargs))
 
 
 class MetaClarifyState(MetaBaseState):
@@ -172,16 +136,17 @@ class MetaClarifyState(MetaBaseState):
         owner.remove_state(self)
 
 
-@g_tool_registry.register("meta:clarify")
-def meta_clarify(
-        task_id: str,  # 任务id
-        information: str,  # 用户澄清的关键信息
-        owner: StateOwner, **kwargs):
-    """
-
-    """
-    print("重新规划动作")
-    return owner.add_state(MetaClarifyState(task_id=task_id, information=information, **kwargs))
+#
+# @g_tool_registry.register("meta:clarify")
+# def meta_clarify(
+#         task_id: str,  # 任务id
+#         information: str,  # 用户澄清的关键信息
+#         owner: StateOwner, **kwargs):
+#     """
+#
+#     """
+#     print("重新规划动作")
+#     return owner.add_state(MetaClarifyState(task_id=task_id, information=information, **kwargs))
 
 
 class MetaAskState(MetaBaseState):
@@ -190,7 +155,9 @@ class MetaAskState(MetaBaseState):
     """
     stateName = 'MetaAskState'
 
-    def __init__(self, question: str, **kwargs):
+    def __init__(self,
+                 question: str,  # 需要用户回答澄清的问题
+                 **kwargs):
         super().__init__(**kwargs)
         self.question = question
 
@@ -204,13 +171,14 @@ class MetaAskState(MetaBaseState):
         owner.remove_state(self)
 
 
-@g_tool_registry.register("meta:ask")
-def meta_ask(question: str,  # 需要用户回答澄清的问题
-             owner=None, **kwargs):
-    """
-    向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。
-    """
-    return owner.add_state(MetaAskState(question, **kwargs))
+#
+# @g_tool_registry.register("meta:ask")
+# def meta_ask(question: str,  # 需要用户回答澄清的问题
+#              owner=None, **kwargs):
+#     """
+#     向用户提问，获取用户回答。用户描述的信息过于模糊、缺失关键要素，以至于无法开展具体工作，必须通过提问来澄清。不反复询问同一个问题。
+#     """
+#     return owner.add_state(MetaAskState(question, **kwargs))
 
 
 class MetaReadState(MetaBaseState):
@@ -221,7 +189,6 @@ class MetaReadState(MetaBaseState):
 
     def __init__(self, file_uuid: str, **kwargs):
         self.file_uuid = file_uuid
-        # FIXME 确定是uuid还是filepath，应该是uuid
         self.file_path = GlobalFunction.uuid_to_file_path(self.file_uuid)
         self._scanner_added = False
         self._parser_added = False
@@ -240,15 +207,16 @@ class MetaReadState(MetaBaseState):
         owner.remove_state(self)
 
 
-@g_tool_registry.register("meta:read")
-def meta_read(file_uuid: str,  # 文件uuid
-              owner: StateOwner, **kwargs):
-    """
-    根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。
-    """
-    # 分析文件，最后得到初步摘要。尝试理解推测用户的需求和意图。
-    print("meta:read")
-    return owner.add_state(MetaReadState(file_uuid, **kwargs))
+#
+# @g_tool_registry.register("meta:read")
+# def meta_read(file_uuid: str,  # 文件uuid
+#               owner: StateOwner, **kwargs):
+#     """
+#     根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。
+#     """
+#     # 分析文件，最后得到初步摘要。尝试理解推测用户的需求和意图。
+#     print("meta:read")
+#     return owner.add_state(MetaReadState(file_uuid, **kwargs))
 
 
 # 查看所有命令
@@ -264,12 +232,12 @@ class ExecutePromptState(BaseState):
         self.prompt_file = prompt_file
 
     def Enter(self, owner):
-        owner.log("运行状态", f"{self.stateName} 执行提示词: {self.prompt_file}")
+        GlobalFunction.log("运行状态", f"{self.stateName} 执行提示词: {self.prompt_file}")
         pass
 
     def Execute(self, owner):
         action_json = owner.execute_prompt(self.prompt_file)
-        owner.log("运行状态", f"{self.stateName} 执行结果: {action_json}")
+        GlobalFunction.log("运行状态", f"{self.stateName} 执行结果: {action_json}")
         owner.remove_state(self)
 
 
@@ -285,17 +253,17 @@ class EvalPromptState(BaseState):
         return prompt_content
 
     def Enter(self, owner):
-        owner.log("运行状态", f"开始评估: {self.prompt_full_path}")
+        GlobalFunction.log("运行状态", f"开始评估: {self.prompt_full_path}")
 
     def Execute(self, owner):
         action_list = owner.execute_prompt("评估提示词设计与建议", state=self)
-        owner.log("运行状态", f"评估完成: {self.prompt_full_path}")
+        GlobalFunction.log("运行状态", f"评估完成: {self.prompt_full_path}")
         if action_list:
-            owner.log("运行状态", f"评估结果: {action_list[0]}")
+            GlobalFunction.log("运行状态", f"评估结果: {action_list[0]}")
             if isinstance(action_list[0], dict):
                 # self.prompt_full_path ，生成一个同名文件，后缀为_评估建议.txt
                 eval_file_path = self.prompt_full_path.replace(".md", "_(评估建议).md")
-                owner.log("运行状态", f"评估结果已保存到: {eval_file_path}")
+                GlobalFunction.log("运行状态", f"评估结果已保存到: {eval_file_path}")
                 if "text" in action_list[0]:
                     GlobalFunction.write_file(eval_file_path, action_list[0]['text'])
         owner.remove_state(self)
@@ -325,14 +293,14 @@ class EvalState(BaseState):
         for prompt_path in all_prompts:
             full_path = os.path.join(prompt_dir, prompt_path)
             owner.add_state(EvalPromptState(full_path))
-        owner.log("运行状态", f"总共评估 {len(all_prompts)} 个提示词")
+        GlobalFunction.log("运行状态", f"总共评估 {len(all_prompts)} 个提示词")
 
     def Enter(self, owner):
-        owner.log("运行状态", "开始评估")
+        GlobalFunction.log("运行状态", "开始评估")
 
     def Execute(self, owner):
         self.eval_prompts(owner)
         owner.remove_state(self)
 
     def Exit(self, owner):
-        owner.log("运行状态", "评估完成，退出评估状态。")
+        GlobalFunction.log("运行状态", "评估完成，退出评估状态。")

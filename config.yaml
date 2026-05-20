@@ -27,9 +27,9 @@ chat:
   reload_chat_max_bytes: 3000
   max_chat_record_in_mem: 20
   #启动清空聊天记录
-  launch_clear_chat: true
+  launch_clear_chat: false
   #启动清空任务
-  launch_clear_task: true
+  launch_clear_task: false
   #启动清空评估建议
   launch_clear_prompt_eval: true
 
@@ -42,3 +42,5 @@ state:
 dev:
   #检测注释是否正确
   check_annotation: false
+  #打印工具信息
+  debug: true

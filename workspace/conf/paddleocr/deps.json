@@ -3,6 +3,6 @@
     "paddlepaddle_cpu": "3.1.1",
     "paddlepaddle_gpu": "3.1.1.post120",
     "paddleocr": "3.3.3",
-    "use_gpu": false,
-    "gpu_mem": 10000
+    "use_gpu": true,
+    "gpu_mem": 13000
 }

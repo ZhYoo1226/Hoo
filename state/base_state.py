@@ -136,6 +136,9 @@ class BaseState:
 
 
 class StateOwner:
+    # 状态类的注册表
+    _states_class = {}
+
     def __init__(self, config: Dict = None):
         # 全局配置文件
         self._config = config or {}
@@ -201,7 +204,8 @@ class StateOwner:
     def list_meta_tools(self):
         """获取所有状态元工具"""
         tools = self.list_tools()
-        meta_tools = [tool for tool in tools if tool['action'].startswith('state:Meta')]
+        meta_tools = [tool for tool in tools if
+                      tool['action'].startswith('state:Meta') or tool['action'].startswith('meta:')]
         return meta_tools
 
     def list_file_tools(self):
@@ -232,6 +236,9 @@ class StateOwner:
                         "action": f"state:{state_class.__name__}",
                         "description": state_class.__doc__.strip() if state_class.__doc__ else ""
                     }
+                    # 判断actionName是否注册，如果有则使用注册的actionName
+                    if hasattr(state_class, 'actionName'):
+                        tool['action'] = state_class.actionName
                     # Get the __init__ method properly
                     init_func = state_class.__init__
                     # Skip if it's the BaseState's __init__ method
@@ -243,11 +250,14 @@ class StateOwner:
                     if init_desc:
                         if 'parameters' in init_desc:
                             del init_desc['parameters']
-                        if 'action' in init_desc:
+                        if 'action' in init_desc:  # 默认是__init__方法名称
                             del init_desc["action"]
                         if 'description' in init_desc:
                             del init_desc["description"]
                         tool.update(init_desc)
+                        # 注册状态类
+                        StateOwner._states_class[tool['action']] = state_class
+
                     tool_list.append(tool)
         return tool_list
 
@@ -259,7 +269,7 @@ class StateOwner:
     # 系统呼吸日志
     def sys_breathe_log(self, msg: str) -> logging.Logger:
         """写入日志文件，带时间戳"""
-        return self.log(f"sys_breathe_{self.current_date()}", msg)
+        return GlobalFunction.log(f"sys_breathe_{self.current_date()}", msg)
 
     def record_execute_action(self):
         pass
@@ -308,31 +318,6 @@ class StateOwner:
             record.print()
 
             # f.write(json.dumps(record, ensure_ascii=False) + '\n')
-
-    def log(self, name: str, msg: str) -> logging.Logger:
-        """初始化系统日志记录器"""
-        logger = logging.getLogger(name)
-        logger.setLevel(logging.INFO)
-
-        # 避免重复添加handler
-        if not logger.handlers:
-            # 创建按日期命名的日志文件
-            log_file = os.path.join(self._log_path, f"{name}.log")
-            os.makedirs(os.path.dirname(log_file), exist_ok=True)
-
-            # 创建文件handler
-            file_handler = logging.FileHandler(log_file, encoding='utf-8')
-            # 创建控制台handler
-            console_handler = logging.StreamHandler()
-            # 设置日志格式
-            formatter = logging.Formatter('[%(asctime)s]: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-            file_handler.setFormatter(formatter)
-            console_handler.setFormatter(formatter)
-            # 添加handler到logger
-            logger.addHandler(file_handler)
-            # logger.addHandler(console_handler)
-        logger.info(msg)
-        return logger
 
     #################################状态机基础方法########################################
     def read_property(self,  # 目标对象
@@ -528,3 +513,35 @@ class StateOwner:
             self.breathe_frame += 1
         # 每次呼吸的时间间隔是0.1s
         await asyncio.sleep(0.04)
+
+    def _find_state(self, state_name: str) -> BaseState:
+        """查找状态类"""
+        if state_name in StateOwner._states_class:
+            return StateOwner._states_class[state_name]
+
+        # 缓存未命中，才进行动态查找
+        # 遍历state模块下所有py文件，查找对应名称的状态类
+        state_class = None
+        for _, module_name, _ in pkgutil.iter_modules(['state']):
+            if module_name == '__init__' or module_name == 'base_state':
+                continue
+            module = importlib.import_module(f'.{module_name}', package='state')
+            # 遍历模块中的所有类，找到匹配stateName的状态类
+            for attr_name in dir(module):
+                attr = getattr(module, attr_name)
+                if isinstance(attr, type) and issubclass(attr, BaseState) and attr != BaseState:
+                    # 优先匹配stateName属性，如果没有则匹配类名
+                    match_found = False
+                    if hasattr(attr, 'stateName') and attr.stateName == state_name:
+                        match_found = True
+                    elif attr.__name__ == state_name:
+                        match_found = True
+                    elif hasattr(attr, 'actionName') and attr.actionName == state_name:
+                        match_found = True
+
+                    if match_found:
+                        state_class = attr
+                        # 存入缓存，下次直接使用
+                        StateOwner._states_class[state_name] = state_class
+                        return state_class
+        return None

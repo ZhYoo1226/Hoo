@@ -46,6 +46,12 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)
     g_owner.add_state(LiveState())
 
+    # input_text = GlobalFunction.load_file("tests/任务_设计提示词.md")
+    # input_text = GlobalFunction.load_file("tests/对话_静态信息_日期.md")
+    # input_text = GlobalFunction.load_file("tests/对话_静态信息_自我.md")
+    # input_text = GlobalFunction.load_file("tests/任务_银行回单_不清晰.md")
+    input_text = GlobalFunction.load_file("tests/文件_银行回单.md")
+    g_owner.recv_message("用户", input_text)
 
     # 在独立线程中运行 LLM 测试
     # def test_llm():

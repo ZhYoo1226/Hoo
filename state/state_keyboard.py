@@ -5,8 +5,6 @@ import threading
 from .base_state import BaseState
 
 
-# FIXME
-
 # ---------- 输入监听线程 ----------
 class InputListener:
     def __init__(self):
@@ -34,7 +32,6 @@ class InputListener:
                 # print("请你可以在这儿模拟输入消息:")
                 line = sys.stdin.readline()
                 if line:
-                    # print(f"收到键盘输入消息，[键盘]: {line.strip()}")
                     self._queue.put(line.strip('\n\r'))
                 else:
                     # EOF 时退出
@@ -63,14 +60,14 @@ class WaitInputState(BaseState):
 
     def Enter(self, owner):
         """进入状态时启动输入监听"""
-        print("等待用户输入... (输入任意内容后继续)")
+        owner.sys_breathe_log("等待用户输入... (输入任意内容后继续)")
         self.listener.start()
 
     def Execute(self, owner):
         """每次呼吸时检查是否有输入"""
         got, new_msg = self.listener.get_input(block=False, timeout=0.1)
         if got and new_msg:
-            print(f"收到输入消息，[用户]: {new_msg}")
+            # owner.sys_breathe_log(f"收到输入消息，[用户]: {new_msg}")
             # owner.add_state(NewMessageState("用户",new_msg))
             # 推送一条意图未理解的意图消息
             owner.recv_message("用户", new_msg)

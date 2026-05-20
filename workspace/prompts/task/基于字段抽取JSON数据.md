@@ -263,17 +263,17 @@ JSON 对象包含你对数据处理的思考及抽取后的结构化数据。
 # 用户输入数据
 **文本数据**
 ```
-{state.table_text}
+{{state.table_text}}
 ```
 
 **原始表格**
 ```
-{state.table_content}
+{{state.table_content}}
 ```
 
 **字段列表**
 ```
-{state.table_headers}
+{{state.table_headers}}
 ```
 
 **输出:**

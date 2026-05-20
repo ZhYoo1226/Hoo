@@ -1,6 +1,6 @@
 import json
 
-from common import g_yaml_config
+from common import g_yaml_config, GlobalFunction
 from .base_state import BaseState
 from .state_clear import ClearChatState, ClearTaskState, ClearEvalAdviceState
 from .state_keyboard import WaitInputState
@@ -57,7 +57,7 @@ class LiveState(BaseState):
     #         t.start()
 
     def Enter(self, owner):
-        print("进入生命状态")
+        owner.sys_breathe_log("进入生命状态")
         # 清除聊天记录
         if g_yaml_config["chat"]["launch_clear_chat"]:
             owner.add_state(ClearChatState())
@@ -82,9 +82,9 @@ class LiveState(BaseState):
         owner.add_state(ExecuteTaskState())
         # 工具
         owner.sys_breathe_log(f"工具列表: {json.dumps(owner.list_tools(), ensure_ascii=False, indent=2)}")
-
-    def Exit(self, owner):
-        pass
+        # 是否debug
+        if g_yaml_config["dev"]["debug"]:
+            owner.add_state(DebugState())
 
     def Execute(self, owner):
         pass
@@ -109,6 +109,33 @@ class ExampleState(BaseState):
         # 最好是能够切换到TTS的线程
         owner.remove_state(self)
         pass
+
+    def Exit(self, owner):
+        pass
+
+
+class DebugState(BaseState):
+    stateName = "DebugState"
+
+    def log(self, msg):
+        return GlobalFunction.log("DEBUG", msg)
+
+    def Enter(self, owner):
+        self.log("进入调试状态")
+
+    def Execute(self, owner):
+        # 打印工具信息
+        self.log(f"工具列表【owner.list_tools】:\n {json.dumps(owner.list_tools(), ensure_ascii=False, indent=2)}\n---\n")
+        self.log(
+            f"meta工具列表【owner.list_meta_tools】:\n {json.dumps(owner.list_meta_tools(), ensure_ascii=False, indent=2)}\n---\n")
+        self.log(
+            f"文件工具列表【owner.list_file_tools】:\n {json.dumps(owner.list_file_tools(), ensure_ascii=False, indent=2)}\n---\n")
+        self.log(
+            f"web工具列表【owner.list_web_tools】:\n {json.dumps(owner.list_web_tools(), ensure_ascii=False, indent=2)}\n---\n")
+        self.log(
+            f"激活任务列表【owner.list_active_task】:\n {json.dumps(owner.list_active_task(), ensure_ascii=False, indent=2)}\n---\n")
+
+        owner.remove_state(self)
 
     def Exit(self, owner):
         pass

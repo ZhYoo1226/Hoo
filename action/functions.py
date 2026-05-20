@@ -12,15 +12,17 @@ from state import StateOwner
 # 3.读取隐私信息
 
 
-@g_tool_registry.register()
+@g_tool_registry.register("meta:read_file")
 def read_file(file_path: str,  # 文件路径
               max_read_size: int = 5 * 1024,  # 最大读取字节数
               **kwargs):
     """
     读取文件内容
     """
-    # 读取文件内容，不管他是什么文件。
+    # 也必须是一个状态，进入的时候，文件正在被读取，退出的时候，文件没有被读取。
+    # 读取文件内容，不管他是什么文件。包括pdf,doc,docx,image,excel等。
     # 设置文件大小阈值（5KB），超过这个大小就返回摘要
+    # 不管是什么文件，都应该被读取。
     try:
         file_size = os.path.getsize(file_path)
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -36,7 +38,7 @@ def read_file(file_path: str,  # 文件路径
         return f"读取文件出错：{str(e)}"
 
 
-@g_tool_registry.register()
+@g_tool_registry.register("meta:read_mine_profile")
 def read_mine_profile(profile_path: str = "profile.yaml",  # 个人资料文件路径
                       owner: StateOwner = None,  # 状态所有者
                       **kwargs):

@@ -24,10 +24,11 @@ class ThinkClient:
         self.process_thread.start()
 
     def observe_user_intent(self, owner):
-        owner.sys_breathe_log("开始分析用户对话意图")
+        owner.sys_breathe_log("开始观察用户意图")
         self.total_intent_count = 0
-        # 分析用户的对话意图
-        predict_action = owner.execute_prompt("观察用户意图")
+        # 分析用户的对话意图,不需要系统提示词
+        user_input = "---\n观察用户意图，请输出评估预测结果。\n**输出**"
+        predict_action = owner.execute_prompt(user_prompt=None, user_msg=user_input, system_prompt="观察用户意图")
         # 这个地方是返回的action，具体的执行是在下一个状态处理的
         owner.execute_action(predict_action)
 
@@ -47,7 +48,7 @@ class ThinkClient:
             try:
                 role, chat_new_msg = chat_text_queue.get(timeout=0.5)
                 if not chat_new_msg:
-                    #如果没有新消息，且意图分析次数超过3次，则分析意图意图分类
+                    # 如果没有新消息，且意图分析次数超过3次，则分析意图意图分类
                     if self.total_intent_count >= 3:
                         self.observe_user_intent(owner)
                     continue

@@ -4,6 +4,7 @@ import re
 from datetime import datetime
 
 import openpyxl
+import pandas as pd
 
 from .global_functions import GlobalFunction
 
@@ -54,6 +55,43 @@ class ExcelEntity:
         return content
 
 
+# FIXME mim：信息从哪里来，组织文件状态。
+class WorkFile:
+    """用户发送来的工作文件，对应 files_abstract.parquet 中的一行记录"""
+
+    """
+    工作文件是否绑定任务，还是任务绑定工作文件。
+    文件在对话中的显示状态,to_markdown()
+    文件对file_abstract的属性读取，比如是否完成分析。
+    """
+    def __init__(self, file_info: dict):
+        self.uuid = file_info.get("uuid", "")
+        self.file_path = file_info.get("文件路径", "")
+        self.file_name = file_info.get("文件名称", "")
+        self.hash_value = file_info.get("hash值", "")
+        self.updated_at = file_info.get("更新时间", "")
+        self.preview = file_info.get("文件预览", "")
+        self.abstract = file_info.get("文件摘要", "")
+        self.entities = file_info.get("关键实体", "")
+        self.importance = file_info.get("重要性", "")
+        self._raw = file_info
+
+    @property
+    def abstract_filled(self) -> bool:
+        return bool(self.abstract and self.abstract.strip())
+
+    def to_dict(self) -> dict:
+        return self._raw.copy()
+
+    def to_markdown(self) -> str:
+        """文件在对话中的显示状态"""
+        status = "已摘要" if self.abstract_filled else "待摘要"
+        return f" - 文件: {self.file_name}({status})"
+
+    def __repr__(self):
+        return f"WorkFile(uuid={self.uuid}, name={self.file_name})"
+
+
 class WorkTask:
     def __init__(self, json: dict, owner):
         self.task_json = json
@@ -75,10 +113,6 @@ class WorkTask:
     @property
     def type(self):
         return self.task_json['type']
-
-    @property
-    def steps(self):
-        return self.task_json['steps']
 
     @property
     def name(self):
@@ -103,6 +137,10 @@ class WorkTask:
     @property
     def action_list(self):
         return self._action_list
+
+    def to_markdown(self):
+        """将任务信息转换为markdown格式"""
+        return f" - 任务: {self.name}({self.task_id})"
 
     def task_execute_history(self):
         """任务执行历史记录"""
@@ -134,20 +172,16 @@ class WorkTask:
                 append_bytes = file_bytes
         else:
             # 没有内容，说明是新建
-            append_bytes = f"""
-# 任务执行
-
-...
-(已忽略时间更早的对话记录)
-...
-{self.owner.get_chat_history_text(limit=20, roles=['assistant', 'user', 'observation'])}\n"""
+            append_bytes = ["# 任务执行"]
+            hist_text = self.owner.get_chat_history_text(limit=5, roles=['用户', '助手', '行动', '观察'])
+            append_bytes.append(hist_text)
 
         # 重新以w模式打开写入新内容
         with open(executor_path, 'w', encoding='utf-8') as f:
             # 写入新的内容
             f.write(f"# 任务信息摘要\n\n")
             f.write(f"```json\n{json.dumps(self.task_json, ensure_ascii=False, indent=2)}\n```\n\n")
-            f.write(append_bytes)
+            f.write("\n".join(append_bytes))
 
     @action_list.setter
     def action_list(self, value):
@@ -163,9 +197,9 @@ class ChatMessage:
         "用户": "user",
         "助手": "assistant",
         "系统": "system",
-        "行动": "行动",
-        "观察": "观察",
-        "思考": "思考"
+        "行动": "action",
+        "观察": "observation",
+        "思考": "think"
     }
 
     def __init__(self, role: str = None, content: str = None, data: str = None):
@@ -181,7 +215,7 @@ class ChatMessage:
 
     def __str__(self):
         # {self.timestamp}
-        return f"<{self.role}>: {self.content}"
+        return f"[{self.role}]: {self.content}"
 
     def __repr__(self):
         return self.__str__()
@@ -193,8 +227,8 @@ class ChatMessage:
 
     def parse(self, data: str):
         """读取消息文本"""
-        # <self.role>: <self.text> 格式，解析data
-        pattern = r'^<(.*?)>\:\s*(.*)$'
+        # [self.role]: {self.text} 格式，解析data
+        pattern = r'^\[(.*?)\]\:\s*(.*)$'
         match = re.match(pattern, data.strip())
         if match:
             self.role = match.group(1).strip()
@@ -300,9 +334,10 @@ class PromptIndex:
         return instance
 
     # 加载提示词，填充占位符
-    def load_prompt(self, prompt_file: str, owner, state) -> tuple[str, dict]:
-        prompt_json = self.get_src_prompt(prompt_file)
-        assert prompt_json, f"提示词不存在。{prompt_file}。"
+    def load_prompt(self, prompt_name: str, owner, state) -> tuple[str, dict]:
+        prompt_json = self.get_src_prompt(prompt_name)
+        if not prompt_json:
+            return None, None
         input_param = prompt_json["输入参数"]
         # 使用完整路径（包含子目录相对路径）加载文件
         from common import GlobalFunction
@@ -310,7 +345,7 @@ class PromptIndex:
         if input_param:
             # 遍历每个需要替换的键
             for key in input_param.keys():
-                placeholder = "{" + key + "}"  # 占位符格式 {key}
+                placeholder = "{{" + key + "}}"  # 占位符格式 {{key}}
                 value = None
                 if state:
                     # 优先从state状态属性中获取
@@ -322,7 +357,7 @@ class PromptIndex:
                 if value is None:
                     value = "(Not Provided)"
                     # FIXME 需要构建提示词创建这个参数获得的代码。
-                    owner.sys_breathe_log(f"新任务:owner,对象owner找不到参数 {key}，创建属性存储对应数据。")
+                    GlobalFunction.log("运行时错误", f"提示词[{prompt_name}]输入参数[{key}]不存在，请检查提示词配置。")
                 # 替换所有出现的占位符
                 output_text = output_text.replace(placeholder, str(value))
         return output_text, prompt_json

@@ -113,7 +113,7 @@ class ScanTaskState(BaseState):
                     # 读取文件内容
                     with open(task_executor_path, 'r', encoding='utf-8') as f:
                         file_data = f.read()
-                        task_json_list = GlobalFunction.parse_llm_text_output_json(file_data, "#任务信息摘要")
+                        task_json_list = GlobalFunction.parse_llm_output_json(file_data, "json")
                         # 解析JSON内容并添加到列表
                         if task_json_list:
                             owner.active_task_list.append(WorkTask(task_json_list[0], owner=owner))
@@ -123,7 +123,10 @@ class ScanTaskState(BaseState):
         if not owner.active_task_list:
             # 没有任务，扫描新任务
             self.scan_active_task(owner)
-        pass
+        #任务扫描完成，移除扫描状态
+        owner.sys_breathe_log("任务扫描完成，移除扫描状态")
+        owner.list_active_task()
+        owner.remove_state(self)
 
     def Exit(self, owner):
         pass
@@ -175,7 +178,7 @@ class ExecuteTaskState(BaseState):
             # 如果询问用户，用户并没有回答，这个action也是执行完成了，所以也是不需要继续执行的规划的。
 
             if not self.task.action_list:
-                action_json = owner.execute_prompt(prompt_file="规划任务下一步动作", state=self)
+                action_json = owner.execute_prompt(user_prompt="规划任务下一步动作", state=self,system_prompt="任务提示词")
                 action_state = owner.execute_action(action_json)
                 self.task.action_list.append(action_state)
 

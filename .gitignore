@@ -15,8 +15,8 @@ env/
 # IDE - JetBrains
 .idea/
 
-# IDE - VS Code (keep workspace-level settings, ignore user prefs)
-.vscode/settings.json
+# IDE - VS Code
+.vscode/
 
 # Claude Code - user-specific settings (contains personal paths)
 .claude/settings.json
@@ -39,3 +39,9 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+# local
+zy-local/
+
+# Test data - large files, transfer separately via scp
+workspace/user/files/

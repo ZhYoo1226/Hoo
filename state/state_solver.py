@@ -1,7 +1,5 @@
-import importlib
 import json
 import os
-import pkgutil
 import re
 import threading
 from collections import deque
@@ -51,6 +49,12 @@ class SolverOwner(StateOwner):
         self.llm_action_model = None
         # 文件摘要 workspace/user/files/
         self.files_abstract = None
+        # 加载 files_abstract.parquet 并注册 WorkFile 对象
+        abstract_path = os.path.join(self.workspace_path, "user", "files", "files_abstract.parquet")
+        if os.path.exists(abstract_path):
+            import pandas as pd
+            self.files_abstract = pd.read_parquet(abstract_path)
+            GlobalFunction.register_work_files(self.files_abstract)
         # 文件UUID映射
         self._uuid_maps = {}
         # 活跃任务列表，指定为WorkTask类型
@@ -133,18 +137,17 @@ class SolverOwner(StateOwner):
             return
 
         # 遍历目录下所有md文件
-        self.log("运行状态", f"开始扫描目录 {prompt_path} 下的所有md文件，构建提示词索引")
+        GlobalFunction.log("运行状态", f"开始扫描目录 {prompt_path} 下的所有md文件，构建提示词索引")
         # 递归遍历目录及所有子目录下所有md文件
         for root, dirs, files in os.walk(prompt_path):
             for filename in files:
                 if filename.endswith('.md') and not filename.endswith("_(评估建议).md"):
                     file_path = os.path.join(root, filename)
-                    self.log("运行状态", f"发现提示词文件: {file_path}")
+                    GlobalFunction.log("运行状态", f"发现提示词文件: {file_path}")
                     # 读取文件内容
                     content = GlobalFunction.load_file(file_path)
-                    # 提取所有{xxx}格式的占位符（包含空格、不换行），支持中文和多层级xx.yy.zz(path = 'c:/test/xxx.pdf')格式
-                    # 匹配 {xxx}、{yy}、{zz}、{xx.yy.bb}、{xx.yy.func(abc)} 等格式
-                    pattern = re.compile(r'\{([a-zA-Z0-9_.\u4e00-\u9fa5()=\s\'"/:-]+)\}')
+                    # 提取所有{{xxx}}格式的占位符（包含空格、不换行），支持中文和多层级xx.yy.zz(path = 'c:/test/xxx.pdf')格式
+                    pattern = re.compile(r'\{\{([^\n\r]+?.*?)\}\}')
                     placeholders = pattern.findall(content)
                     # 去重
                     placeholders = list(set(placeholders))
@@ -159,36 +162,38 @@ class SolverOwner(StateOwner):
                         "文件路径": os.path.relpath(file_path, prompt_path),  # 保存相对路径便于后续查找
                         "输入参数": {p: "input" for p in placeholders} if placeholders else {}
                     }
-                    self.log("运行状态",
-                             f"owner.prompt_index 添加提示词索引条目: \n{json.dumps(item, ensure_ascii=False, indent=2)}")
+                    GlobalFunction.log("运行状态",
+                                       f"owner.prompt_index 添加提示词索引条目: \n{json.dumps(item, ensure_ascii=False, indent=2)}")
                     index_list.append(item)
 
         # 构建索引
         self.prompt_index = PromptIndex(index_list)
-        self.log("运行状态", f"系统提示词索引构建完成，共 {len(index_list)} 个提示词")
+        GlobalFunction.log("运行状态", f"系统提示词索引构建完成，共 {len(index_list)} 个提示词")
 
-    def execute_prompt(self, user_prompt: str, state: BaseState = None, system_prompt: str = "系统提示词") -> List[
+    def execute_prompt(self,
+                       user_prompt: str,  # user提示词
+                       state: BaseState = None,  # 当前状态
+                       system_prompt: str = "系统提示词",  # 系统提示词
+                       conversation: list = None,  # 基于的对话内容
+                       user_msg: str = None  # 用户消息, user_prompt二选一
+                       ) -> List[
         dict]:
         """执行提示词，返回response执行Action"""
         # prompt_file=规划任务.md
         assert self.llm_prompt_model, "提示词执行模型未设置，请设置owner.llm_prompt_model的模型。"
         self.llm_prompt_model.reset_tokens()
-        # 填充提示词,返回填充后的文本和提示词的json
-        prompt_text, prompt_json = self.prompt_index.load_prompt(user_prompt, owner=self, state=state)
-        # 不要记录执行提示词的日志
-        self.record_execute_prompt(prompt_json)
-        # 必须加入的系统提示词
-        system_text, system_json = self.prompt_index.load_prompt(system_prompt, owner=self, state=state)
-        messages = [{"role": "system", "content": system_text}]
-        # 获取历史聊天记录（支持单独的子任务)
-        for item in self.get_chat_conversation(limit=-1, roles=["用户", "思考", "助手", "观察", "系统"]):
-            messages.append(item)
-        messages.append({"role": "user", "content": prompt_text})
+        # 转换成llm对话消息格式
+        messages = self._to_llm_conversation(owner=self, state=state, system_prompt=system_prompt,
+                                             conversation=conversation, user_prompt=user_prompt)
+        # 额外的用户消息
+        if user_msg:
+            messages.append({"role": "user", "content": user_msg})
 
+        # 请求模型
         llm_output = self.llm_prompt_model.query(messages=messages)  # prompt model
         query_log = self.llm_prompt_model.get_query_log()
         self.llm_prompt_model.reset_query_log()
-        self.log("模型日志", f"{json.dumps(query_log, ensure_ascii=False, indent=2)}")
+        GlobalFunction.log("模型日志", f"{json.dumps(query_log, ensure_ascii=False, indent=2)}")
         if llm_output:
             json_list = GlobalFunction.parse_llm_output_json(llm_output)
             return json_list
@@ -215,6 +220,10 @@ class SolverOwner(StateOwner):
         work_task = WorkTask(json, self)
         self.active_task_list.append(work_task)
         return work_task
+
+    def list_active_task(self):
+        """列出当前激活的任务"""
+        return "\n".join([task.to_markdown() for task in self.active_task_list])
 
     # 加载历史聊天记录
     def load_memory(self):
@@ -283,9 +292,9 @@ class SolverOwner(StateOwner):
         if latest_500_text:
             # 解码，忽略截断导致的无效字节
             text = latest_500_text.decode('utf-8', errors='ignore')
-            # 按行首的 "<xxx>: " 切分，保留分隔符本身
+            # 按行首的 "[xxx]: " 切分，保留分隔符本身
             # (?=...) 是正向预查，匹配位置但不消费字符，从而保留标记在结果中
-            pattern = re.compile(r'(?=^<[^>]+>: )', re.MULTILINE)
+            pattern = re.compile(r'(?=^\[?[^]]]+]: )', re.MULTILINE)
             parts = pattern.split(text)
             # split 会产生一个空字符串在开头（如果文本以标记开头），过滤掉
             parts = [ChatMessage(data=p.strip().rstrip('\n')) for p in parts if p]
@@ -304,43 +313,79 @@ class SolverOwner(StateOwner):
         # 进行意图理解
         self.intent_queue.put((role, text))
 
-    def execute_chat(self, state = None,system_prompt: str = "系统提示词"):
+    def _to_llm_conversation(self, owner, state, system_prompt, conversation, user_prompt):
+        """对话"""
+        # 必须加入的系统提示词
+        messages = []
+        if system_prompt:
+            system_text, system_json = owner.prompt_index.load_prompt(system_prompt, owner=owner, state=state)
+            messages.append({"role": "system", "content": system_text})
+        # 限制对话轮数
+        if not conversation:
+            # 用户历史聊天获取，再从状态获取历史聊天记录
+            # 加载聊天记录,如果state有get_chat_conversation方法,否则使用self的get_chat_conversation方法
+            _conversation_func = owner.get_chat_conversation
+            if state and hasattr(state, "get_chat_conversation"):
+                _conversation_func = getattr(state, "get_chat_conversation")
+            # 历史聊天
+            conversation = _conversation_func(limit=-1, roles=["用户", "思考", "助手", "观察", "系统"])
+        messages.extend(conversation)
+        # 最后增加对话提示词
+        if user_prompt:
+            prompt_text, prompt_json = owner.prompt_index.load_prompt(user_prompt, owner=owner, state=state)
+            if prompt_text:
+                # 有提示词
+                owner.record_execute_prompt(prompt_json)
+                messages.append({"role": "user", "content": prompt_text})
+            else:
+                messages.append({"role": "user", "content": user_prompt})
+
+        return messages
+
+    def execute_chat(self, state=None, system_prompt: str = "系统提示词"):
         """
         同步执行聊天
         """
         assert self.llm_prompt_model, "提示词执行模型未设置，请设置owner.llm_prompt_model的模型。"
         self.llm_prompt_model.reset_tokens()
-        system_text, system_json = self.prompt_index.load_prompt(system_prompt, owner=self, state=state)
-        messages = [{"role": "system", "content": system_text}]
-        #加载聊天记录,如果state有get_chat_conversation方法,则使用state的get_chat_conversation方法,否则使用self的get_chat_conversation方法
+
+        # 加载聊天记录,如果state有get_chat_conversation方法,否则使用self的get_chat_conversation方法
         _conversation_func = self.get_chat_conversation
         if state and hasattr(state, "get_chat_conversation"):
-            _conversation_func =getattr(state, "get_chat_conversation")
-        #历史聊天
-        for item in _conversation_func(limit=-1, roles=["用户", "助手", "观察"]):
-            messages.append(item)
+            _conversation_func = getattr(state, "get_chat_conversation")
+        # 历史聊天
+        conversation = _conversation_func(limit=-1, roles=["用户", "助手", "观察"])
+        # 转换成llm对话消息格式
+        messages = self._to_llm_conversation(self, state, system_prompt, conversation, user_prompt=None)
 
         llm_output = self.llm_prompt_model.query(messages=messages)  # prompt model
         # 直接聊天，不会输出action指令
         # 解析思考
         query_log = self.llm_prompt_model.get_query_log()
         self.llm_prompt_model.reset_query_log()
-        self.log("模型日志", f"{json.dumps(query_log, ensure_ascii=False, indent=2)}")
+        GlobalFunction.log("模型日志", f"{json.dumps(query_log, ensure_ascii=False, indent=2)}")
         think_text = GlobalFunction.parse_llm_think(llm_output)
         if think_text:
             self.record_role_chat("思考", think_text)
-        # 思考之后的内容
-        reply_text = GlobalFunction.parse_llm_reply(llm_output)
-        if reply_text:
-            self.record_role_chat("助手", reply_text)
+
+        action_json = GlobalFunction.extract_action_json(llm_output)
+        if action_json:
+            # 有可能返回的是action
+            self.execute_action(action_json)
         else:
-            self.record_role_chat("助手", llm_output.strip())
+            # 没有action，直接输出llm_output
+            reply_text = GlobalFunction.parse_llm_reply(llm_output)
+            self.record_role_chat("助手", reply_text)
 
     def execute_action(self, action_json):
         """执行Action
             如果是state:XXXXState,则查找状态，创建状态，并添加add_state到owner。
         """
         # 判断action_json 是dict还是list
+        if not action_json:
+            self.sys_breathe_log(f"llm 输出中没有 action: {action_json}")
+            return False
+
         data_list = None
         if isinstance(action_json, list):
             action = action_json[0]
@@ -351,60 +396,26 @@ class SolverOwner(StateOwner):
         # 组装action的data_list数据集，如果有！
         if data_list:
             action["data_list"] = data_list
+        if "action" not in action:
+            self.sys_breathe_log(f"llm 输出中没有 action: {action_json}")
+            return False
         action_name = action["action"]
-        # 判断是否是 state 操作，格式为 state:xxx
+        # 判断是否是 state 操作，格式为 state:xxxState 或者 actionName
+        # FIXME 后续的可能情况，不需要用register注册，直接用actionName即可
+        state_name = ""
         if action_name.startswith("state:"):
             # 提取 state 名称
             state_name = action_name.split(":", 1)[1]
 
-            # 类级缓存，避免每次都重新扫描导入
-            if not hasattr(SolverOwner, "_states_class"):
-                SolverOwner._states_class = {}
+        if action_name in StateOwner._states_class:
+            state_name = action_name
 
-            # 先从缓存中查找
-            if state_name in SolverOwner._states_class:
-                state_class = SolverOwner._states_class[state_name]
-                state = state_class(**action)
-                self.add_state(state)
-                return True
-
-            # 缓存未命中，才进行动态查找
-            # 遍历state模块下所有py文件，查找对应名称的状态类
-            found = False
-            state_class = None
-            for _, module_name, _ in pkgutil.iter_modules(['state']):
-                if module_name == '__init__' or module_name == 'base_state':
-                    continue
-                try:
-                    module = importlib.import_module(f'.{module_name}', package='state')
-                    # 遍历模块中的所有类，找到匹配stateName的状态类
-                    for attr_name in dir(module):
-                        attr = getattr(module, attr_name)
-                        if isinstance(attr, type) and issubclass(attr,
-                                                                 BaseState) and attr != BaseState:
-                            # 优先匹配stateName属性，如果没有则匹配类名
-                            match_found = False
-                            if hasattr(attr, 'stateName') and attr.stateName == state_name:
-                                match_found = True
-                            elif attr.__name__ == state_name:
-                                match_found = True
-                            if match_found:
-                                state_class = attr
-                                found = True
-                                break
-                    if found:
-                        break
-                except Exception as e:
-                    self.sys_breathe_log(f"加载状态模块 {module_name} 出错: {e}")
-                    continue
-            if not found:
-                raise ValueError(f"未找到名为 {state_name} 的状态类，请检查状态名称是否正确")
-
-            # 存入缓存，下次直接使用
-            SolverOwner._states_class[state_name] = state_class
+        # 先从缓存中查找
+        if state_name in StateOwner._states_class:
+            state_class = StateOwner._states_class[state_name]
             state = state_class(**action)
             self.add_state(state)
-            return state
+            return True
         else:
             # 普通工具调用
             return g_tool_registry.execute(tool_name=action_name, owner=self, **action)

@@ -108,6 +108,7 @@ class ScanAbstractState(BaseState):
             owner.remove_state(self)
         else:
             # 将缓存转换为pd.DataFrame类型
+            #FIXME mim，file_abstract_cache这个存在的意义是啥呢？
             owner.files_abstract = pd(self.file_abstract_cache)
 
             # 过滤出摘要为空的数据（需要重新扫描的文件）

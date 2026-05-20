@@ -23,6 +23,8 @@ class ToolRegistry:
             # 解析参数注释
             try:
                 func_json = GlobalFunction.inspect_function_desc(func)
+                # 重新修正回注册的工具名字
+                func_json["action"] = name
                 tools_info.append(func_json)
             except (TypeError, OSError, SyntaxError):
                 # 对于内置函数/无法获取源码的函数跳过解析
@@ -44,15 +46,3 @@ class ToolRegistry:
 
 # 创建全局注册器
 g_tool_registry = ToolRegistry()
-
-# @g_tool_registry.register()
-# def greet(name):
-#     return f"Hello, {name}!"
-#
-# @g_tool_registry.register("bye")
-# def farewell(name):
-#     return f"Goodbye, {name}!"
-#
-# # 执行
-# print(g_tool_registry.execute("greet", "Bob"))   # Hello, Bob!
-# print(g_tool_registry.execute("bye", "Bob"))    # Goodbye, Bob!

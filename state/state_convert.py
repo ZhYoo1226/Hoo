@@ -13,6 +13,8 @@ from xml.etree import ElementTree
 
 from docx import Document
 from pdf2docx import Converter
+
+from common import GlobalFunction
 from .base_state import BaseState
 from .state_doc import (
     CHINESE_HEADING_PATTERN,
@@ -23,6 +25,7 @@ from .state_doc import (
     HeadingChunk,
     _sanitize_name,
 )
+
 
 # --------------------------------------------------------------------------
 # Pdf2DocxState
@@ -61,7 +64,7 @@ class Pdf2DocxState(BaseState):
 
     def Execute(self, owner):
         if self._error is not None:
-            owner.log("转换错误", f"pdf → docx 转换失败: {self._error}")
+            GlobalFunction.log("转换错误", f"pdf → docx 转换失败: {self._error}")
             owner.remove_state(self)
             return
         if not self._done:
@@ -138,7 +141,7 @@ class Doc2DocxState(BaseState):
 
     def Execute(self, owner):
         if self._error is not None:
-            owner.log("转换错误", f"doc → docx 转换失败: {self._error}")
+            GlobalFunction.log("转换错误", f"doc → docx 转换失败: {self._error}")
             owner.remove_state(self)
             return
         if not self._done:
