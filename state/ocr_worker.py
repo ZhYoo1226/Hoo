@@ -18,6 +18,7 @@ _OCR_CONF = json.loads((_CONF_DIR / "models.json").read_text(encoding="utf-8"))
 # 计算模式：改 deps.json 中 use_gpu 即可切换 CPU/GPU
 USE_GPU: bool = _DEPS.get("use_gpu", False)
 GPU_MEM: int = _DEPS.get("gpu_mem", 10000)                # 单卡显存上限 MB
+os.environ.setdefault("FLAGS_gpu_memory_limit_mb", str(GPU_MEM))
 
 # 根据 use_gpu 自动选取对应的 Paddle 版本和模型组
 _paddle_ver_key = "paddlepaddle_gpu" if USE_GPU else "paddlepaddle_cpu"
@@ -80,7 +81,6 @@ def init_all_engines(auto_install: bool, lang: str, use_textline_orientation: bo
         use_doc_unwarping=False,
         use_textline_orientation=bool(use_textline_orientation),
         use_gpu=USE_GPU,
-        gpu_mem=GPU_MEM,
     )
     table_kwargs = dict(
         lang=lang,
@@ -94,7 +94,6 @@ def init_all_engines(auto_install: bool, lang: str, use_textline_orientation: bo
         use_doc_unwarping=False,
         use_textline_orientation=False,
         use_gpu=USE_GPU,
-        gpu_mem=GPU_MEM,
     )
 
     global _OCR_WORKER_ENGINE, _OCR_WORKER_USE_TEXTLINE_ORIENTATION
