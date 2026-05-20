@@ -45,6 +45,18 @@ _TABLE_OCR_WORKER_ENGINE = None
 _LANG = "ch"
 
 
+def get_gpu_free_memory_mb() -> int:
+    """查询 GPU 空闲显存（MB），失败返回 0。"""
+    try:
+        result = subprocess.run(
+            ["nvidia-smi", "--query-gpu=memory.free", "--format=csv,noheader,nounits"],
+            capture_output=True, text=True, timeout=10,
+        )
+        return int(result.stdout.strip().split("\n")[0])
+    except Exception:
+        return 0
+
+
 # --------------------------------------------------------------------------
 # 依赖安装与验证
 # --------------------------------------------------------------------------

@@ -12,6 +12,8 @@ from .ocr_worker import (
     OCR_INSTALL_COMMANDS,
     PersistentOCRPool,
     USE_GPU,
+    GPU_MEM,
+    get_gpu_free_memory_mb,
 )
 from .base_state import BaseState
 
@@ -98,7 +100,8 @@ class _BaseOCRState(BaseState):
             cpu_count = os.cpu_count() or 1
             n_workers = max(1, min(total_images // 2, 4, max(1, cpu_count // 2)))
             if USE_GPU:
-                n_workers = 1  # spawn 独立加载，单 worker 避免显存碎片化
+                free_mb = get_gpu_free_memory_mb()
+                n_workers = max(1, min(free_mb // GPU_MEM, 2))
             pool = PersistentOCRPool(n_workers, self.auto_install, self.lang, self.use_textline_orientation)
             try:
                 owner.sys_breathe_log(f"批次{self.batch_index}: 预处理完成，增强={len(enhanced_images)}")
