@@ -42,6 +42,7 @@ OCR_INSTALL_COMMANDS = [
 _OCR_WORKER_ENGINE = None
 _OCR_WORKER_USE_TEXTLINE_ORIENTATION = True
 _TABLE_OCR_WORKER_ENGINE = None
+_LANG = "ch"
 
 
 # --------------------------------------------------------------------------
@@ -71,11 +72,10 @@ def _ensure_ocr_deps(auto_install: bool) -> None:
 # --------------------------------------------------------------------------
 
 def init_all_engines(auto_install: bool, lang: str, use_textline_orientation: bool) -> None:
-    """加载全部 OCR 引擎：文字识别、方向检测、表格识别。"""
+    """加载文字 OCR 引擎（表格引擎按需懒加载，避免 GPU 显存浪费）。"""
     _ensure_ocr_deps(auto_install)
     paddleocr = importlib.import_module("paddleocr")
     PaddleOCR = paddleocr.PaddleOCR
-    PPStructureV3 = paddleocr.PPStructureV3
 
     ocr_kwargs = dict(
         lang=lang,
@@ -85,8 +85,25 @@ def init_all_engines(auto_install: bool, lang: str, use_textline_orientation: bo
         use_doc_unwarping=False,
         use_textline_orientation=bool(use_textline_orientation),
     )
+
+    global _OCR_WORKER_ENGINE, _OCR_WORKER_USE_TEXTLINE_ORIENTATION
+    global _LANG
+
+    _OCR_WORKER_ENGINE = PaddleOCR(**ocr_kwargs)
+    _OCR_WORKER_USE_TEXTLINE_ORIENTATION = use_textline_orientation
+    _LANG = lang
+
+
+def _init_table_engine() -> None:
+    """懒加载表格 OCR 引擎，仅在首次表格识别任务时初始化。"""
+    global _TABLE_OCR_WORKER_ENGINE
+    if _TABLE_OCR_WORKER_ENGINE is not None:
+        return
+    paddleocr = importlib.import_module("paddleocr")
+    PPStructureV3 = paddleocr.PPStructureV3
+
     table_kwargs = dict(
-        lang=lang,
+        lang=_LANG,
         text_detection_model_name=_MODELS["text_detection_model_name"],
         text_recognition_model_name=_MODELS["text_recognition_model_name"],
         use_table_recognition=True,
@@ -97,12 +114,6 @@ def init_all_engines(auto_install: bool, lang: str, use_textline_orientation: bo
         use_doc_unwarping=False,
         use_textline_orientation=False,
     )
-
-    global _OCR_WORKER_ENGINE, _OCR_WORKER_USE_TEXTLINE_ORIENTATION
-    global _TABLE_OCR_WORKER_ENGINE
-
-    _OCR_WORKER_ENGINE = PaddleOCR(**ocr_kwargs)
-    _OCR_WORKER_USE_TEXTLINE_ORIENTATION = use_textline_orientation
     _TABLE_OCR_WORKER_ENGINE = PPStructureV3(**table_kwargs)
 
 
@@ -132,6 +143,7 @@ def recognize_image_worker(image_path: str) -> str:
 
 # 常驻进程入口：表格 OCR → 返回 (图片路径, 文字文本, [表格html+bbox])
 def recognize_table_worker(image_path: str) -> Tuple[str, str, List[Dict]]:
+    _init_table_engine()  # 懒加载表格引擎
     if _TABLE_OCR_WORKER_ENGINE is None:
         raise RuntimeError("表格 OCR worker 未初始化")
     output = list(_TABLE_OCR_WORKER_ENGINE.predict(image_path) or [])
