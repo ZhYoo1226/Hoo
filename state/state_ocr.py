@@ -98,7 +98,7 @@ class _BaseOCRState(BaseState):
             cpu_count = os.cpu_count() or 1
             n_workers = max(1, min(total_images // 2, 4, max(1, cpu_count // 2)))
             if USE_GPU:
-                n_workers = 1  # spawn 模式每 worker 独立加载模型，限制 1 个避免 OOM
+                n_workers = max(1, min(n_workers, 2))  # spawn 模式每 worker 独立加载模型
             pool = PersistentOCRPool(n_workers, self.auto_install, self.lang, self.use_textline_orientation)
             try:
                 owner.sys_breathe_log(f"批次{self.batch_index}: 预处理完成，增强={len(enhanced_images)}")
