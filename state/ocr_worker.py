@@ -80,7 +80,6 @@ def init_all_engines(auto_install: bool, lang: str, use_textline_orientation: bo
         use_doc_orientation_classify=True,
         use_doc_unwarping=False,
         use_textline_orientation=bool(use_textline_orientation),
-        use_gpu=USE_GPU,
     )
     table_kwargs = dict(
         lang=lang,
@@ -93,7 +92,6 @@ def init_all_engines(auto_install: bool, lang: str, use_textline_orientation: bo
         use_doc_orientation_classify=True,
         use_doc_unwarping=False,
         use_textline_orientation=False,
-        use_gpu=USE_GPU,
     )
 
     global _OCR_WORKER_ENGINE, _OCR_WORKER_USE_TEXTLINE_ORIENTATION
