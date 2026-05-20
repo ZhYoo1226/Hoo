@@ -200,31 +200,28 @@ class _BaseOCRState(BaseState):
         )
 
     def _ensure_ocr_ready(self, owner) -> None:
-        try:
-            import paddle
-            import paddleocr
-            from paddleocr import PPStructureV3, PaddleOCR
-        except BaseException as exc:
-            if not self.auto_install:
-                raise RuntimeError(f"未检测到 PaddleOCR 依赖，且 auto_install=False, error={exc}") from exc
-            for command in OCR_INSTALL_COMMANDS:
-                result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                if result.returncode != 0:
-                    raise RuntimeError(
-                        f"自动安装 OCR 依赖失败: command={' '.join(command)}, stdout={result.stdout}, stderr={result.stderr}"
-                    )
-            installed = (
-                importlib.util.find_spec("paddleocr") is not None
-                and importlib.util.find_spec("paddle") is not None
-            )
-            if not installed:
-                raise RuntimeError("OCR 依赖安装完成后仍不可用")
-            import paddle
-            import paddleocr
-            from paddleocr import PPStructureV3, PaddleOCR
+        """仅检查依赖是否已安装，不做 import 以避免在父进程中初始化 CUDA。"""
+        if (
+            importlib.util.find_spec("paddleocr") is not None
+            and importlib.util.find_spec("paddle") is not None
+        ):
+            return
 
-        if not all([PaddleOCR, PPStructureV3]):
-            raise RuntimeError("paddleocr 缺少关键导出符号")
+        if not self.auto_install:
+            raise RuntimeError("未检测到 PaddleOCR 依赖，且 auto_install=False")
+
+        for command in OCR_INSTALL_COMMANDS:
+            result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            if result.returncode != 0:
+                raise RuntimeError(
+                    f"自动安装 OCR 依赖失败: command={' '.join(command)}, stdout={result.stdout}, stderr={result.stderr}"
+                )
+
+        if not (
+            importlib.util.find_spec("paddleocr") is not None
+            and importlib.util.find_spec("paddle") is not None
+        ):
+            raise RuntimeError("OCR 依赖安装完成后仍不可用")
 
 
 # --------------------------------------------------------------------------

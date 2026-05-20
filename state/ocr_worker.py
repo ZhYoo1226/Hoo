@@ -8,9 +8,6 @@ import threading
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-# 强制 spawn 子进程，避免 fork 导致 CUDA 上下文冲突
-multiprocessing.set_start_method("spawn", force=True)
-
 os.environ.setdefault("DISABLE_MODEL_SOURCE_CHECK", "True")
 
 _CONF_DIR = Path(__file__).resolve().parent.parent / "workspace" / "conf" / "paddleocr"
