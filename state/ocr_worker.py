@@ -123,14 +123,14 @@ def recognize_image_worker(image_path: str) -> str:
     )
     texts: List[str] = []
     for res in output:
-        for ocr in res.res.get("ocr_result", []):
-            for t in ocr.get("rec_texts", []):
-                if t and str(t).strip():
-                    texts.append(str(t).strip())
+        # 新 API: OCRResult 是扁平 dict，rec_texts 直接取
+        for t in res.get("rec_texts", []):
+            if t and str(t).strip():
+                texts.append(str(t).strip())
     return "\n".join(texts)
 
 
-# 常驻进程入口：表格 OCR → 返回 (图片路径, 文字文本, [表格md+html+bbox])
+# 常驻进程入口：表格 OCR → 返回 (图片路径, 文字文本, [表格html+bbox])
 def recognize_table_worker(image_path: str) -> Tuple[str, str, List[Dict]]:
     if _TABLE_OCR_WORKER_ENGINE is None:
         raise RuntimeError("表格 OCR worker 未初始化")
@@ -138,20 +138,20 @@ def recognize_table_worker(image_path: str) -> Tuple[str, str, List[Dict]]:
     table_regions: List[Dict] = []
     ocr_lines: List[str] = []
     for res in output:
-        data = res.res
-        for ocr in data.get("ocr_result", []):
-            for t in ocr.get("rec_texts", []):
+        # 新 API: LayoutParsingResultV2
+        ocr_res = res.get("overall_ocr_res")
+        if ocr_res:
+            for t in ocr_res.get("rec_texts", []):
                 if t and str(t).strip():
                     ocr_lines.append(str(t).strip())
-        for tbl in data.get("table_result", []):
-            html = str(tbl.get("html", "") or "")
-            md = str(tbl.get("markdown", "") or "")
-            if not html.strip() and not md.strip():
+        for tbl in res.get("table_res_list", []):
+            html = str(tbl.get("pred_html", "") or "")
+            if not html.strip():
                 continue
             table_regions.append({
                 "html": html,
-                "markdown": md,
-                "bbox": str(tbl.get("bbox", "")),
+                "markdown": "",
+                "bbox": str(tbl.get("table_region_id", "")),
             })
     return image_path, "\n".join(ocr_lines), table_regions
 
