@@ -1,6 +1,5 @@
 import importlib.util
 import json
-import os
 import re
 import subprocess
 import threading
@@ -11,7 +10,6 @@ from PIL import Image, ImageFilter, ImageOps
 from .ocr_worker import (
     OCR_INSTALL_COMMANDS,
     PersistentOCRPool,
-    USE_GPU,
     GPU_MEM,
     get_gpu_free_memory_mb,
 )
@@ -58,9 +56,7 @@ class _BaseOCRState(BaseState):
         self.auto_install = auto_install
         self.use_textline_orientation = use_textline_orientation
         self.lang = lang
-        self.service_name = "paddleocr"
         self.batch_index = batch_index
-        self._thread: Optional[threading.Thread] = None
         self._done = False
         self._error: Optional[BaseException] = None
         self._started = False
@@ -69,8 +65,8 @@ class _BaseOCRState(BaseState):
         if self._started:
             return
         self._started = True
-        self._thread = threading.Thread(target=self._run_ocr, args=(owner,), daemon=True)
-        self._thread.start()
+        t = threading.Thread(target=self._run_ocr, args=(owner,), daemon=True)
+        t.start()
 
     def Execute(self, owner):
         if self._error is not None:
@@ -97,11 +93,8 @@ class _BaseOCRState(BaseState):
 
             enhanced_images = self._enhance_images(image_paths)
 
-            cpu_count = os.cpu_count() or 1
-            n_workers = max(1, min(total_images // 2, 4, max(1, cpu_count // 2)))
-            if USE_GPU:
-                free_mb = get_gpu_free_memory_mb()
-                n_workers = max(1, min(free_mb // GPU_MEM, 2))
+            free_mb = get_gpu_free_memory_mb()
+            n_workers = max(1, min(free_mb // GPU_MEM, 2))
             pool = PersistentOCRPool(n_workers, self.auto_install, self.lang, self.use_textline_orientation)
             try:
                 owner.sys_breathe_log(f"批次{self.batch_index}: 预处理完成，增强={len(enhanced_images)}")
@@ -294,17 +287,13 @@ class TableOCRState(_BaseOCRState):
         page_name = name[:60].rstrip(". ") if len(name) > 60 else (name or "未命名")
         for table_index, region in enumerate(regions, start=1):
             html = str(region.get("html", "")).strip()
-            md = str(region.get("markdown", "")).strip()
-            if not html and not md:
+            if not html:
                 continue
             stem = f"{page_name}_TableOCR_{table_index}"
             html_path = output_dir / f"{stem}.html"
-            md_path = output_dir / f"{stem}.md"
             html_path.write_text(html, encoding="utf-8")
-            md_path.write_text(md, encoding="utf-8")
             outputs.append({
                 "html": str(html_path),
-                "md": str(md_path),
                 "bbox": str(region.get("bbox", "")),
             })
         return outputs

@@ -175,7 +175,6 @@ def recognize_table_worker(image_path: str) -> Tuple[str, str, List[Dict]]:
                 continue
             table_regions.append({
                 "html": html,
-                "markdown": "",
                 "bbox": str(tbl.get("table_region_id", "")),
             })
     return image_path, "\n".join(ocr_lines), table_regions
