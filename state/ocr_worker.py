@@ -38,7 +38,7 @@ OCR_INSTALL_COMMANDS = [
     [sys.executable, "-m", "pip", "install", f"paddleocr=={PINNED_PADDLEOCR_VERSION}"],
 ]
 
-# 模块级引擎缓存：常驻子进程各自调用 init_all_engines 后赋值
+# 模块级引擎缓存：子进程按任务类型懒加载对应引擎后赋值
 _OCR_WORKER_ENGINE = None
 _OCR_WORKER_USE_TEXTLINE_ORIENTATION = True
 _TABLE_OCR_WORKER_ENGINE = None
@@ -71,8 +71,12 @@ def _ensure_ocr_deps(auto_install: bool) -> None:
 # 引擎初始化
 # --------------------------------------------------------------------------
 
-def init_all_engines(auto_install: bool, lang: str, use_textline_orientation: bool) -> None:
-    """加载文字 OCR 引擎（表格引擎按需懒加载，避免 GPU 显存浪费）。"""
+def _init_ocr_engine(auto_install: bool, lang: str, use_textline_orientation: bool) -> None:
+    """懒加载文字 OCR 引擎，仅首次 OCR 任务时初始化。"""
+    global _OCR_WORKER_ENGINE, _OCR_WORKER_USE_TEXTLINE_ORIENTATION
+    global _LANG
+    if _OCR_WORKER_ENGINE is not None:
+        return
     _ensure_ocr_deps(auto_install)
     paddleocr = importlib.import_module("paddleocr")
     PaddleOCR = paddleocr.PaddleOCR
@@ -85,9 +89,6 @@ def init_all_engines(auto_install: bool, lang: str, use_textline_orientation: bo
         use_doc_unwarping=False,
         use_textline_orientation=bool(use_textline_orientation),
     )
-
-    global _OCR_WORKER_ENGINE, _OCR_WORKER_USE_TEXTLINE_ORIENTATION
-    global _LANG
 
     _OCR_WORKER_ENGINE = PaddleOCR(**ocr_kwargs)
     _OCR_WORKER_USE_TEXTLINE_ORIENTATION = use_textline_orientation
@@ -172,14 +173,8 @@ def recognize_table_worker(image_path: str) -> Tuple[str, str, List[Dict]]:
 # 常驻进程池
 # --------------------------------------------------------------------------
 
-# 常驻子进程主循环：加载全部引擎 → 循环取任务 → 识别 → 回结果
+# 常驻子进程主循环：按任务类型懒加载引擎 → 循环取任务 → 识别 → 回结果
 def _persistent_worker(task_queue, result_queue, auto_install, lang, use_textline_orientation):
-    try:
-        init_all_engines(auto_install, lang, use_textline_orientation)
-    except BaseException as exc:
-        result_queue.put(("init_error", str(exc)))
-        return
-
     result_queue.put(("ready", None))
 
     while True:
@@ -190,12 +185,12 @@ def _persistent_worker(task_queue, result_queue, auto_install, lang, use_textlin
         task_type, task_id, payload = item
         try:
             if task_type == 1:  # OCR
-                image_path = payload
-                result = recognize_image_worker(image_path)
+                _init_ocr_engine(auto_install, lang, use_textline_orientation)
+                result = recognize_image_worker(payload)
                 result_queue.put((task_id, "success", ("ocr", result)))
             elif task_type == 2:  # Table
-                image_path = payload
-                result = recognize_table_worker(image_path)
+                _init_table_engine()
+                result = recognize_table_worker(payload)
                 result_queue.put((task_id, "success", ("table", result)))
         except BaseException as exc:
             result_queue.put((task_id, "error", str(exc)))
@@ -225,11 +220,9 @@ class PersistentOCRPool:
 
         ready = 0
         while ready < n_workers:
-            msg_type, payload = self._result_queue.get()
+            msg_type, _ = self._result_queue.get()
             if msg_type == "ready":
                 ready += 1
-            elif msg_type == "init_error":
-                raise RuntimeError(f"常驻 worker 初始化失败: {payload}")
 
     def _next_task_id(self) -> int:
         with self._lock:
