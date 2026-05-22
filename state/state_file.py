@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from common import WorkFile, GlobalFunction
 from state import BaseState
 
 # 文件摘要索引表列名
@@ -108,7 +109,7 @@ class ScanAbstractState(BaseState):
             owner.remove_state(self)
         else:
             # 将缓存转换为pd.DataFrame类型
-            #FIXME mim，file_abstract_cache这个存在的意义是啥呢？
+            # FIXME mim，file_abstract_cache这个存在的意义是啥呢？
             owner.files_abstract = pd(self.file_abstract_cache)
 
             # 过滤出摘要为空的数据（需要重新扫描的文件）
@@ -165,6 +166,7 @@ class ScanAbstractState(BaseState):
 
         return True
 
+
 # FIXME 张耀
 class ScanFileState(BaseState):
     """
@@ -214,7 +216,7 @@ class ScanFileState(BaseState):
                 existing = df[df[COL_PATH] == rel_path]
                 if not existing.empty and existing.iloc[0].get(COL_HASH) == file_hash:
                     continue
-            #FIXME 这是读取的文件更新时间？?需要的文件时间
+            # FIXME 这是读取的文件更新时间？?需要的文件时间
             updated_at = datetime.fromtimestamp(file_path.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S")
             record = {
                 COL_UUID: str(uuid_module.uuid4()),
@@ -243,7 +245,6 @@ class ScanFileState(BaseState):
     def _relative_path(file_path: Path, files_dir: Path) -> str:
         return str(file_path.relative_to(files_dir)).replace("\\", "/")
 
-
     @staticmethod
     def _compute_sha256(file_path: Path) -> str:
         sha256 = hashlib.sha256()
@@ -251,6 +252,91 @@ class ScanFileState(BaseState):
             for chunk in iter(lambda: f.read(65536), b""):
                 sha256.update(chunk)
         return sha256.hexdigest()
+
+    def Exit(self, owner):
+        pass
+
+
+# FIXME mim2,截收文件，更新索引
+class RecvFileState(BaseState):
+    """
+    接收文件状态：接收用户上传的文件，建立文件摘要索引表 files_abstract.parquet
+    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间
+    """
+    stateName = "RecvFileState"
+
+    def __init__(self, file_path: str, **kwargs):
+        super().__init__(**kwargs)
+        self.file_path = file_path
+
+    def Enter(self, owner):
+        #构建 WorkFile 对象
+        # WorkFile.to_markdown()
+        self._work_file = self._build_work_file(owner)
+        owner.record_role_chat("用户", f"上传文件: {self._work_file.to_markdown()}")
+
+    def _build_work_file(self, owner) -> WorkFile:
+        src = Path(self.file_path)
+        files_dir = Path(owner.workspace_path) / "user" / "files"
+        if not src.exists():
+            return WorkFile({"文件路径": self.file_path, "文件名称": src.name})
+        rel_path = str(src.relative_to(files_dir)).replace("\\", "/") if files_dir in src.parents or files_dir == src.parent else str(src)
+        file_hash = ScanFileState._compute_sha256(src)
+        updated_at = datetime.fromtimestamp(src.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S")
+        file_info = {
+            COL_UUID: str(uuid_module.uuid4()),
+            COL_PATH: rel_path,
+            COL_NAME: src.name,
+            COL_HASH: file_hash,
+            COL_UPDATED: updated_at,
+            COL_PREVIEW: "",
+            COL_ABSTRACT: "",
+            COL_ENTITIES: "",
+            COL_IMPORTANCE: "",
+        }
+        return WorkFile(file_info)
+
+    async def Execute(self, owner):
+        files_dir = Path(owner.workspace_path) / "user" / "files"
+        abstract_path = files_dir / FILES_ABSTRACT_NAME
+        abstract_path.parent.mkdir(parents=True, exist_ok=True)
+
+        if abstract_path.exists() and abstract_path.stat().st_size > 0:
+            df = pd.read_parquet(abstract_path)
+        else:
+            df = pd.DataFrame(columns=FILES_ABSTRACT_COLUMNS)
+
+        for col in FILES_ABSTRACT_COLUMNS:
+            if col not in df.columns:
+                df[col] = ""
+
+        record = {
+            COL_UUID: self._work_file.uuid,
+            COL_PATH: self._work_file.file_path,
+            COL_NAME: self._work_file.file_name,
+            COL_HASH: self._work_file.hash_value,
+            COL_UPDATED: self._work_file.updated_at,
+            COL_PREVIEW: self._work_file.preview,
+            COL_ABSTRACT: self._work_file.abstract,
+            COL_ENTITIES: self._work_file.entities,
+            COL_IMPORTANCE: self._work_file.importance,
+        }
+
+        rel_path = record[COL_PATH]
+        if rel_path in set(df[COL_PATH].tolist()) if not df.empty else set():
+            idx = df[df[COL_PATH] == rel_path].index[0]
+            for key, value in record.items():
+                if key != COL_UUID:
+                    df.at[idx, key] = value
+        else:
+            df.loc[len(df)] = record
+
+        df = df[FILES_ABSTRACT_COLUMNS]
+        df.to_parquet(abstract_path, index=False)
+
+        owner.files_abstract = df
+        GlobalFunction.register_work_files(df)
+        owner.sys_breathe_log(f"文件索引已更新: {rel_path}")
 
     def Exit(self, owner):
         pass

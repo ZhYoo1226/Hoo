@@ -64,29 +64,33 @@ class WorkFile:
     文件在对话中的显示状态,to_markdown()
     文件对file_abstract的属性读取，比如是否完成分析。
     """
-    def __init__(self, file_info: dict):
-        self.uuid = file_info.get("uuid", "")
-        self.file_path = file_info.get("文件路径", "")
-        self.file_name = file_info.get("文件名称", "")
-        self.hash_value = file_info.get("hash值", "")
-        self.updated_at = file_info.get("更新时间", "")
-        self.preview = file_info.get("文件预览", "")
-        self.abstract = file_info.get("文件摘要", "")
-        self.entities = file_info.get("关键实体", "")
-        self.importance = file_info.get("重要性", "")
-        self._raw = file_info
+    def __init__(self, file_abstract: dict):
+        #命名的一致性
+        self.uuid = file_abstract.get("uuid", "")
+        self.file_path = file_abstract.get("文件路径", "")
+        self.file_name = file_abstract.get("文件名称", "")
+        self.hash_value = file_abstract.get("hash值", "")
+        self.updated_at = file_abstract.get("更新时间", "")
+        self.preview = file_abstract.get("文件预览", "")
+        self.abstract = file_abstract.get("文件摘要", "")
+        self.entities = file_abstract.get("关键实体", "")
+        self.importance = file_abstract.get("重要性", "")
+        self.file_abstract = file_abstract
+
+    def __getitem__(self, item):
+        return self.file_abstract.get(item, None)
 
     @property
     def abstract_filled(self) -> bool:
         return bool(self.abstract and self.abstract.strip())
 
     def to_dict(self) -> dict:
-        return self._raw.copy()
+        return self.file_abstract.copy()
 
     def to_markdown(self) -> str:
         """文件在对话中的显示状态"""
         status = "已摘要" if self.abstract_filled else "待摘要"
-        return f" - 文件: {self.file_name}({status})"
+        return f" - 文件：{self['文件名称']}(uuid:{self['文件路径']})"
 
     def __repr__(self):
         return f"WorkFile(uuid={self.uuid}, name={self.file_name})"

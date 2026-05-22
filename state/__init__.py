@@ -1,4 +1,5 @@
 from .base_state import *
+from .state_clear import *
 from .state_data import *
 from .state_doc import *
 from .state_file import *
@@ -7,6 +8,6 @@ from .state_life import *
 from .state_meta import *
 from .state_msg import *
 from .state_ocr import *
+from .state_search import *
 from .state_solver import *
 from .state_xlsx import *
-from .state_clear import *

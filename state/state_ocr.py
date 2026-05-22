@@ -98,7 +98,6 @@ class _BaseOCRState(BaseState):
             pool = PersistentOCRPool(n_workers, self.auto_install, self.lang, self.use_textline_orientation)
             try:
                 owner.sys_breathe_log(f"批次{self.batch_index}: 预处理完成，增强={len(enhanced_images)}")
-
                 pending = self._submit_all(pool, enhanced_images)
                 self._collect_all(pool, pending, owner)
             finally:

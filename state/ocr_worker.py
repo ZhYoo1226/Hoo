@@ -17,7 +17,7 @@ _OCR_CONF = json.loads((_CONF_DIR / "models.json").read_text(encoding="utf-8"))
 
 # 计算模式：改 deps.json 中 use_gpu 即可切换 CPU/GPU
 USE_GPU: bool = _DEPS.get("use_gpu", False)
-GPU_MEM: int = _DEPS.get("gpu_mem", 10000)                # 单卡显存上限 MB
+GPU_MEM: int = _DEPS.get("gpu_mem", 12000)                # 单卡显存上限 MB
 os.environ.setdefault("FLAGS_gpu_memory_limit_mb", str(GPU_MEM))
 
 # GPU 模式下必须用 spawn 启动子进程，CUDA 不支持 fork
@@ -212,7 +212,6 @@ class PersistentOCRPool:
     TASK_OCR = 1
     TASK_TABLE = 2
 
-    # 启动 n_workers 个子进程，等待全部就绪后返回
     def __init__(self, n_workers: int, auto_install: bool, lang: str, use_textline_orientation: bool):
         self._task_queue = multiprocessing.Queue()
         self._result_queue = multiprocessing.Queue()
@@ -229,6 +228,8 @@ class PersistentOCRPool:
             p.start()
             self._workers.append(p)
 
+        # 等待n个子进程全部就绪，否则停在init（同步屏障：spawn需要时间
+        # 导入模块和初始化环境），全部就绪，主进程开始submit
         ready = 0
         while ready < n_workers:
             msg_type, _ = self._result_queue.get()
@@ -260,8 +261,12 @@ class PersistentOCRPool:
     # 发送退出信号并等待全部子进程结束
     def shutdown(self):
         for _ in self._workers:
+            # 该退出了
             self._task_queue.put(None)
         for p in self._workers:
-            p.join(timeout=60)
+            # 等待子进程结束，防止子进程不随着主进程释放，显存进程不干净
+            # 此处主进程等待ing
+            p.join(timeout=10) # p.start() p.join() p.is_alive()
+            # 30s内还没好直接SIGTERM杀死
             if p.is_alive():
                 p.terminate()
