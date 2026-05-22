@@ -26,7 +26,6 @@ FILES_ABSTRACT_COLUMNS = [
     COL_UUID, COL_PATH, COL_NAME, COL_HASH, COL_UPDATED,
     COL_PREVIEW, COL_ABSTRACT, COL_ENTITIES, COL_IMPORTANCE,
 ]
-SUPPORTED_EXTENSIONS = {".docx"}
 
 
 class SummaryAbstractState(BaseState):
@@ -170,76 +169,52 @@ class ScanAbstractState(BaseState):
 # FIXME 张耀
 class ScanFileState(BaseState):
     """
-    扫描文件状态：扫描用户workspace/user/files文件目录下的所有docx文件，
-    建立文件摘要索引表 files_abstract.parquet
-    head: uuid,文件预览,文件摘要,关键实体,重要性,hash值,文件路径,文件名称,更新时间
+    根据文件uuid或路径，读取 parquet 中该文件的字段记录，供调用方诊断使用。
     """
     stateName = "ScanFileState"
 
-    def __init__(self, **kwargs):
+    def __init__(self, file_uuid: str = None,  # 文件uuid
+                 file_path: str = None,  # 文件路径（uuid 和 path 至少传一个）
+                 **kwargs):
         super().__init__(**kwargs)
+        self.file_uuid = file_uuid
+        self.file_path = file_path
 
     def Enter(self, owner):
         pass
 
-    async def Execute(self, owner):
+    def Execute(self, owner):
         files_dir = Path(owner.workspace_path) / "user" / "files"
-        if not files_dir.exists():
+        abstract_path = files_dir / FILES_ABSTRACT_NAME
+
+        if not abstract_path.exists():
+            owner.sys_breathe_log(f"ScanFileState: parquet 文件不存在: {abstract_path}")
+            owner.scan_file_result = None
+            owner.remove_state(self)
             return
 
-        abstract_path = files_dir / FILES_ABSTRACT_NAME
-        abstract_path.parent.mkdir(parents=True, exist_ok=True)
+        df = pd.read_parquet(abstract_path)
 
-        if abstract_path.exists() and abstract_path.stat().st_size > 0:
-            df = pd.read_parquet(abstract_path)
-        else:
-            df = pd.DataFrame(columns=FILES_ABSTRACT_COLUMNS)
+        record = None
+        if self.file_uuid:
+            match = df[df[COL_UUID] == self.file_uuid]
+            if not match.empty:
+                record = match.iloc[0].to_dict()
+        elif self.file_path:
+            match = df[df[COL_PATH] == self.file_path]
+            if not match.empty:
+                record = match.iloc[0].to_dict()
 
-        for col in FILES_ABSTRACT_COLUMNS:
-            if col not in df.columns:
-                df[col] = ""
+        owner.scan_file_result = record
 
-        known_paths = set(df[COL_PATH].tolist()) if not df.empty else set()
+        if record is None:
+            identifier = self.file_uuid or self.file_path
+            owner.sys_breathe_log(f"ScanFileState: 未在 parquet 中找到文件: {identifier}")
 
-        for file_path in files_dir.rglob("*"):
-            if not file_path.is_file():
-                continue
-            if file_path.name == FILES_ABSTRACT_NAME:
-                continue
-            if file_path.suffix.lower() not in SUPPORTED_EXTENSIONS:
-                continue
+        owner.remove_state(self)
 
-            rel_path = self._relative_path(file_path, files_dir)
-            file_hash = self._compute_sha256(file_path)
-
-            if rel_path in known_paths:
-                existing = df[df[COL_PATH] == rel_path]
-                if not existing.empty and existing.iloc[0].get(COL_HASH) == file_hash:
-                    continue
-            # FIXME 这是读取的文件更新时间？?需要的文件时间
-            updated_at = datetime.fromtimestamp(file_path.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S")
-            record = {
-                COL_UUID: str(uuid_module.uuid4()),
-                COL_PATH: rel_path,
-                COL_NAME: file_path.name,
-                COL_HASH: file_hash,
-                COL_UPDATED: updated_at,
-                COL_PREVIEW: "",
-                COL_ABSTRACT: "",
-                COL_ENTITIES: "",
-                COL_IMPORTANCE: "",
-            }
-
-            if rel_path in known_paths:
-                idx = df[df[COL_PATH] == rel_path].index[0]
-                for key, value in record.items():
-                    df.at[idx, key] = value
-            else:
-                df.loc[len(df)] = record
-                known_paths.add(rel_path)
-
-        df = df[FILES_ABSTRACT_COLUMNS]
-        df.to_parquet(abstract_path, index=False)
+    def Exit(self, owner):
+        pass
 
     @staticmethod
     def _relative_path(file_path: Path, files_dir: Path) -> str:
@@ -253,11 +228,8 @@ class ScanFileState(BaseState):
                 sha256.update(chunk)
         return sha256.hexdigest()
 
-    def Exit(self, owner):
-        pass
 
-
-# FIXME mim2,截收文件，更新索引
+# FIXME mim2,接收文件，更新索引
 class RecvFileState(BaseState):
     """
     接收文件状态：接收用户上传的文件，建立文件摘要索引表 files_abstract.parquet
@@ -265,7 +237,8 @@ class RecvFileState(BaseState):
     """
     stateName = "RecvFileState"
 
-    def __init__(self, file_path: str, **kwargs):
+    def __init__(self, file_path: str,  # 接收到的文件路径
+                 **kwargs):
         super().__init__(**kwargs)
         self.file_path = file_path
 

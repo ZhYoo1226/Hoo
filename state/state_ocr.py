@@ -29,27 +29,19 @@ _MEDIA_CONTENT_TYPES: dict = json.loads(
 # --------------------------------------------------------------------------
 
 class _BaseOCRState(BaseState):
+    """OCR 基类：图片预处理、进程池管理、结果回写磁盘。"""
 
     MEDIA_CONTENT_TYPES = _MEDIA_CONTENT_TYPES
 
     def __init__(
         self,
-        source_path: str,
-        auto_install: bool = True,
-        use_textline_orientation: bool = True,
-        lang: str = "ch",
-        batch_index: int = 0,
+        source_path: str,  # 图片目录路径，内部自动扫描目录下所有图片文件
+        auto_install: bool = True,  # 是否自动安装 OCR 依赖
+        use_textline_orientation: bool = True,  # 是否启用文本行方向检测
+        lang: str = "ch",  # OCR 识别语言
+        batch_index: int = 0,  # 批次序号，用于日志标识
         **kwargs,
     ):
-        '''
-        参数：
-        source_path: 图片目录路径，内部自动扫描目录下所有图片文件
-        auto_install: 是否自动安装 OCR 依赖，默认 True
-        use_textline_orientation: 是否启用文本行方向检测，默认 True
-        lang: OCR 识别语言，默认 "ch"
-        batch_index: 批次序号，用于日志标识
-        **kwargs: 其他参数
-        '''
         super().__init__(**kwargs)
         self._duration = 60 * 60 * 1000
         self.source_path = Path(source_path)

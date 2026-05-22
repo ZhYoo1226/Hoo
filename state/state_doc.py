@@ -105,7 +105,7 @@ from .state_extract import ExtractDocxImagesState, ExtractDocxTablesState  # noq
 # --------------------------------------------------------------------------
 
 class WordParseState(BaseState):
-    # zhang: 文档解析混合状态机。输入 source_path，按阶段依次添加子状态机执行解析管线，最终输出写入磁盘文件。
+    """文档解析混合状态机：输入文件路径，按阶段依次添加子状态机执行解析管线，最终输出写入磁盘文件。"""
 
     stateName = "WordParseState"
 
@@ -117,7 +117,9 @@ class WordParseState(BaseState):
     STAGE_TEXT = "text"
     STAGE_CHUNKS = "chunks"
 
-    def __init__(self, source_path: str, output_root: Optional[str] = None, **kwargs):
+    def __init__(self, source_path: str,  # 待解析的文件路径（.docx / .pdf / .doc）
+                 output_root: Optional[str] = None,  # 解析产物输出根目录，默认同文件目录
+                 **kwargs):
         super().__init__(**kwargs)
         self.source_path = source_path
         self.output_root = output_root

@@ -4,7 +4,6 @@ from datetime import datetime
 from common import GlobalFunction
 from state import BaseState, StateOwner
 from state.state_doc import WordParseState
-from state.state_file import ScanFileState
 from state.state_task import ExecuteTaskState
 
 
@@ -183,27 +182,25 @@ class MetaAskState(MetaBaseState):
 
 class MetaReadState(MetaBaseState):
     """
-    根据文件uuid，分析文件(pdf,doc,docx,image)内容，生成摘要信息。
+    根据文件uuid，查找文件路径并启动文档解析管线。
     """
     stateName = 'MetaReadState'
 
-    def __init__(self, file_uuid: str, **kwargs):
+    def __init__(self, file_uuid: str,  # 文件uuid
+                 **kwargs):
+        super().__init__(**kwargs)
         self.file_uuid = file_uuid
         self.file_path = GlobalFunction.uuid_to_file_path(self.file_uuid)
-        self._scanner_added = False
-        self._parser_added = False
-        super().__init__(**kwargs)
 
     def Enter(self, owner):
         super().Enter(owner)
-        if not self._scanner_added:
-            owner.add_state(ScanFileState())
-            self._scanner_added = True
 
     def Execute(self, owner):
-        if not self._parser_added:
-            owner.add_state(WordParseState(str(self.file_path)))
-            self._parser_added = True
+        if not self.file_path:
+            owner.record_role_chat("观察", f"MetaReadState: 未找到 uuid={self.file_uuid} 对应的文件路径")
+            owner.remove_state(self)
+            return
+        owner.add_state(WordParseState(str(self.file_path)))
         owner.remove_state(self)
 
 

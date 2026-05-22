@@ -70,12 +70,14 @@ class GlobalFunction:
         return wf.file_path if wf else None
 
     @staticmethod
-    def uuid_to_work_file(uuid: str) -> "WorkFile":
+    def uuid_to_work_file(uuid: str,  # 文件uuid
+                          ) -> "WorkFile":
         """根据文件uuid，返回 WorkFile 对象"""
         return GlobalFunction._work_file_map.get(uuid)
 
     @staticmethod
-    def file_to_work_file(file_path: str) -> "WorkFile":
+    def file_to_work_file(file_path: str,  # 文件路径
+                          ) -> "WorkFile":
         """根据文件路径，返回 WorkFile 对象"""
         for wf in GlobalFunction._work_file_map.values():
             if wf.file_path == file_path:
