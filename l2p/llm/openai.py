@@ -10,7 +10,10 @@ located at 'l2p/llm/utils/openaiSDK.yaml'.
 Users can also define their own custom models and parameters by extending the YAML
 configuration using the same format template.
 """
+import base64
+import mimetypes
 import time
+from pathlib import Path
 
 from retry import retry
 from typing_extensions import override
@@ -107,6 +110,7 @@ class OPENAI(BaseLLM):
             self,
             prompt: str = None,
             messages=None,
+            images: list[str] = None,  # VL 模型的图片路径列表
             end_when_error=False,
             max_retry=3,
             est_margin=200,
@@ -120,10 +124,30 @@ class OPENAI(BaseLLM):
             messages = []
 
         if prompt:
-            messages = messages + [{"role": "user", "content": prompt}]
+            if images:
+                content = [{"type": "text", "text": prompt}]
+                for img_path in images:
+                    b64 = self._encode_image(img_path)
+                    mime, _ = mimetypes.guess_type(img_path)
+                    if not mime:
+                        mime = "image/jpeg"
+                    content.append({
+                        "type": "image_url",
+                        "image_url": {"url": f"data:{mime};base64,{b64}"}
+                    })
+                messages = messages + [{"role": "user", "content": content}]
+            else:
+                messages = messages + [{"role": "user", "content": prompt}]
 
-        # estimate current usage of tokens
-        current_tokens = sum(len(self.tok.encode(m["content"])) for m in messages)
+        # estimate current usage of tokens (text only for VL content)
+        def _text_tokens(content):
+            if isinstance(content, str):
+                return len(self.tok.encode(content))
+            if isinstance(content, list):
+                return sum(len(self.tok.encode(p.get("text", ""))) for p in content if p.get("type") == "text")
+            return 0
+
+        current_tokens = sum(_text_tokens(m["content"]) for m in messages)
         requested_tokens = min(
             self.max_completion_tokens,
             self.context_length - current_tokens - est_margin,
@@ -199,11 +223,12 @@ class OPENAI(BaseLLM):
             )
 
         elapsed = time.time() - start_time
-        # log query information
+        # log query information (sanitize image data for readability)
+        _log_messages = self._sanitize_messages(messages)
         self.query_log.append(
             {
                 "model": self.model_alias,
-                "messages": messages,
+                "messages": _log_messages,
                 "response": llm_output,
                 "input_tokens": usage.prompt_tokens if usage else current_tokens,
                 "output_tokens": (
@@ -233,6 +258,28 @@ class OPENAI(BaseLLM):
         )
         print(f"LLM请求查询, 耗时: {elapsed:.2f} 秒")
         return llm_output
+
+    @staticmethod
+    def _encode_image(image_path: str) -> str:
+        """读取图片文件并返回 base64 字符串"""
+        with open(image_path, "rb") as f:
+            return base64.b64encode(f.read()).decode("utf-8")
+
+    @staticmethod
+    def _sanitize_messages(messages: list) -> list:
+        """截断消息中的 base64 图片数据，避免日志膨胀"""
+        import copy
+        safe = copy.deepcopy(messages)
+        for m in safe:
+            content = m.get("content", "")
+            if isinstance(content, list):
+                for part in content:
+                    if part.get("type") == "image_url":
+                        url = part.get("image_url", {}).get("url", "")
+                        if "base64," in url:
+                            prefix, b64 = url.split("base64,", 1)
+                            part["image_url"]["url"] = f"{prefix}base64,{b64[:50]}...[truncated]"
+        return safe
 
     def get_tokens(self) -> tuple[int, int]:
         """Return input and output token counts."""

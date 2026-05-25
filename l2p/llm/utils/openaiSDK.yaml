@@ -17,6 +17,18 @@
 
 #qwen
 qwen:
+  qwen3-vl:32b:
+    model_family: qwen3-vl
+    model_alias: qwen3-vl:32b
+    model_context_length: 131072
+    model_params:
+      max_completion_tokens: 16384
+      temperature: 1.0
+      top_p: 1.0
+    cost_usd_mtok:
+      input: 2.00
+      output: 12.00
+
   qwen3-30b:
     model_family: qwen3
     model_alias: qwen3:30b

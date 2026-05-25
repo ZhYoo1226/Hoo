@@ -65,12 +65,14 @@ class BaseLLM(ABC):
         self.api_key: str | None = api_key
 
     @abstractmethod
-    def query(self, prompt: str) -> str:
+    def query(self, prompt: str = None, messages=None, images: list[str] = None) -> str:
         """
         Abstract method to query an LLM with a given prompt and return the response.
 
         Args:
             prompt (str): The prompt to send to the LLM
+            messages: Pre-built message list (OpenAI format)
+            images (list[str]): Image file paths for VL models
         Returns:
             str: The response from the LLM
         """

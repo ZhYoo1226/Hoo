@@ -175,7 +175,8 @@ class SolverOwner(StateOwner):
                        state: BaseState = None,  # 当前状态
                        system_prompt: str = "系统提示词",  # 系统提示词
                        conversation: list = None,  # 基于的对话内容
-                       user_msg: str = None  # 用户消息, user_prompt二选一
+                       user_msg: str = None,  # 用户消息, user_prompt二选一
+                       images: list[str] = None,  # VL 模型的图片路径列表
                        ) -> List[
         dict]:
         """执行提示词，返回response执行Action"""
@@ -190,7 +191,7 @@ class SolverOwner(StateOwner):
             messages.append({"role": "user", "content": user_msg})
 
         # 请求模型
-        llm_output = self.llm_prompt_model.query(messages=messages)  # prompt model
+        llm_output = self.llm_prompt_model.query(messages=messages, images=images)  # prompt model
         query_log = self.llm_prompt_model.get_query_log()
         self.llm_prompt_model.reset_query_log()
         GlobalFunction.log("模型日志", f"{json.dumps(query_log, ensure_ascii=False, indent=2)}")

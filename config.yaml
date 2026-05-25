@@ -4,7 +4,7 @@ openai:
   #91
   api_key: "fastgpt-rxQKFa0gEpI1Y7B0L4pCHqvSyzwqcmR8noBF5tjGAJBeUTaFPcL6ukrCRgzU"
   base_url: "http://gpu.skyopenai.com:3000/api/v1"
-  model: "qwen3.6:27b"
+  model: "qwen3-vl:32b"
 
   #51 60
   #  api_key: "sk-F7iKGTfdiRFLExq0gzIkkJg8LQ62DSfsJpgHnOQIVcXql4m9"
