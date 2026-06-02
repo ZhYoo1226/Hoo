@@ -10,4 +10,6 @@ from .state_msg import *
 from .state_ocr import *
 from .state_search import *
 from .state_solver import *
+from .state_modify import *
+from .state_modify_support import *
 from .state_xlsx import *

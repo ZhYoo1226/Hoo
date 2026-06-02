@@ -64,8 +64,7 @@ class WorkFile:
     文件在对话中的显示状态,to_markdown()
     文件对file_abstract的属性读取，比如是否完成分析。
     """
-    def __init__(self, file_abstract: dict,  # files_abstract.parquet 中的一行记录
-        #命名的一致性
+    def __init__(self, file_abstract: dict):  # files_abstract.parquet 中的一行记录
         self.uuid = file_abstract.get("uuid", "")
         self.file_path = file_abstract.get("文件路径", "")
         self.file_name = file_abstract.get("文件名称", "")

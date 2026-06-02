@@ -1,6 +1,5 @@
 import os.path
 from pathlib import Path
-
 import pytest
 
 from app import g_owner, run_server
@@ -11,6 +10,11 @@ from state import MetaReadState, ClearChatState, ClearTaskState, \
 from state.state_doc import WordParseState
 from state.state_ocr import TableOCRState
 from state.state_task import ScanTaskState, ExecuteTaskState
+from state.state_modify import (
+    ModifyYamlState, ModifyJsonState, ModifyIniState, ModifyTomlState, ModifyExcelState,
+    ModifyHtmlState, ModifyMarkdownState, ModifyDocxState,
+    ModifyXmlState, ModifyEnvState, ModifyRegexState, ModifyPyCodeState,
+)
 
 
 # FIXME 张耀: 测试文件解析
@@ -27,9 +31,12 @@ def ztest_img_ocr_state():
 # zhang 提前删除产物，看效果（有幂等检查）
 def test_word_parse_state():
     root = Path(g_owner.workspace_path) / "user/files/202605"
-    for filePath in root.rglob("*.pdf"):
+    for filePath in root.rglob("*.docx"):
+        if "__docx__解析" in str(filePath):
+            continue
         parse_state = WordParseState(str(filePath))
         g_owner.add_state(parse_state)
+
 
 
 # zhang 仅实现ScanTaskState
@@ -50,6 +57,78 @@ def clear_local_chat_data_state():
     # 清除评估建议
     if g_yaml_config["chat"]["launch_clear_prompt_eval"]:
         g_owner.add_state(ClearEvalAdviceState())
+
+
+# --------------------------------------------------------------------------
+# 文件修改状态测试
+# --------------------------------------------------------------------------
+
+_MODIFY_DIR = "user/files/test_modify"
+
+
+def ztest_modify_yaml():
+    test_file = os.path.join(g_owner.workspace_path, _MODIFY_DIR, "test.yaml")
+    g_owner.add_state(ModifyYamlState(file=test_file, xpath="server.port", value=9090))
+
+
+def ztest_modify_json():
+    test_file = os.path.join(g_owner.workspace_path, _MODIFY_DIR, "test.json")
+    g_owner.add_state(ModifyJsonState(file=test_file, xpath="database.host", value="10.0.0.1"))
+
+
+def ztest_modify_ini():
+    test_file = os.path.join(g_owner.workspace_path, _MODIFY_DIR, "test.ini")
+    g_owner.add_state(ModifyIniState(file=test_file, xpath="database.host", value="db.internal"))
+
+
+def ztest_modify_toml():
+    test_file = os.path.join(g_owner.workspace_path, _MODIFY_DIR, "test.toml")
+    g_owner.add_state(ModifyTomlState(file=test_file, xpath="server.port", value=3000))
+
+
+def ztest_modify_excel():
+    test_file = os.path.join(g_owner.workspace_path, _MODIFY_DIR, "test.xlsx")
+    g_owner.add_state(ModifyExcelState(file=test_file, xpath="Sheet1!B5", value=999))
+
+
+def ztest_modify_new_key():
+    test_file = os.path.join(g_owner.workspace_path, _MODIFY_DIR, "test.yaml")
+    g_owner.add_state(ModifyYamlState(file=test_file, xpath="app.debug.enabled", value=True))
+
+
+def ztest_modify_html():
+    test_file = os.path.join(g_owner.workspace_path, _MODIFY_DIR, "test.html")
+    g_owner.add_state(ModifyHtmlState(file=test_file, origin_text="Hello World", new_text="Hello Claude"))
+
+
+def ztest_modify_markdown():
+    test_file = os.path.join(g_owner.workspace_path, _MODIFY_DIR, "test.md")
+    g_owner.add_state(ModifyMarkdownState(file=test_file, origin_text="Hello World", new_text="Hello Claude"))
+
+
+def ztest_modify_docx():
+    test_file = os.path.join(g_owner.workspace_path, _MODIFY_DIR, "test.docx")
+    g_owner.add_state(ModifyDocxState(file=test_file, origin_text="Hello World", new_text="Hello Claude"))
+
+
+def ztest_modify_xml():
+    test_file = os.path.join(g_owner.workspace_path, _MODIFY_DIR, "test.xml")
+    g_owner.add_state(ModifyXmlState(file=test_file, xpath="server.port", value=9090))
+
+
+def ztest_modify_env():
+    test_file = os.path.join(g_owner.workspace_path, _MODIFY_DIR, "test.env")
+    g_owner.add_state(ModifyEnvState(file=test_file, xpath="DATABASE_HOST", value="10.0.0.1"))
+
+
+def ztest_modify_regex():
+    test_file = os.path.join(g_owner.workspace_path, _MODIFY_DIR, "test.conf")
+    g_owner.add_state(ModifyRegexState(file=test_file, origin_text=r"server_port=\d+", new_text="server_port=9090"))
+
+
+def ztest_modify_pycode():
+    test_file = os.path.join(g_owner.workspace_path, _MODIFY_DIR, "test.py")
+    g_owner.add_state(ModifyPyCodeState(file=test_file, xpath="PORT", value=9090))
 
 
 if __name__ == "__main__":
