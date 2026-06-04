@@ -64,7 +64,7 @@ class Pdf2DocxState(BaseState):
 
     def Execute(self, owner):
         if self._error is not None:
-            GlobalFunction.log("转换错误", f"pdf → docx 转换失败: {self._error}")
+            GlobalFunction.log("转换错误", f"pdf → docx 转换失败: 源={self._pdf_path}, 目标={self._docx_path}, 错误={self._error}")
             owner.remove_state(self)
             return
         if not self._done:
@@ -141,7 +141,7 @@ class Doc2DocxState(BaseState):
 
     def Execute(self, owner):
         if self._error is not None:
-            GlobalFunction.log("转换错误", f"doc → docx 转换失败: {self._error}")
+            GlobalFunction.log("转换错误", f"doc → docx 转换失败: 源={self._doc_path}, 目标={self._docx_path}, 错误={self._error}")
             owner.remove_state(self)
             return
         if not self._done:

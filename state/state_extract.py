@@ -9,11 +9,11 @@ from docx import Document
 
 from .base_state import BaseState
 from .state_doc import (
-    MEDIA_CONTENT_TYPES,
     REL_NAMESPACE,
     DocxImage,
     DocxTable,
     _sanitize_name,
+    get_media_content_types,
 )
 
 
@@ -173,7 +173,7 @@ class ExtractDocxImagesState(BaseState):
                 media_path = media_map[rel_id]
                 media_name = Path(media_path).name
                 ext = Path(media_name).suffix.lower()
-                if ext not in MEDIA_CONTENT_TYPES:
+                if ext not in get_media_content_types():
                     continue
                 images.append(
                     DocxImage(

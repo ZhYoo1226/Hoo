@@ -12,6 +12,7 @@ from openpyxl import load_workbook
 
 from .base_state import BaseState
 from .state_modify_support import (
+    _atomic_replace,
     _backup_file,
     _rollback_file,
     _set_by_path,
@@ -198,7 +199,7 @@ class ModifyExcelState(BaseState):
                 ws = wb.active
                 cell_ref = self.xpath
             ws[cell_ref] = self.value
-            wb.save(self.file)
+            _atomic_replace(self.file, lambda p: wb.save(p))
             _verify_file_type(self.file, "xlsx")
             _log(owner, "info", f"Excel 修改成功: {self.file} → {self.xpath} = {self.value}")
         except Exception as e:
@@ -272,6 +273,7 @@ class ModifyMarkdownState(BaseState):
             tmp = self.file + ".tmp"
             with open(tmp, "w", encoding="utf-8") as f:
                 f.write(content)
+            os.replace(tmp, self.file)
             _verify_file_type(self.file, "md")
             _log(owner, "info", f"Markdown 修改成功: {self.file}")
         except Exception as e:
@@ -309,7 +311,7 @@ class ModifyDocxState(BaseState):
                         found = True
             if not found:
                 raise ValueError(f"未找到匹配文本: {self.origin_text}")
-            doc.save(self.file)
+            _atomic_replace(self.file, lambda p: doc.save(p))
             _verify_file_type(self.file, "docx")
             _log(owner, "info", f"DOCX 修改成功: {self.file}")
         except Exception as e:

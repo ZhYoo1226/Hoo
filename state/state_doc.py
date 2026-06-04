@@ -74,9 +74,19 @@ REL_NAMESPACE = {
 }
 
 _CONF_DIR = Path(__file__).resolve().parent.parent / "workspace" / "conf"
-MEDIA_CONTENT_TYPES: dict = json.loads(
-    (_CONF_DIR / "imagetype.json").read_text(encoding="utf-8")
-)
+_media_content_types_cache: Optional[dict] = None
+
+
+def get_media_content_types() -> dict:
+    global _media_content_types_cache
+    if _media_content_types_cache is None:
+        try:
+            _media_content_types_cache = json.loads(
+                (_CONF_DIR / "imagetype.json").read_text(encoding="utf-8")
+            )
+        except Exception:
+            _media_content_types_cache = {}
+    return _media_content_types_cache
 
 
 # --------------------------------------------------------------------------
@@ -90,6 +100,13 @@ def _sanitize_name(name: str) -> str:
     if len(safe) > 60:
         safe = safe[:60].rstrip(". ")
     return safe or "未命名"
+
+
+def _safe_write_text(path: Path, content: str, label: str) -> None:
+    try:
+        path.write_text(content, encoding="utf-8")
+    except Exception as exc:
+        GlobalFunction.log("解析错误", f"{label} [{path}]: {exc}")
 
 
 # --------------------------------------------------------------------------
@@ -167,6 +184,9 @@ class WordParseState(BaseState):
         self._full_text_path = self._parsed_root / f"{source.stem}_全文.txt"
         self._source_hash = self._file_sha256(source)
 
+        if not hasattr(owner, "parsed_document_cache"):
+            owner.parsed_document_cache = {}
+
         # 创建目录
         for d in [self._document_dir, self._parsed_root, self._image_dir, self._table_dir, self._text_dir]:
             d.mkdir(parents=True, exist_ok=True)
@@ -237,7 +257,10 @@ class WordParseState(BaseState):
     def _advance_from_normalize(self, owner):
         sub_state = self._current_sub_state
         if sub_state._error is not None:
-            GlobalFunction.log("解析错误", f"pdf/doc → docx 转换失败: {sub_state._error}")
+            GlobalFunction.log("解析错误",
+                                f"pdf/doc → docx 转换失败: 源={self.source_path}, "
+                                f"目标={self._parsed_root / f'{Path(self.source_path).stem}.docx'}, "
+                                f"错误={sub_state._error}")
             self._done = True
             return
         source_stem = Path(self.source_path).stem
@@ -267,8 +290,6 @@ class WordParseState(BaseState):
         # 分块完成，写入全部输出产物，标记完成
         self._chunks = self._current_sub_state._chunks
         self._write_outputs(owner)
-        if not hasattr(owner, "parsed_document_cache"):
-            owner.parsed_document_cache = {}
         owner.parsed_document_cache[self._source_hash] = str(self._parsed_root)
         self._done = True
         owner.event.put("WordParseState_done")
@@ -284,8 +305,6 @@ class WordParseState(BaseState):
 
     def _check_idempotent(self, owner) -> bool:
         # 1. 内存缓存：同会话已解析过，直接返回
-        if not hasattr(owner, "parsed_document_cache"):
-            owner.parsed_document_cache = {}
         if owner.parsed_document_cache.get(self._source_hash) == str(self._parsed_root):
             return True
 
@@ -293,20 +312,23 @@ class WordParseState(BaseState):
         abstract_path = Path(owner.workspace_path) / "user" / "files" / FILES_ABSTRACT_NAME
         hash_matched = False
         if abstract_path.exists() and abstract_path.stat().st_size > 0:
-            df = pd.read_parquet(abstract_path)
-            if COL_PATH in df.columns:
-                files_dir = Path(owner.workspace_path) / "user" / "files"
-                try:
-                    rel_path = str(Path(self.source_path).relative_to(files_dir)).replace("\\", "/")
-                except ValueError:
-                    rel_path = Path(self.source_path).name
-                matched = df[df[COL_PATH] == rel_path]
-                if not matched.empty and matched.iloc[0].get(COL_HASH) == self._source_hash:
-                    hash_matched = True
+            try:
+                df = pd.read_parquet(abstract_path)
+                if COL_PATH in df.columns:
+                    files_dir = Path(owner.workspace_path) / "user" / "files"
+                    try:
+                        rel_path = str(Path(self.source_path).relative_to(files_dir)).replace("\\", "/")
+                    except ValueError:
+                        rel_path = Path(self.source_path).name
+                    matched = df[df[COL_PATH] == rel_path]
+                    if not matched.empty and matched.iloc[0].get(COL_HASH) == self._source_hash:
+                        hash_matched = True
+            except Exception:
+                pass
         if not hash_matched:
             return False
 
-        # 3. 磁盘产物完整性：防止手误删除
+        # 3. 磁盘产物完整性
         if not self._parsed_root.exists():
             return False
         source = Path(self.source_path)
@@ -316,7 +338,10 @@ class WordParseState(BaseState):
         if not self._full_text_path.exists():
             return False
         if self._text_dir.exists():
-            for path in self._text_dir.rglob("内容.txt"):
+            content_files = list(self._text_dir.rglob("内容.txt"))
+            if not content_files:
+                return False
+            for path in content_files:
                 if any(child.is_dir() for child in path.parent.iterdir()):
                     return False
 
@@ -442,18 +467,19 @@ class WordParseState(BaseState):
 
     def _write_outputs(self, owner):
         # 将所有中间结果写入磁盘：表格md、图片+元数据、全文txt、目录文件、标题树、manifest
-        for d in [self._document_dir, self._parsed_root, self._image_dir, self._table_dir, self._text_dir]:
-            d.mkdir(parents=True, exist_ok=True)
-
         for table in self._tables:
             stem = f"表{table.index}_{table.position}_{table.title}"
             markdown_path = self._table_dir / f"{stem}.md"
-            markdown_path.write_text(table.markdown, encoding="utf-8")
+            _safe_write_text(markdown_path, table.markdown, "表格写入失败")
 
         for image in self._images:
             stem = f"图{image.index}"
             image_path = self._image_dir / f"{stem}{image.extension}"
-            self._write_image_blob(image, image_path)
+            try:
+                self._write_image_blob(image, image_path)
+            except Exception as exc:
+                GlobalFunction.log("解析错误", f"图片写入失败 [{image_path}]: {exc}")
+                continue
             try:
                 rel_img = str(image_path.relative_to(Path(owner.workspace_path))).replace("\\", "/")
             except ValueError:
@@ -467,17 +493,18 @@ class WordParseState(BaseState):
                 "文字识别": "",
             }
             output_md = self._image_dir / f"{stem}_图片解析.md"
-            output_md.write_text(
+            _safe_write_text(
+                output_md,
                 f"# {stem} 图片解析\n\n"
                 f"## 图片信息摘要\n\n"
                 f"```json\n"
                 f"{json.dumps(result, ensure_ascii=False, indent=2)}\n"
                 f"```\n\n"
                 f"## 图片处理\n",
-                encoding="utf-8",
+                "图片元数据写入失败",
             )
 
-        self._full_text_path.write_text(self._full_text, encoding="utf-8")
+        _safe_write_text(self._full_text_path, self._full_text, "全文写入失败")
         self._write_heading_outline_files(self._parsed_root, self._chunks)
 
         for chunk in self._chunks:

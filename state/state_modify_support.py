@@ -81,6 +81,13 @@ def _set_by_path(data, path: str, value):
     target[last] = value
 
 
+def _atomic_replace(file_path: str, write_fn) -> None:
+    """写入临时文件后原子替换原文件。write_fn 接收临时文件路径。"""
+    tmp = file_path + ".tmp"
+    write_fn(tmp)
+    os.replace(tmp, file_path)
+
+
 def _log(owner, level: str, msg: str):
     """安全日志输出：优先 owner.logger，降级到 print。"""
     try:
