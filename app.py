@@ -1,7 +1,26 @@
+import os
 import signal
+import time
 
+# 当前路径
+# 当前工作目录和common模块的工作目录，不知道是什么，训练时会变化
+BASE_URL = os.path.dirname(os.path.abspath(__file__)) + "/"
+print(f"BASE_URL -> runtime pydata base path: {BASE_URL}")
+
+os.environ["TIKTOKEN_CACHE_DIR"] = BASE_URL + "resources/models"
+os.environ['FASTEMBED_CACHE_PATH'] = BASE_URL + "resources/models"
+os.environ['HUGGINGFACE_HUB_CACHE'] = BASE_URL + "resources/models"
+os.environ['HF_HOME'] = BASE_URL + "resources/models"
+os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"  # 国内镜像
+
+print(f"os.environ['TIKTOKEN_CACHE_DIR'] -> {os.environ['TIKTOKEN_CACHE_DIR']}")
+print(f"os.environ['FASTEMBED_CACHE_PATH'] -> {os.environ['FASTEMBED_CACHE_PATH']}")
+print(f"os.environ['HF_HOME'] -> {os.environ['HF_HOME']}")
+print(f"os.environ['HF_ENDPOINT'] -> {os.environ['HF_ENDPOINT']}")
+
+from common import GlobalFunction
+from state import g_yaml_config, g_owner, LiveState, StateOwner
 from l2p.llm.openai import OPENAI
-from state import *
 
 '''
 统一管理大模型
@@ -14,9 +33,10 @@ llm = OPENAI(
     enable_thinking=g_yaml_config["openai"]["enable_thinking"]
 )
 
-# 设置意图理解的模型
-g_owner.set_llm_intent_model(llm)
-g_owner.set_llm_prompt_model(llm)
+# 设置意图理解的模型,静态变量
+StateOwner.llm_intent_model = llm
+StateOwner.llm_prompt_model = llm
+StateOwner.llm_action_model = llm
 
 # 用于优雅退出的标志
 running = True
@@ -50,8 +70,13 @@ if __name__ == "__main__":
     # input_text = GlobalFunction.load_file("tests/对话_静态信息_日期.md")
     # input_text = GlobalFunction.load_file("tests/对话_静态信息_自我.md")
     # input_text = GlobalFunction.load_file("tests/任务_银行回单_不清晰.md")
-    input_text = GlobalFunction.load_file("tests/文件_银行回单.md")
-    g_owner.recv_message("用户", input_text)
+    # input_text = GlobalFunction.load_file("tests/文件_银行回单.md")
+    # input_text = GlobalFunction.load_file("tests/项目经理工作任务.md")
+    # g_owner.recv_message("用户", input_text)
+
+
+
+
 
     # 在独立线程中运行 LLM 测试
     # def test_llm():

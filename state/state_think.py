@@ -52,11 +52,11 @@ class ThinkClient:
                     if self.total_intent_count >= 3:
                         self.observe_user_intent(owner)
                     continue
-                assert owner.llm_intent_model, "意图理解模型未设置，调用set_llm_intent_model设置意图模型。"
+                assert owner.llm_intent_model, "意图理解模型未设置，调用llm_intent_model设置意图模型。"
                 self.total_intent_count += 1
                 owner.record_role_chat(role, chat_new_msg)
                 # 回复用户的聊天信息
-                owner.execute_chat(None)
+                owner.execute_chat(owner=owner, state=None)
                 # 没有得到明确的意图，需要重新分析用户意图。
                 if chat_text_queue.empty() or self.total_intent_count >= 3:
                     # 如果有新消息未处理，则优先处理新消息，再分析意图

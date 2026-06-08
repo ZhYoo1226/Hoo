@@ -8,22 +8,53 @@ import re
 import textwrap
 import tokenize
 from datetime import datetime
-from typing import List
+from typing import List, Union
 
+from . import PromptIndex, ChatMessage
 from .config import g_yaml_config
+
+"""存在的意义就是统一全局的变量名，哪些用了，哪些没用"""
+GlobalNames = {
+    "元认知分类": "元认知分类",
+    "领域模型": "领域模型",
+    "规划任务下一步动作": "规划任务下一步动作",
+    "任务提示词": "任务提示词",
+}
+
+
+class GlobalObject:
+    """
+    全局对象，用于存储全局变量
+    全局变量以首字母大写
+    下划线开头，不对外。
+    """
+    _WorkFileMap: dict = {}  # uuid → WorkFile
+    Prompts: PromptIndex = None
 
 
 class GlobalFunction:
-    _work_file_map: dict = {}  # uuid → WorkFile
 
-    @classmethod
-    def register_work_files(cls, df: "pd.DataFrame"):
+    @staticmethod
+    def parse_chat_text_to_messages(md_chat_text: str) -> List[ChatMessage]:
+        # 按行首的 "[xxx]: " 切分，保留分隔符本身
+        # (?=...) 是正向预查，匹配位置但不消费字符，从而保留标记在结果中
+        pattern = re.compile(r'(?=^\[[^\]]+]: )', re.MULTILINE)
+        parts = pattern.split(md_chat_text)
+        # split 会产生一个空字符串在开头（如果文本以标记开头），过滤掉
+        # 判断role是否为None，删除None
+        chat_messsages = [m for m in [ChatMessage(data=p.strip().rstrip('\n')) for p in parts if p] if m.role is not None]
+        return chat_messsages
+
+
+    @staticmethod
+    def register_work_files(df: "pd.DataFrame"):
         """从 files_abstract.parquet 的 DataFrame 注册 WorkFile 对象"""
         from .entities import WorkFile
-        cls._work_file_map.clear()
+        # 需要清空之前的注册吗？
+        GlobalObject._WorkFileMap.clear()
         for _, row in df.iterrows():
             wf = WorkFile(row.to_dict())
-            cls._work_file_map[wf.uuid] = wf
+            GlobalObject._WorkFileMap[wf.uuid] = wf
 
     @staticmethod
     def show_file_structure():
@@ -44,8 +75,69 @@ class GlobalFunction:
         log_text.append(f"|----{GlobalFunction.file_to_doc_text_path(file_path)[len(base_path) + 1:]}")
         log_text.append(f"|----{GlobalFunction.file_to_doc_table_path(file_path)[len(base_path) + 1:]}")
         log_text.append(f"|----{GlobalFunction.file_to_doc_image_path(file_path)[len(base_path) + 1:]}")
+        log_text.append(f"|----{GlobalFunction.memory_path()}")
         return "\n".join(log_text)
 
+    @staticmethod
+    def init_paths():
+        '''初始化系统所有的文件目录'''
+        for p in g_yaml_config["app"]["paths"].values():
+            p = os.path.abspath(os.path.join(GlobalFunction.workspace_path(), p))
+            if p and not os.path.exists(p):
+                os.makedirs(p, exist_ok=True)  # 递归创建，父目录不存在也会创建
+
+    ################目录创建##################
+    @staticmethod
+    def workspace_path():
+        return g_yaml_config["app"]["workspace_path"]
+
+    @staticmethod
+    def task_path():
+        """任务路径目录"""
+        return os.path.abspath(os.path.join(GlobalFunction.workspace_path(), g_yaml_config["app"]["paths"]["task_path"]))
+
+    @staticmethod
+    def chat_path():
+        """聊天记录存储路径目录"""
+        return os.path.abspath(os.path.join(GlobalFunction.workspace_path(), g_yaml_config["app"]["paths"]["chat_path"]))
+
+    @staticmethod
+    def domain_model_path():
+        """重要：用户的工作或生活的行为模型，由AI总结生成。"""
+        return os.path.abspath(os.path.join(GlobalFunction.workspace_path(), g_yaml_config["app"]["paths"]["domain_model_path"]))
+
+    @staticmethod
+    def log_path():
+        """日志存储路径目录"""
+        return os.path.abspath(os.path.join(GlobalFunction.workspace_path(), g_yaml_config["app"]["paths"]["log_path"]))
+
+    @staticmethod
+    def prompt_path():
+        """提示词存储路径目录"""
+        return os.path.abspath(os.path.join(GlobalFunction.workspace_path(), g_yaml_config["app"]["paths"]["prompt_path"]))
+
+    @staticmethod
+    def memory_path():
+        """重要：记忆存储路径，不可删除。需要备份。"""
+        return os.path.abspath(os.path.join(GlobalFunction.workspace_path(), g_yaml_config["app"]["paths"]["memory_path"]))
+
+    ################文件##################
+
+    @classmethod
+    def files_abstract_path(cls):
+        return os.path.join(GlobalFunction.workspace_path(), "user", "files", "files_abstract.parquet")
+
+    @staticmethod
+    def user_profile_md():
+        """重要：记忆存储路径，不可删除。需要备份。"""
+        return os.path.abspath(os.path.join(GlobalFunction.workspace_path(), g_yaml_config["app"]["files"]["user_profile_path"]))
+
+    @staticmethod
+    def agent_profile_md():
+        """重要：智能体的SOUL.md文件路径"""
+        return os.path.abspath(os.path.join(GlobalFunction.workspace_path(), g_yaml_config["app"]["files"]["agent_profile_path"]))
+
+    ########################################################
     @staticmethod
     def file_to_dir_name(file_path: str):
         """
@@ -73,13 +165,13 @@ class GlobalFunction:
     def uuid_to_work_file(uuid: str,  # 文件uuid
                           ) -> "WorkFile":
         """根据文件uuid，返回 WorkFile 对象"""
-        return GlobalFunction._work_file_map.get(uuid)
+        return GlobalObject._WorkFileMap.get(uuid)
 
     @staticmethod
     def file_to_work_file(file_path: str,  # 文件路径
                           ) -> "WorkFile":
         """根据文件路径，返回 WorkFile 对象"""
-        for wf in GlobalFunction._work_file_map.values():
+        for wf in GlobalObject._WorkFileMap.values():
             if wf.file_path == file_path:
                 return wf
         return None
@@ -167,34 +259,10 @@ class GlobalFunction:
         return os.path.join(GlobalFunction.task_path(), f"任务_{task_id}/任务执行.md")
 
     @staticmethod
-    def workspace_path():
-        return g_yaml_config["app"]["workspace_path"]
-
-    @staticmethod
-    def task_path():
-        """任务路径目录"""
-        return os.path.abspath(os.path.join(GlobalFunction.workspace_path(), g_yaml_config["app"]["task_path"]))
-
-    @staticmethod
-    def chat_path():
-        """聊天记录存储路径目录"""
-        return os.path.abspath(os.path.join(GlobalFunction.workspace_path(), g_yaml_config["app"]["chat_path"]))
-
-    @staticmethod
     def chat_hist_store_file() -> str:
         """生成默认文件路径：chat_年月日.md"""
         date_str = datetime.now().strftime("%Y%m%d")
         return os.path.join(GlobalFunction.chat_path(), f"chat_{date_str}.md")
-
-    @staticmethod
-    def log_path():
-        """日志存储路径目录"""
-        return os.path.abspath(os.path.join(GlobalFunction.workspace_path(), g_yaml_config["app"]["log_path"]))
-
-    @staticmethod
-    def prompt_path():
-        """提示词存储路径目录"""
-        return os.path.abspath(os.path.join(GlobalFunction.workspace_path(), g_yaml_config["app"]["prompt_path"]))
 
     @staticmethod
     def parse_llm_think(response: str):
@@ -303,6 +371,16 @@ class GlobalFunction:
         return json_list
 
     @staticmethod
+    def parse_markdown_title(text: str, block_level: str = "###") -> List[str]:
+        """按读取text文本，提取以block_level开头的行后面的标题"""
+        lines = text.splitlines(keepends=False)
+        title_list = []
+        for line in lines:
+            if line and line.strip().startswith(block_level + " "):
+                title_list.append(line.strip(block_level + " ").strip())
+        return title_list
+
+    @staticmethod
     def load_file(file_path: str):
         """Helper function that loads a single file into a string"""
         _, ext = os.path.splitext(file_path)
@@ -370,7 +448,7 @@ class GlobalFunction:
         return tool
 
     @staticmethod
-    def log(name: str, msg: str) -> logging.Logger:
+    def log(name: str, msg: Union[str, list[str]]) -> logging.Logger:
         """初始化系统日志记录器"""
         logger = logging.getLogger(name)
         logger.setLevel(logging.INFO)
@@ -391,5 +469,20 @@ class GlobalFunction:
             # 添加handler到logger
             logger.addHandler(file_handler)
             # logger.addHandler(console_handler)
-        logger.info(msg)
+        # Handle both single message and list of messages
+        if isinstance(msg, list):
+            for message in msg:
+                logger.info(message)
+        else:
+            logger.info(msg)
         return logger
+
+    @staticmethod
+    def owner_props_yaml():
+        """owner的props文件路径"""
+        return os.path.join(GlobalFunction.workspace_path(), "owner_props.yaml")
+
+    @staticmethod
+    def embedding_model():
+        """获取嵌入模型"""
+        return g_yaml_config["model"]["embedding_model"]

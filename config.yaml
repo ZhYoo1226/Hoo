@@ -2,9 +2,14 @@ openai:
   #  api_key: "fastgpt-m5AaD8Li2hhTm1DQO9awVuDx1e9pgVGZEfNBnMGGbAX5GhJOK3Pi"
 
   #91
-  api_key: "fastgpt-rxQKFa0gEpI1Y7B0L4pCHqvSyzwqcmR8noBF5tjGAJBeUTaFPcL6ukrCRgzU"
-  base_url: "http://gpu.skyopenai.com:3000/api/v1"
-  model: "qwen3-vl:32b"
+#  api_key: "fastgpt-rxQKFa0gEpI1Y7B0L4pCHqvSyzwqcmR8noBF5tjGAJBeUTaFPcL6ukrCRgzU"
+#  base_url: "http://gpu.skyopenai.com:3000/api/v1"
+#  model: "qwen3-vl:32b"
+
+  #刘伟模型
+  api_key : "sk-37qm42MA5vqorqMoB59cA03394054b85B8096d6b2cF6A5Bc"
+  base_url: "http://183.222.234.174:5090/v1"
+  model: "qwen3"
 
   #51 60
   #  api_key: "sk-F7iKGTfdiRFLExq0gzIkkJg8LQ62DSfsJpgHnOQIVcXql4m9"
@@ -12,19 +17,26 @@ openai:
   #  model: "qwen3:30b"
 
   enable_thinking: true
+model:
+  embedding_model: "BAAI/bge-small-zh-v1.5"
+  #embedding_model: "BAAI/bge-small-en-v1.5"
 app:
   workspace_path: ./workspace/
-  #读取所有的属性配置到owner
-  owner_props_yaml: owner_props.yaml
-  chat_path: chat
-  log_path: log
-  task_path: task
-  prompt_path: prompts
-  user_profile_path: mem/我的/个人信息/USER.md
-  agent_profile_path: mem/智能体/SOUL.md
+  paths:
+    chat_path: chat
+    log_path: log
+    task_path: task
+    prompt_path: prompts
+    memory_path: mem/数据库
+    domain_model_path: domain_models
+  files:
+    #读取所有的属性配置到owner
+    owner_props_yaml: owner_props.yaml
+    user_profile_path: mem/我的/个人信息/USER.md
+    agent_profile_path: mem/智能体/SOUL.md
 
 chat:
-  reload_chat_max_bytes: 3000
+  reload_chat_max_bytes: 8000
   max_chat_record_in_mem: 20
   #启动清空聊天记录
   launch_clear_chat: false

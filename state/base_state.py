@@ -8,12 +8,14 @@ import pkgutil
 import queue
 import time
 import uuid
+from collections import deque
 from datetime import datetime
 from typing import List, Dict
 
+from engram import Engram
 from lunar_python import Solar
 
-from common import ChatMessage, GlobalFunction
+from common import ChatMessage, GlobalFunction, GlobalObject
 from common.register import g_tool_registry
 
 
@@ -138,10 +140,23 @@ class BaseState:
 class StateOwner:
     # 状态类的注册表
     _states_class = {}
+    # 意图理解模型
+    llm_intent_model = None
+    # 提示词执行执行模型
+    llm_prompt_model = None
+    # 执行模型
+    llm_action_model = None
 
-    def __init__(self, config: Dict = None):
+    def __init__(self, config):
         # 全局配置文件
-        self._config = config or {}
+        self._config = config
+        # 聊天历史最近的数据，最多最近的10条
+        self.max_chat_record_in_mem = self._config["chat"]["max_chat_record_in_mem"]
+        # deque,只保留默认的前20条对话记录
+        GlobalFunction.log("运行日志", f"初始化StateOwner")
+        #maxlen=self.max_chat_record_in_mem
+        self.chat_records = deque()
+
         self._states: List['BaseState'] = []
         # 全局状态
         self._g_state = None
@@ -153,6 +168,74 @@ class StateOwner:
         self.breathe_frame = 0
         self.frame_start_time = time.perf_counter()
         self.tools = []
+        # 一般不需要外部使用
+        print(f"记忆路径:{GlobalFunction.memory_path()}")
+        self._memories = None
+        GlobalFunction.init_paths()
+
+        self.workspace_path = GlobalFunction.workspace_path()
+
+        # 1.向聊天历史记录中增加消息
+        self.chat_hist_file_path = GlobalFunction.chat_hist_store_file()
+
+
+    def execute_prompt(self,
+                       user_prompt: str,  # user提示词
+                       state: BaseState = None,  # 当前状态
+                       system_prompt: str = "系统提示词",  # 系统提示词
+                       conversation: list = None,  # 基于的对话内容
+                       user_msg: str = None,  # 用户消息, user_prompt二选一
+                       images: list[str] = None,  # VL 模型的图片路径列表
+                       ) -> List[
+        dict]:
+        """执行提示词，返回response执行Action"""
+        # prompt_file=规划任务.md
+        assert self.llm_prompt_model, "提示词执行模型未设置，请设置owner.llm_prompt_model的模型。"
+        self.llm_prompt_model.reset_tokens()
+        # 转换成llm对话消息格式
+        messages = self._to_llm_conversation(owner=self, state=state, system_prompt=system_prompt,
+                                             conversation=conversation, user_prompt=user_prompt)
+        # 额外的用户消息
+        if user_msg:
+            messages.append({"role": "user", "content": user_msg})
+
+        # 请求模型
+        llm_output = self.llm_prompt_model.query(messages=messages, images=images)  # prompt model
+        query_log = self.llm_prompt_model.get_query_log()
+        self.llm_prompt_model.reset_query_log()
+        GlobalFunction.log("模型日志", f"{json.dumps(query_log, ensure_ascii=False, indent=2)}")
+        if llm_output:
+            json_list = GlobalFunction.parse_llm_output_json(llm_output)
+            return json_list
+        else:
+            return []
+
+    def load_memories(self):
+        """加载记忆"""
+        self._memories = {}
+        memory_path = GlobalFunction.memory_path()
+        '''遍历目录下的所有记忆文件，后缀为.memory'''
+        memory_list = []
+        for file in os.listdir(memory_path):
+            if file.endswith(".memory"):
+                '''获得文件basename'''
+                memory_name = os.path.splitext(file)[0]
+                self._memories[memory_name] = Engram(path=os.path.join(f"{memory_path}/{file}"), embedder_model=GlobalFunction.embedding_model())
+
+    def list_memory(self) -> List[str]:
+        """列出所有记忆"""
+        if self._memories is None:
+            self.load_memories()
+        return list(self._memories.keys())
+
+    def memory(self, memory_name: str) -> Engram:
+        """获取记忆，如果不存在，则创建一个新的记忆"""
+        if self._memories is None:
+            self.load_memories()
+
+        if memory_name not in self._memories:
+            self._memories[memory_name] = Engram(path=os.path.join(GlobalFunction.memory_path(), f"{memory_name}.memory"), embedder_model=GlobalFunction.embedding_model())
+        return self._memories[memory_name]
 
     def current_time(self):
         """
@@ -182,6 +265,26 @@ class StateOwner:
         """
         return Solar.fromDate(datetime.today()).toFullString()
 
+    def recall_memory(self,
+                      memory_name: str,  # 记忆名称
+                      memory_desc: str,  # 记忆信息描述
+                      k: int = 3,  # 召回数量
+                      mode: str = "hybrid",  # 查询模式,hybrid:结合向量语义和关键词检索;spreading:关联激活扩散检索;cosine:纯向量检索，擅长语义联想
+                      ):
+        """根据任务描述，查找最匹配的行为模型"""
+        GlobalFunction.log("运行日志", f"搜索记忆[{memory_name}]，描述：\n{memory_desc}")
+        # 使用 hybrid 模式，结合语义和关键词检索
+        results = self.memory(memory_name).recall(memory_desc, k=k, mode=mode)
+        if not results:
+            GlobalFunction.log("运行日志", f"记忆[{memory_name}]没有找到匹配的行为模型。")
+            return None
+
+        for r in results:
+            # r.episode.content 是匹配到的检索内容
+            GlobalFunction.log("运行日志", f"记忆[{memory_name}] [分数: {r.score:.3f}] {r.episode.content}\n-------------------------------------")
+
+        return results
+
     # 农历日期
     def current_lunar(self):
         """
@@ -194,12 +297,20 @@ class StateOwner:
         today_lunar = today_solar.getLunar()
         return today_lunar.toFullString()
 
-    def list_tools(self):
+    def list_tools(self,
+                   category: str = None  # 按分类返回, None表示所有工具
+                   ):
         """获取所有注册的工具"""
         if not self.tools:
             self.tools = g_tool_registry.list_tools()
             self.tools.extend(self._list_state_tools())
-        return self.tools
+        if category:
+            # 按分类返回工具
+            tool_list = [tool for tool in self.tools if tool['action'].startswith(category)]
+            return tool_list if tool_list else ["Not Provided"]
+        else:
+            # 返回全部工具
+            return self.tools
 
     def list_meta_tools(self):
         """获取所有状态元工具"""
@@ -239,6 +350,11 @@ class StateOwner:
                     # 判断actionName是否注册，如果有则使用注册的actionName
                     if hasattr(state_class, 'actionName'):
                         tool['action'] = state_class.actionName
+                        GlobalFunction.log("运行日志", f"状态类{state_class.__name__}注册为{state_class.actionName}")
+                    else:
+                        # 没有显性声明ActionName，不能注册状态类
+                        GlobalFunction.log("运行日志", f"状态类{state_class.__name__}没有显性声明actionName，不能注册状态类")
+                        continue
                     # Get the __init__ method properly
                     init_func = state_class.__init__
                     # Skip if it's the BaseState's __init__ method
@@ -300,13 +416,11 @@ class StateOwner:
         if not text:
             return False
 
-        # 1.向聊天历史记录中增加消息
-        file_path = GlobalFunction.chat_hist_store_file()
-        dir_name = os.path.dirname(file_path)
+        dir_name = os.path.dirname(self.chat_hist_file_path)
         if dir_name:
             os.makedirs(dir_name, exist_ok=True)
 
-        with open(file_path, 'a', encoding='utf-8') as f:
+        with open(self.chat_hist_file_path, 'a', encoding='utf-8') as f:
             # 如果text内容中有josn，会出错！！！！应该直接以文本的形式存储。最后多少行。
             # record = f"[{role}]：{text}\n"
             record = ChatMessage(role, text)
@@ -328,9 +442,21 @@ class StateOwner:
         :param props: 属性路径，使用.分隔级联，如 'user.name'
         :return: 找到的值，找不到返回None
         """
+
         # 判断props是否以owner.开头，是，则去掉owner.
         if props.startswith('owner.'):
-            props = props[6:]
+            # 首先判断self是否包含有owner属性
+            if hasattr(self, 'owner'):
+                # 直接读取，这是task_owner的属性
+                return _read_target_property(self, props)
+            else:
+                return _read_target_property(self, props[6:])
+
+        # 有具体的任务，从任务中读取属性
+        if props.startswith('task.'):
+            return _read_target_property(self, props[5:])
+
+        # 直接读取自己的属性
         return _read_target_property(self, props)
 
     def destroy(self):
@@ -545,3 +671,151 @@ class StateOwner:
                         StateOwner._states_class[state_name] = state_class
                         return state_class
         return None
+
+    def get_chat_conversation(self, limit: int = 0, roles: list = None):
+        """获取历史聊天文本,
+        limit为0时，默认返回所有聊天记录，否则返回最近limit条记录
+        roles为None时，默认返回所有角色的聊天记录
+        """
+        # 先根据角色过滤消息
+        filtered_messages = []
+        for msg in self.chat_records:
+            if roles is None or msg.role in roles:
+                filtered_messages.append(msg)
+        # 处理limit，只取最近limit条
+        if limit > 0 and limit >= len(filtered_messages):
+            filtered_messages = filtered_messages[-limit:]
+        # filtered_messages 组装为json 列表
+        json_messages = [msg.to_conversation() for msg in filtered_messages]
+        return json_messages
+
+    def get_chat_history_text(self,
+                              limit: int = 0,  # 最多返回最近limit条记录
+                              roles: list = None  # 角色列表，None表示所有角色
+                              ) -> str:
+        """获取历史聊天文本(纯文本),
+        limit为0时，默认返回所有聊天记录，否则返回最近limit条记录
+        roles为None时，默认返回所有角色的聊天记录
+        """
+        # 先根据角色过滤消息
+        filtered_messages = []
+        for msg in self.chat_records:
+            if roles is None or msg.role in roles:
+                filtered_messages.append(msg)
+        # 处理limit，只取最近limit条
+        if limit > 0 and limit >= len(filtered_messages):
+            filtered_messages = filtered_messages[-limit:]
+        # 将每个ChatMessage对象转换为字符串再拼接
+        return '\n'.join(map(str, filtered_messages))
+
+    def _to_llm_conversation(self, owner, state, system_prompt, conversation, user_prompt):
+        """转换成llm的对话格式"""
+        # 必须加入的系统提示词
+        messages = []
+        if system_prompt:
+            system_text, system_json = GlobalObject.Prompts.load_prompt(system_prompt, owner=owner, state=state)
+            messages.append({"role": "system", "content": system_text})
+        # 限制对话轮数
+        if not conversation:
+            # 用户历史聊天获取，再从状态获取历史聊天记录
+            # 加载聊天记录,如果state有get_chat_conversation方法,否则使用self的get_chat_conversation方法
+            _conversation_func = owner.get_chat_conversation
+            if state and hasattr(state, "get_chat_conversation"):
+                _conversation_func = getattr(state, "get_chat_conversation")
+            # 历史聊天
+            conversation = _conversation_func(limit=-1, roles=["用户", "思考", "助手", "行动", "观察", "系统"])
+        messages.extend(conversation)
+        # 最后增加对话提示词
+        if user_prompt:
+            prompt_text, prompt_json = GlobalObject.Prompts.load_prompt(user_prompt, owner=owner, state=state)
+            if prompt_text:
+                # 有提示词
+                owner.record_execute_prompt(prompt_json)
+                messages.append({"role": "user", "content": prompt_text})
+            else:
+                messages.append({"role": "user", "content": user_prompt})
+
+        return messages
+
+    def execute_chat(self, owner, state=None, system_prompt: str = "系统提示词"):
+        """
+        同步执行聊天，返回response执行Action
+        """
+        assert owner.llm_prompt_model, "提示词执行模型未设置，请设置owner.llm_prompt_model的模型。"
+        owner.llm_prompt_model.reset_tokens()
+
+        # 加载聊天记录,如果state有get_chat_conversation方法,否则使用self的get_chat_conversation方法
+        _conversation_func = owner.get_chat_conversation
+        if state and hasattr(state, "get_chat_conversation"):
+            _conversation_func = getattr(state, "get_chat_conversation")
+        # 历史聊天
+        conversation = _conversation_func(limit=-1, roles=["用户", "助手", "观察"])
+        # 转换成llm对话消息格式
+        messages = owner._to_llm_conversation(self, state, system_prompt, conversation, user_prompt=None)
+
+        llm_output = owner.llm_prompt_model.query(messages=messages)  # prompt model
+        # 直接聊天，不会输出action指令
+        # 解析思考
+        query_log = owner.llm_prompt_model.get_query_log()
+        owner.llm_prompt_model.reset_query_log()
+        GlobalFunction.log("模型日志", f"{json.dumps(query_log, ensure_ascii=False, indent=2)}")
+        think_text = GlobalFunction.parse_llm_think(llm_output)
+        if think_text:
+            owner.record_role_chat("思考", think_text)
+
+        action_json = GlobalFunction.extract_action_json(llm_output)
+        if action_json:
+            # 有可能返回的是action
+            owner.execute_action(action_json)
+        else:
+            # 没有action，直接输出llm_output
+            reply_text = GlobalFunction.parse_llm_reply(llm_output)
+            owner.record_role_chat("助手", reply_text)
+
+    def execute_action(self, action_json):
+        """执行Action
+            如果是state:XXXXState,则查找状态，创建状态，并添加add_state到owner。
+        """
+        # 判断action_json 是dict还是list
+        if not action_json:
+            self.sys_breathe_log(f"llm 输出中没有 action: {action_json}")
+            return False
+
+        data_list = None
+        if isinstance(action_json, list):
+            action = action_json[0]
+            # 如果action_json的长度大于1，datas等于 action_json[1:]
+            data_list = action_json[1:]
+        else:
+            action = action_json
+        # 组装action的data_list数据集，如果有！
+        if data_list:
+            action["data_list"] = data_list
+        if "action" not in action:
+            self.sys_breathe_log(f"llm 输出中没有 action: {action_json}")
+            return False
+        action_name = action["action"]
+        # 判断是否是 state 操作，格式为 state:xxxState 或者 actionName
+        # FIXME 后续的可能情况，不需要用register注册，直接用actionName即可
+        state_name = ""
+        if action_name.startswith("state:"):
+            # 提取 state 名称
+            state_name = action_name.split(":", 1)[1]
+
+        if action_name in StateOwner._states_class:
+            state_name = action_name
+
+        # 先从缓存中查找
+        if state_name in StateOwner._states_class:
+            state_class = StateOwner._states_class[state_name]
+            state = state_class(**action)
+            # 这个新增的状态，隶属于某个具体的任务。如何绑定任务？
+            self.add_state(state)
+            return True
+        else:
+            try:
+                # 普通工具调用
+                return g_tool_registry.execute(tool_name=action_name, owner=self, **action)
+            except Exception as e:
+                self.sys_breathe_log(f"执行工具{action_name}失败: {e}")
+                return False

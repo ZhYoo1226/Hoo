@@ -1,3 +1,4 @@
 record_delimiter: <record>
 tuple_delimiter: "||"
 entity_types: PERSON, ORGANIZATION, GEO, LOCATION, DATE, TIME, MONEY, PRODUCT, EVENT, LAW, FACILITY, DISEASE, BRAND, PRODUCT, VEHICLE
+任务类型: "查询统计 | 业务办理 | 搜索问答 | 项目管理"

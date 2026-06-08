@@ -5,7 +5,8 @@ import re
 import requests
 import yaml
 from bs4 import BeautifulSoup
-from engram import Memory
+from engram import Engram
+
 from openai import OpenAI
 
 from common import GlobalFunction
@@ -18,9 +19,12 @@ client = OpenAI(
     base_url=g_yaml_config["openai"]["base_url"],
 )
 
-memory = Memory("./task_templates.db")
-
 import sqlite3
+
+# 核心：确保 path 参数是有效的本地文件路径
+memory = Engram(path="./task_models.engram")
+
+
 
 
 def build_prompt(task_desc, similar_template=False):

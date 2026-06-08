@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from common import GlobalFunction
+from common import GlobalFunction, GlobalNames
 from state import BaseState, StateOwner
 from state.state_doc import WordParseState
 from state.state_task import ExecuteTaskState
@@ -45,7 +45,7 @@ class MetaSpeakState(MetaBaseState):
 
     def Execute(self, owner):
         """直接问模型，返回response执行Action"""
-        owner.execute_chat(state=self)
+        owner.execute_chat(owner=owner,state=self)
         owner.remove_state(self)
 
 
@@ -69,11 +69,10 @@ class MetaTaskState(MetaBaseState):
     def __init__(self,
                  name: str,  # 任务名称
                  task: str,  # 任务内容描述
-                 goal: str,  # 任务最终要达成的目标
                  type: str,  # 任务类型->(查询统计 | 业务办理 | 搜索问答)
                  **kwargs):
         self.name = name
-        self.task = {'name': name, 'task': task, 'goal': goal, 'type': type}
+        self.task = {'name': name, 'task': task, 'type': type}
         current_time = datetime.now()
         self.task_id = current_time.strftime("%Y%m%d%H%M%S")
         self.create_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
@@ -94,10 +93,23 @@ class MetaTaskState(MetaBaseState):
             self.task['finished'] = False
             # 记录chat历史
             owner.record_role_chat("行动", f"创建任务：{self.task['name']}(task_id:{self.task['task_id']})")
+            # 搜索记忆
+            try:
+                mem_recall = owner.recall_memory(GlobalNames["领域模型"],self.task['task'])
+            except:
+                mem_recall = None
+            # 召回记忆
+            if mem_recall:
+                # 实际是用户要求
+                owner.record_role_chat("行动", f"根据任务描述，搜索到的领域模型：\n```\n{mem_recall[0].episode.content}\n```")
+            else:
+                owner.record_role_chat("用户", "没有相关任务的领域模型，需要一边摸索，一边执行。最后，当且仅当任务执行完成后，需要思考总结该任务的领域模型，存储到领域模型记忆中。")
+
             # 创建任务对象
             work_task = owner.create_task(self.task)
             # 更新任务记录到文件
-            work_task.update_task_record()
+            work_task.create_task_record()
+            # 去执行任务的时候，尝试去生成任务的行为模型
         owner.remove_state(self)
 
 
