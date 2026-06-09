@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open WebUI 使用手册</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --card-bg: #ffffff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --code-bg: #f3f4f6;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 40px 20px;
+  }
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 2em; margin-bottom: 8px; }
+  h2 {
+    font-size: 1.35em;
+    margin: 40px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 { font-size: 1.1em; margin: 28px 0 8px; }
+  p, li { color: #374151; }
+  p { margin: 10px 0; }
+  ul, ol { padding-left: 24px; }
+  li { margin: 4px 0; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    overflow-x: auto;
+    font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+    font-size: 0.88em;
+    margin: 12px 0;
+  }
+  code {
+    font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+    font-size: 0.9em;
+  }
+  :not(pre) > code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: left;
+  }
+  th {
+    background: var(--code-bg);
+    font-weight: 600;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 14px 0;
+  }
+  .tip {
+    background: var(--accent-light);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 12px 18px;
+    margin: 14px 0;
+  }
+  .flow {
+    background: #f9fafb;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 18px 24px;
+    margin: 14px 0;
+    font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+    font-size: 0.85em;
+    white-space: pre;
+    overflow-x: auto;
+    color: #4b5563;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1.05em;
+    margin-bottom: 24px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.78em;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Open WebUI 使用手册</h1>
+<p class="subtitle">OpenSolver 的 Web 对话前端 &mdash; 通过浏览器与智能体交互</p>
+
+<h2>什么是 Open WebUI</h2>
+<p>Open WebUI 是一个开源的 AI 对话前端，提供类似 ChatGPT 的 Web 界面。它通过 OpenAI 兼容 API 连接到 OpenSolver Gateway，让用户可以通过浏览器与智能体对话。</p>
+
+<h2>启动方式</h2>
+
+<p>OpenSolver 启动时会<strong>自动</strong>拉起 Gateway 和 Open WebUI，无需单独操作。</p>
+
+<h3>一键启动</h3>
+<pre><code>PS&gt; .venv312\Scripts\activate
+PS&gt; python app.py</code></pre>
+<p>启动后访问：</p>
+<ul>
+  <li>Open WebUI：<a href="http://localhost:3000">http://localhost:3000</a></li>
+  <li>Gateway API：<a href="http://localhost:8081">http://localhost:8081</a></li>
+</ul>
+
+<h3>配置开关</h3>
+<p>在 <code>config.yaml</code> 中控制各组件的启停：</p>
+<table>
+  <tr><th>配置项</th><th>默认值</th><th>说明</th></tr>
+  <tr><td><code>gateway.enabled</code></td><td><code>true</code></td><td>是否启动 OpenAI 兼容 API 网关（端口 8081）</td></tr>
+  <tr><td><code>gateway.port</code></td><td><code>8081</code></td><td>网关监听端口</td></tr>
+  <tr><td><code>webui.enabled</code></td><td><code>true</code></td><td>是否自动启动 Open WebUI（端口 3000）</td></tr>
+  <tr><td><code>webui.port</code></td><td><code>3000</code></td><td>WebUI 监听端口</td></tr>
+</table>
+<p>环境变量（<code>OPENAI_API_BASE_URL</code> 等）由 <code>app.py</code> 自动设置，无需手动配置。</p>
+
+<h2>首次使用：创建管理员账号</h2>
+<ol>
+  <li>填写<strong>名称</strong>、<strong>电子邮箱</strong>、<strong>密码</strong></li>
+  <li>点击<strong>创建管理员账号</strong></li>
+  <li>之后用该账号登录</li>
+</ol>
+<p>账号数据存储在 <code>d:\solver\.webui_secret_key</code> 和 SQLite 数据库中（<code>open-webui</code> 包自动管理）。</p>
+
+<h2>基本功能</h2>
+
+<h3>新建对话</h3>
+<p>登录后点击左上角<strong>新对话</strong>，选择模型（自动识别 OpenSolver 配置的模型），即可开始聊天。</p>
+<p>消息流转路径：</p>
+<div class="flow">浏览器 → Open WebUI → POST /v1/chat/completions → OpenSolver Gateway
+       → FSM ThinkClient → LLM(qwen3) → 响应 → SSE 流式返回 → 浏览器</div>
+
+<h3>对话历史</h3>
+<p>Open WebUI 自动保存所有对话，左侧栏可查看和管理历史会话。</p>
+<div class="tip"><strong>注意：</strong>Open WebUI 的对话历史与 OpenSolver 的聊天记录（<code>workspace/chat/</code>）是两套独立系统，互不影响。</div>
+
+<h3>模型管理</h3>
+<p>Open WebUI 自动从 <code>/v1/models</code> 拉取可用模型。你可以在设置中添加多个 OpenAI 兼容后端，从而在一个界面切换不同模型。</p>
+
+<h2>常见问题</h2>
+
+<h3>网页打不开</h3>
+<p>检查 OpenSolver 是否正常运行：</p>
+<pre><code>PS&gt; curl http://localhost:8081/health</code></pre>
+
+<h3>发消息没回复</h3>
+<p>查看 OpenSolver 终端日志，确认 ThinkClient 线程是否正在处理。检查 LLM API 服务（<code>183.222.234.174:5090</code>）是否可达。</p>
+
+<h3>RAG 知识库报错</h3>
+<p><code>RAG_EMBEDDING_ENGINE=openai</code> 时，上传文档做知识库检索会调用 <code>/v1/embeddings</code> 接口。OpenSolver 当前未实现该端点，知识库功能暂时不可用。基础聊天不受影响。</p>
+<p>如果报错影响使用，可以去掉该变量让 embedding 引擎为空（知识库功能仍不可用，但不会尝试调用不存在的接口）。</p>
+
+<h3>停止服务</h3>
+<p>在 OpenSolver 终端按 <kbd>Ctrl+C</kbd> 即可。OpenSolver 会优雅退出，自动停止 Gateway 和 Open WebUI（执行 <code>stop_gateway()</code>、<code>stop_webui()</code> 和 <code>g_owner.destroy()</code>）。</p>
+
+</div>
+</body>
+</html>

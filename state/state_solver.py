@@ -1,5 +1,6 @@
 import json
 import os
+import queue
 import re
 import threading
 from collections import deque
@@ -50,6 +51,8 @@ class SolverOwner(StateOwner):
         self.agent_soul = None
         self.mine_profile = None
         self.agent_meta = None
+        # gateway 响应队列: request_id → queue.Queue，供 API 端点等待 LLM 回复
+        self._response_queues: dict = {}
         # 刷新用户的配置,应该在呼吸的时候刷新
         self.refresh_config()
 
@@ -223,6 +226,17 @@ class SolverOwner(StateOwner):
         """
         # 进行意图理解
         self.intent_queue.put((role, text))
+
+    def record_role_chat(self, role: str, text: str):
+        super().record_role_chat(role, text)
+        try:
+            for q in list(self._response_queues.values()):
+                try:
+                    q.put_nowait({"role": role, "content": text})
+                except queue.Full:
+                    pass
+        except Exception:
+            pass  # FIXME: gateway 广播失败 — 记录认知盲区
 
 
 # 全局解决器

@@ -1,5 +1,6 @@
 import os
 import signal
+import subprocess
 import time
 
 # 当前路径
@@ -21,6 +22,7 @@ print(f"os.environ['HF_ENDPOINT'] -> {os.environ['HF_ENDPOINT']}")
 from common import GlobalFunction
 from state import g_yaml_config, g_owner, LiveState, StateOwner
 from l2p.llm.openai import OPENAI
+from gateway import start_gateway, stop_gateway
 
 '''
 统一管理大模型
@@ -41,10 +43,43 @@ StateOwner.llm_action_model = llm
 # 用于优雅退出的标志
 running = True
 
+# Open WebUI 子进程
+_webui_process = None
+
+
+def start_webui(port=3000):
+    """将 Open WebUI 作为子进程启动，与 OpenSolver 同生命周期"""
+    global _webui_process
+    env = os.environ.copy()
+    env["OPENAI_API_BASE_URL"] = f"http://localhost:{g_yaml_config.get('gateway', {}).get('port', 8081)}/v1"
+    env["OPENAI_API_KEY"] = "opensolver"
+    env["RAG_EMBEDDING_ENGINE"] = "openai"
+    # 清除镜像配置，WebUI 子进程不需要也不兼容 hf-mirror 的 SSL
+    env.pop("HF_ENDPOINT", None)
+    _webui_process = subprocess.Popen(
+        [os.path.join(BASE_URL, ".venv312", "Scripts", "open-webui.exe"), "serve", "--port", str(port)],
+        env=env
+    )
+    print(f"[WebUI] Open WebUI 已启动: http://localhost:{port}")
+
+
+def stop_webui():
+    global _webui_process
+    if _webui_process is not None:
+        print("[WebUI] 正在停止 Open WebUI...")
+        _webui_process.terminate()
+        try:
+            _webui_process.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            _webui_process.kill()
+        _webui_process = None
+
 
 def signal_handler(sig, frame):
     global running
     print("\n正在停止 FSM 线程...")
+    stop_gateway()
+    stop_webui()
     g_owner.destroy()
     # 呼吸3次，清除所有的state
     g_owner.breathe(1)  # 执行一次状态机更新
@@ -53,6 +88,15 @@ def signal_handler(sig, frame):
 
 def run_server():
     """在独立线程中运行 FSM 的呼吸循环"""
+    gw_config = g_yaml_config.get("gateway", {})
+    if gw_config.get("enabled", False):
+        start_gateway(
+            host=gw_config.get("host", "0.0.0.0"),
+            port=gw_config.get("port", 8080)
+        )
+    wui_config = g_yaml_config.get("webui", {})
+    if wui_config.get("enabled", False):
+        start_webui(port=wui_config.get("port", 3000))
     while running:
         g_owner.breathe(1)  # 执行一次状态机更新
         time.sleep(0.1)  # 间隔 0.1 秒
