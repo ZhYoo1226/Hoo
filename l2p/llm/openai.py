@@ -60,6 +60,9 @@ class OPENAI(BaseLLM):
 
         # call the parent class constructor to handle model and api_key
         super().__init__(model, api_key)
+        '''
+        这一行在app.py启动之后执行，每次复用都是client
+        '''
         self.client = OpenAI(api_key=api_key, base_url=base_url)
 
         # set model parameters

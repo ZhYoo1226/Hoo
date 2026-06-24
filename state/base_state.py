@@ -192,19 +192,46 @@ class StateOwner:
         # prompt_file=规划任务.md
         assert self.llm_prompt_model, "提示词执行模型未设置，请设置owner.llm_prompt_model的模型。"
         self.llm_prompt_model.reset_tokens()
-        # 转换成llm对话消息格式
+        
+        # 转换成llm对话消息格式 
+        # 返回的message
+        '''
+        [
+            {"role": "system", "content": "系统提示词..."},
+            {"role": "用户", "content": "..."},   ← 历史聊天
+            {"role": "助手", "content": "..."},   ← 历史聊天
+            {"role": "user", "content": "### 生成审查清单\n\n**知识树:**\n[...]\n**方案类型:** 桥梁施工方案"}
+        ]
+        '''
         messages = self._to_llm_conversation(owner=self, state=state, system_prompt=system_prompt,
                                              conversation=conversation, user_prompt=user_prompt)
         # 额外的用户消息
         if user_msg:
             messages.append({"role": "user", "content": user_msg})
 
-        # 请求模型
+        # apikey--webui替换
+        user_key = getattr(self,"_user_api_key","")
+        if user_key:
+            self.llm_prompt_model.client.api_key = user_key
+
+        # 请求模型 发送给模型
         llm_output = self.llm_prompt_model.query(messages=messages, images=images)  # prompt model
+        # 日志方面
         query_log = self.llm_prompt_model.get_query_log()
         self.llm_prompt_model.reset_query_log()
         GlobalFunction.log("模型日志", f"{json.dumps(query_log, ensure_ascii=False, indent=2)}")
+        # 拿到返回
         if llm_output:
+            # 拿到action块
+            '''
+            [
+                {
+                    "action":"state:StoreChecklist", 
+                    "params":{...}, 
+                    "thought":"..."
+                }
+            ]
+            '''
             json_list = GlobalFunction.parse_llm_output_json(llm_output)
             return json_list
         else:
@@ -752,6 +779,10 @@ class StateOwner:
         conversation = _conversation_func(limit=-1, roles=["用户", "助手", "观察"])
         # 转换成llm对话消息格式
         messages = owner._to_llm_conversation(self, state, system_prompt, conversation, user_prompt=None)
+        
+        user_key = getattr(owner, "_user_api_key", "")
+        if user_key:
+            owner.llm_prompt_model.client.api_key = user_key
 
         llm_output = owner.llm_prompt_model.query(messages=messages)  # prompt model
         # 直接聊天，不会输出action指令

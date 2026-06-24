@@ -88,7 +88,7 @@ class GlobalFunction:
 
     ################目录创建##################
     @staticmethod
-    def workspace_path():
+    def workspace_path()->str:
         return g_yaml_config["app"]["workspace_path"]
 
     @staticmethod

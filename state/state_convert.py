@@ -2,7 +2,6 @@
 
 import io
 import os
-import re
 import shutil
 import subprocess
 import threading
@@ -11,20 +10,11 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from xml.etree import ElementTree
 
-from docx import Document
 from pdf2docx import Converter
 
 from common import GlobalFunction
-from .base_state import BaseState
-from .state_doc import (
-    CHINESE_HEADING_PATTERN,
-    HEADING_PATTERN,
-    LIST_ITEM_PATTERN,
-    NUMERIC_HEADING_PATTERN,
-    TOC_STYLE_PATTERN,
-    HeadingChunk,
-    _sanitize_name,
-)
+from .base_state import BaseState, StateOwner
+from .state_doc import HeadingChunk
 
 
 # --------------------------------------------------------------------------
@@ -213,133 +203,37 @@ class Text2ChunksState(BaseState):
         self._docx_path = docx_path
         self._full_text = full_text
 
-    def Enter(self, owner):
-        self._chunks = self._split_text_chunks()
+    def Enter(self, owner: StateOwner):
+        self.full_text = self._full_text #当xxx后续要用到，内存。如果其余地方要使用_内存-->常规属性
+        actions = owner.execute_prompt('提取文档标题层级',self,None,[])
+        tree = actions[0].get('params',{}).get('tree',[])
+        self._chunks = self._json_to_chunks(tree)
+    
+    # 正则方案--太脆了
+    
+    def _json_to_chunks(self, tree):
+        result = []
+        for node in tree:          # tree 是列表，node 是字典
+            number = node.get("number", "")
+            title = node.get("title", "")
+            level = node.get("level", 1)
+            content = node.get("content", "")
+            children = node.get("children", [])   # children 也是列表
 
-    def _split_text_chunks(self) -> List[HeadingChunk]:
-        document = Document(str(self._docx_path))
-        blocks: List[Tuple[str, str]] = []
-        for paragraph in document.paragraphs:
-            text = paragraph.text.strip()
-            if not text:
-                continue
-            style_name = getattr(paragraph.style, "name", "") or ""
-            blocks.append((style_name, text))
-
-        toc_heading_map: Dict[str, Tuple[int, str, str]] = {}
-        for style_name, text in blocks:
-            toc_match = TOC_STYLE_PATTERN.match(style_name)
-            if toc_match is None:
-                continue
-            clean_text = text.split("\t", 1)[0].strip()
-            parsed = self._parse_heading_text(clean_text)
-            if parsed is None:
-                continue
-            _, heading_number, heading_title = parsed
-            toc_heading_map[re.sub(r"\s+", "", clean_text)] = (
-                int(toc_match.group(1)),
-                heading_number,
-                heading_title,
-            )
-
-        roots: List[HeadingChunk] = []
-        stack: List[HeadingChunk] = []
-        intro_lines: List[str] = []
-
-        for style_name, text in blocks:
-            if TOC_STYLE_PATTERN.match(style_name):
-                continue
-
-            normalized_key = re.sub(r"\s+", "", text.split("\t", 1)[0].strip())
-            heading_info: Optional[Tuple[int, str, str]] = toc_heading_map.get(
-                normalized_key
-            )
-            if heading_info is None and not LIST_ITEM_PATTERN.match(text.strip()):
-                heading_match = HEADING_PATTERN.match(style_name)
-                if heading_match is not None:
-                    parsed = self._parse_heading_text(text)
-                    if parsed is not None:
-                        _, heading_number, heading_title = parsed
-                        heading_info = (
-                            int(heading_match.group(1)),
-                            heading_number,
-                            heading_title,
-                        )
-                    else:
-                        heading_info = (
-                            int(heading_match.group(1)),
-                            _sanitize_name(text),
-                            text,
-                        )
-                else:
-                    heading_info = self._parse_heading_text(text)
-
-            if heading_info is None:
-                if stack:
-                    stack[-1].content = f"{stack[-1].content}\n{text}".strip()
-                else:
-                    intro_lines.append(text)
-                continue
-
-            heading_level, heading_number, heading_title = heading_info
+            child_chunks = self._json_to_chunks(children)  # 递归
             chunk = HeadingChunk(
-                level=heading_level,
-                number=heading_number,
-                title=heading_title,
-                content="",
+                level=level,
+                number=number,
+                title=title,
+                content=content,
+                children=child_chunks,
             )
+            result.append(chunk)
+        return result
 
-            while stack and stack[-1].level >= heading_level:
-                stack.pop()
-            if stack:
-                stack[-1].children.append(chunk)
-            else:
-                roots.append(chunk)
-            stack.append(chunk)
-
-        if intro_lines:
-            roots.insert(
-                0,
-                HeadingChunk(
-                    level=0,
-                    number="0",
-                    title="前言",
-                    content="\n".join(intro_lines).strip(),
-                ),
-            )
-        elif not roots and self._full_text.strip():
-            roots.append(
-                HeadingChunk(
-                    level=0, number="0", title="全文", content=self._full_text.strip()
-                )
-            )
-        return roots
 
     def Execute(self, owner):
         owner.remove_state(self)
-
-    @staticmethod
-    def _parse_heading_text(text: str) -> Optional[Tuple[int, str, str]]:
-        # 中文/数字标题匹配 → (层级, 编号, 标题)，非标题返回 None
-        clean_text = text.strip()
-        if not clean_text or clean_text == "目录":
-            return None
-
-        chinese_match = CHINESE_HEADING_PATTERN.match(clean_text)
-        if chinese_match:
-            heading_number = chinese_match.group(1).replace("第", "")
-            heading_title = chinese_match.group(2).strip()
-            return 1, heading_number, heading_title or clean_text
-
-        numeric_match = NUMERIC_HEADING_PATTERN.match(clean_text)
-        if numeric_match:
-            heading_number = numeric_match.group(1)
-            heading_title = numeric_match.group(2).strip(" .。．、")
-            if len(heading_title) > 60 or re.search(r"[。；;]", heading_title):
-                return None
-            if heading_title:
-                return heading_number.count(".") + 1, heading_number, heading_title
-        return None
 
     def Exit(self, owner):
         pass

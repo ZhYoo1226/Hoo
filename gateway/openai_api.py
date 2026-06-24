@@ -19,8 +19,13 @@ async def list_models(request):
         "data": [{"id": model_name, "object": "model"}]
     })
 
-
+# HTTP网关
 async def chat_completions(request):
+    """
+    接受用户浏览器的OpenAI格式请求，提取用户消息文本
+    翻译为内部格式-->FSM
+    FSM处理后结果打包未OpenAI格式返回
+    """
     from state import g_owner
 
     try:
@@ -31,7 +36,15 @@ async def chat_completions(request):
     messages = body.get("messages", [])
     stream = body.get("stream", False)
     model = body.get("model", g_yaml_config["openai"]["model"])
-
+    # aiohttp提供的属性request.headers，是一个字典，存了HTTP请求头
+    # 字典的安全取值法，有这个字段就返回，没有就是""。不用["Authorization"]
+    auth = request.headers.get("Authorization","")
+    # 字符串方法，以xxx开头
+    if auth.startswith("Bearer "):
+        # 字符串切片，将“sk-xxx”存储到对象上，作为一个内部属性。
+        g_owner._user_api_key = auth[7:]
+    else:
+        g_owner._user_api_key = ""    
     if not messages:
         return web.json_response({"error": "messages is required"}, status=400)
 
