@@ -1,9 +1,65 @@
 from .base_state import BaseState,StateOwner
 from pathlib import Path
 from common import GlobalFunction
-from .state_doc import WordParseState
+from .state_doc import WordParseState,HeadingChunk
 import json,threading
+from typing import List
 
+# 生成文本块摘要
+class GenSummaryState(BaseState):
+    """要在原本的json树形结构里添加新的字段（摘要）"""
+    def __init__(self, chunks:List[HeadingChunk], **kwargs):
+        super().__init__(**kwargs)
+        self.chunks = chunks
+        self._done = False
+        self._duration = 1000*60*15
+    
+    # 独立的递归函数-->自下而上
+    def _summarize_nodes(self,chunks:List[HeadingChunk],owner:StateOwner):
+        """自底向上递归，先生成子节点摘要"""
+        for chunk in chunks:
+            # dataclass vs dict
+            if chunk.children:
+                self._summarize_nodes(chunk.children,owner)
+            
+            lines = []
+            for child in chunk.children:
+                if child.summary:
+                    lines.append(f'{child.number} {child.title}:{child.summary}')
+            # 都是对已有的chunk进行原地修改
+            self.children_summaries = '\n'.join(lines)
+            
+            self.node_number = chunk.number
+            self.node_title = chunk.title
+            self.node_level = chunk.level
+            self.node_content = chunk.content
+            
+            actions = owner.execute_prompt('生成节点摘要',self)
+            params = actions[0]['params']
+            chunk.prefix_summary = params['prefix_summary']
+            chunk.summary = params['summary']
+            
+    def _run_summarize(self,owner):
+        try:
+            self._summarize_nodes(self.chunks,owner)
+        except Exception as e:
+            GlobalFunction.log('知识树摘要总结出错',f'出错内容:{e}')
+        finally:
+            self._done = True        
+            
+    def Enter(self,owner):
+        self._thread = threading.Thread(
+            target=self._run_summarize,args=(owner,),daemon=True
+        )
+        self._thread.start()
+    
+    def Execute(self, owner:StateOwner):
+        if self._done:
+            owner.remove_state(self)
+            return
+    def Exit(self, owner):
+        pass
+            
 # 构建pageindex的知识库json知识树
 class BuildKnowledgeState(BaseState):
     def __init__(self, source_path:str , name:str ,**kwargs):
@@ -37,38 +93,53 @@ class BuildKnowledgeState(BaseState):
         self._stage = "parse"
         self._output_dir = output_dir #存下来后面要用
 
-
-    def Execute(self,owner):
+    def Execute(self,owner:StateOwner):
         if self._done:
             owner.remove_state(self)
             return
         # 解析结束
         if self._stage == 'parse':
             if self._current_sub_state not in owner._states:
-                self._stage = 'extract'  #开始构建树
-                self._thread = threading.Thread(
-                    target=self._run_build,args=(owner,),daemon=True
-                )
+                self._stage = 'summarize'  #开始总结摘要
+                self._chunks = self._current_sub_state._chunks
+                self._full_text = self._current_sub_state._full_text
+                self._current_sub_state = GenSummaryState(self._chunks)
+                owner.add_state(self._current_sub_state)
+        # 总结结束
+        elif self._stage == 'summarize':
+            if self._current_sub_state not in owner._states:
+                self._stage='build'
+                # 开始构建树
+                self._thread = threading.Thread(target=self._run_build,daemon=True,args=(owner,))
                 self._thread.start()
 
-    def _chunks_to_json(self,chunks):
+    def _chunks_to_json(self,chunks:List[HeadingChunk]):
+        """将chunk树-->最终的json树（PageIndex）"""
         jsonChunks = []
         for chunk in chunks:
             children = chunk.children
             node = { #字典字面量
+            "node_id" : chunk.node_id,
+            "start_index" : chunk.start_index,
+            "end_index" : chunk.end_index,
+            "summary" : chunk.summary,
+            "prefix_summary" : chunk.prefix_summary,
             "level" : chunk.level,
             "number" : chunk.number,
             "title" : chunk.title,
-            "content" : chunk.content,
             "children" : self._chunks_to_json(children)
             }
+            # 平铺的 但是有索引，谁是谁的子节点。
             jsonChunks.append(node)
         return jsonChunks
 
-    def _run_build(self,owner):
+    def _run_build(self,owner:StateOwner):
         try:
-            # 拿到切分的文本块的dataclass的实例对象
-            chunks = self._current_sub_state._chunks
+            chunks = self._chunks
+            full_text = self._full_text
+            # DFS计算 node_id + 计算字符偏移 index
+            self._assign_ids_and_indices(chunks=chunks,full_text=full_text)
+            # 最终的知识树
             jsonChunks = self._chunks_to_json(chunks)
             # 落盘json知识树
             output_path = self._output_dir / '知识树.json'
@@ -81,6 +152,27 @@ class BuildKnowledgeState(BaseState):
         finally:
             # 构建结束
             self._done=True
+    
+    def _assign_ids_and_indices(self, chunks, full_text):
+        """DFS遍历树，计算id和index"""
+        counter = [0]
+        search_from = [0]
+
+        def walk(nodes):
+            for chunk in nodes:
+                counter[0] += 1
+                chunk.node_id = f"{counter[0]:04d}"
+
+                if chunk.content:
+                    start = full_text.find(chunk.content, search_from[0])
+                    chunk.start_index = start
+                    chunk.end_index = start + len(chunk.content)
+                    search_from[0] = chunk.end_index
+
+                if chunk.children:
+                    walk(chunk.children)
+
+        walk(chunks)
     
     def Exit(self,owner):
         pass

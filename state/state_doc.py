@@ -43,12 +43,18 @@ class DocxTable:
 @dataclass
 class HeadingChunk:
     # zhang: 文本切分后的标题节点，children 表示下级标题。
-
     level: int
     number: str
     title: str
     content: str
+    # 可选字段设默认值
     children: List["HeadingChunk"] = field(default_factory=list)
+    node_id: str = ""
+    start_index: int = -1
+    end_index: int = -1
+    summary: str = ""
+    prefix_summary: str = ""
+
 
 
 # --------------------------------------------------------------------------
