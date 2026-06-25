@@ -3,19 +3,19 @@ from pathlib import Path
 from common import GlobalFunction
 from .state_doc import WordParseState,HeadingChunk
 import json,threading
-from typing import List
+
 
 # 生成文本块摘要
 class GenSummaryState(BaseState):
     """要在原本的json树形结构里添加新的字段（摘要）"""
-    def __init__(self, chunks:List[HeadingChunk], **kwargs):
+    def __init__(self, chunks:list[HeadingChunk], **kwargs):
         super().__init__(**kwargs)
         self.chunks = chunks
         self._done = False
         self._duration = 1000*60*15
     
     # 独立的递归函数-->自下而上
-    def _summarize_nodes(self,chunks:List[HeadingChunk],owner:StateOwner):
+    def _summarize_nodes(self,chunks:list[HeadingChunk],owner:StateOwner):
         """自底向上递归，先生成子节点摘要"""
         for chunk in chunks:
             # dataclass vs dict
@@ -113,11 +113,10 @@ class BuildKnowledgeState(BaseState):
                 self._thread = threading.Thread(target=self._run_build,daemon=True,args=(owner,))
                 self._thread.start()
 
-    def _chunks_to_json(self,chunks:List[HeadingChunk]):
+    def _chunks_to_json(self,chunks:list[HeadingChunk]):
         """将chunk树-->最终的json树（PageIndex）"""
         jsonChunks = []
         for chunk in chunks:
-            children = chunk.children
             node = { #字典字面量
             "node_id" : chunk.node_id,
             "start_index" : chunk.start_index,
@@ -127,7 +126,8 @@ class BuildKnowledgeState(BaseState):
             "level" : chunk.level,
             "number" : chunk.number,
             "title" : chunk.title,
-            "children" : self._chunks_to_json(children)
+            "children" : self._chunks_to_json(chunk.children),
+            "knowledge_name" : self.name
             }
             # 平铺的 但是有索引，谁是谁的子节点。
             jsonChunks.append(node)
@@ -153,32 +153,44 @@ class BuildKnowledgeState(BaseState):
             # 构建结束
             self._done=True
     
-    def _assign_ids_and_indices(self, chunks, full_text):
+    def _assign_ids_and_indices(self, chunks:list[HeadingChunk], full_text):
         """DFS遍历树，计算id和index"""
+        # 可以用整数int，但是闭包有问题。内部函数如果想要使用“=”赋值的话，
+        # python则是创建新变量，而不是在原本的索引位置的数据上修改。可以用nonlocal声明该int是外部的变量
+        # 如果用列表，则是“=”修改列表内部元素
         counter = [0]
         search_from = [0]
 
-        def walk(nodes):
+        def walk(nodes:list[HeadingChunk]):
             for chunk in nodes:
                 counter[0] += 1
-                chunk.node_id = f"{counter[0]:04d}"
-
+                chunk.node_id = f"{counter[0]:04d}"# 格式化 04d-->四位数编号
+                
                 if chunk.content:
                     start = full_text.find(chunk.content, search_from[0])
                     chunk.start_index = start
                     chunk.end_index = start + len(chunk.content)
                     search_from[0] = chunk.end_index
 
+                # 子节点的递归调用
                 if chunk.children:
                     walk(chunk.children)
-
+                    for child in chunk.children:
+                        if child.start_index != -1:
+                            if chunk.start_index == -1 or child.start_index < chunk.start_index:
+                                chunk.start_index = child.start_index
+                        if child.end_index != -1:
+                            if chunk.end_index == -1 or child.end_index > chunk.end_index:
+                                chunk.end_index = child.end_index
+        
         walk(chunks)
     
     def Exit(self,owner):
         pass
 
-# 根据方案类型自动生成审查清单
+# 根据方案类型和相关的知识树片段自动生成审查清单
 class GenCheckListState(BaseState):
+    '''两个阶段：知识树相关性--找出森林里，每棵树上相关的枝条；将知识转换为约束条款--根据每个节点的摘要，总结对应每条的llm审查点'''
     def __init__(self, knowledge_names: list[str], plan_type: str, **kwargs):
         super().__init__(**kwargs)
         self.knowledge_names = knowledge_names
@@ -200,12 +212,14 @@ class GenCheckListState(BaseState):
             all_trees = []
             for name in self.knowledge_names:
                 tree_path = Path(owner.workspace_path) / "knowledge" / name / "知识树.json"
+                # extend，是无缝拼接列表，合成新的列表--此处将所有知识树拼在一起，是一个森林
                 all_trees.extend(json.loads(tree_path.read_text(encoding="utf-8")))
-            self.knowledge_tree = all_trees
 
+            selected = self._selected_tree(owner=owner,trees=all_trees)
+            self.knowledge_tree = selected
             actions = owner.execute_prompt("生成审查清单", self)
             checklist = actions[0]['params']['checklist']
-            
+
             output_path = self._output_dir / '审查清单.json'
             output_path.write_text(
                 json.dumps(checklist, ensure_ascii=False, indent=2),
@@ -215,6 +229,60 @@ class GenCheckListState(BaseState):
             GlobalFunction.log('生成审查清单错误', f'错误为{e}')
         finally:
             self._done = True
+
+    def _selected_tree(self,owner,trees:list[dict])->list[dict]:
+        """
+        此算法为了获得与施工方案相关的各个知识树上分支
+        """
+        # 逐层导航
+        pending = trees
+        selected: list[dict] = []
+
+        # 此处是BFS算法，llm自主导航，选出需要的知识树（节点）
+        iteration = 0
+        while pending and iteration<=15:
+            iteration += 1
+            lines = []
+            for node in pending:
+                has = " [含子章节]" if node.get('children') else ""
+                # 转成适合LLM分析的文本 [0001] 1 桩基础 \n 摘要[含子章节]
+                lines.append(f"[{node['node_id']}] {node['number']} {node['title']}\n{node['summary']}{has}")
+            self.current_nodes = '\n\n'.join(lines) #得到第一层节点信息的字符串，把列表里的每个元素间隔两行
+
+            actions = owner.execute_prompt("导航知识树", self)
+            '''
+            JSON 对象必须包含：
+                - `"action"`: string，固定值 "state:StoreNavigation"
+                - `"params"`: object，包含：
+                    - `"decisions"`: array，对每个输入节点给出决策，每个元素包含：
+                        - `"node_id"`: string，节点唯一标识，与输入一致
+                        - `"decision"`: string，"expand" / "select" / "skip"
+                        - `"reason"`: string，简述判断依据（20字以内）
+            '''
+            decisions = actions[0]['params']['decisions']
+            # 构造关于节点决策的字面量字典
+            decision_map = {d['node_id']: d['decision'] for d in decisions}
+            # 下一层(被expand标记)
+            next_pending = []
+            for node in pending:
+                d = decision_map.get(node['node_id'], 'skip')
+                # 选中且子节点相关
+                if d == 'expand':
+                    next_pending.extend(node.get('children', []))
+                # 叶子节点被选中
+                elif d == 'select':
+                    selected.append({
+                        "node_id": node['node_id'],
+                        "number": node.get('number', ''),
+                        "title": node['title'],
+                        "summary": node['summary'],
+                        "start_index": node.get('start_index', -1),
+                        "end_index": node.get('end_index', -1),
+                        "knowledge_name": node.get('knowledge_name', ''),
+                    })
+            # 迭代写法
+            pending = next_pending    
+        return selected
 
     def Execute(self,owner:StateOwner):
         if self._done:
@@ -234,6 +302,7 @@ class ReviewPlanState(BaseState):
         self._duration = 1000*60*15
         
     def Enter(self,owner:StateOwner):
+        # 传进来一个施工方案，类似于buildknowledge的思路，先判断在不在
         source = Path(self.plan_path).expanduser().resolve()
         if not source.exists():
             GlobalFunction.log("解析错误",f"源文件不存在：{source}")
@@ -267,28 +336,61 @@ class ReviewPlanState(BaseState):
         pass
     
     '''
-    daemon线程的异常不会外抛，直接死掉。使用try/catch
+    daemon线程的异常不会外抛，直接死掉。使用try/except
     '''
-    def _run_review(self,owner):
+    def _run_review(self, owner:StateOwner):
+        '''
+        拿到审查清单+对应原文-->llm开始分析-->输出结果
+        '''
         try:
+            # wordparsestate挂载的--方案原文
             self.plan_text = self._current_sub_state._full_text
-            checkList_path = Path(owner.workspace_path)/'knowledge'/self.plan_type/"审查清单.json"
-            checkList = json.loads(checkList_path.read_text(encoding='utf-8'))
-            result = []
-            for check in checkList:
+            # 拿到审查清单
+            checklist_path = Path(owner.workspace_path) / 'knowledge' / self.plan_type / "审查清单.json"
+            checklist:list[dict] = json.loads(checklist_path.read_text(encoding='utf-8'))
+            
+            # 条规原文
+            full_texts= {} 
+            result:list[dict] = []  # 最后的输出结果
+            
+            for check in checklist:
                 self.check_item = check['check_item']
                 self.check_method = check['check_method']
                 self.level = check['level']
                 
-                actions = owner.execute_prompt('逐条合规检查',self)
-                params = actions[0]['params']
+                # 取条款原文
+                name = check.get('knowledge_name', '')
+                start = check.get('start_index', -1)
+                end = check.get('end_index', -1)
                 
-                record = {**check,**params}
+                if name and start != -1 and end != -1:
+                    if name not in full_texts: # 懒加载，拿到对应知识树的全文
+                        dir_path = Path(owner.workspace_path) / 'knowledge' / name
+                        files = list(dir_path.glob("*_全文.txt"))
+                        full_texts[name] = files[0].read_text(encoding='utf-8') if files else ''
+                    self.clause_text = full_texts[name][start:end]
+                else:
+                    self.clause_text = check['check_item']  # 没有拿到文本--鲁棒性采用审查点替代
+                
+                actions = owner.execute_prompt('逐条合规检查', self)
+                params: dict= actions[0]['params']
+                '''
+                {
+                    "action": "state:StoreReviewResult",
+                    "params": {
+                        "clause_number": "3.2.1",
+                        "result": "合规",
+                        "reason": "方案明确规定了试桩数量、目的和清孔工艺要求",
+                        "evidence": "正式施工前选取3根工程桩作为试桩，通过试桩确定钻机转速、泥浆比重等工艺参数。成孔后采用反循环清孔工艺，清孔后沉渣厚度不大于50mm。"
+                    }
+                }
+                '''
+                record = {**check, **params}
                 result.append(record)
-                
-            result_path = self._output_dir/'审查结果.json'
-            result_path.write_text(json.dumps(result,indent=2,ascii=False),encoding='utf-8')
+            
+            result_path = self._output_dir / '审查结果.json'
+            result_path.write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding='utf-8')
         except Exception as e:
-            GlobalFunction.log('审查线程错误',f'错误为{e}')
+            GlobalFunction.log('审查线程错误', f'错误为{e}')
         finally:
             self._done = True
