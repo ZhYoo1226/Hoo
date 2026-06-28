@@ -13,7 +13,6 @@ configuration using the same format template.
 import base64
 import mimetypes
 import time
-from pathlib import Path
 
 from retry import retry
 from typing_extensions import override
@@ -46,6 +45,11 @@ class OPENAI(BaseLLM):
             )
 
         try:
+            '''
+            tiktoken 是 OpenAI 官方开发的一个快速 BPE（Byte Pair Encoding，字节对编码）分词器（Tokeniser）。
+            简单来说，它是一个专门用于将文本切分成“Token”（令牌/词元）的工具。
+            在大型语言模型（LLM）的世界里，模型看到的不是完整的句子，而是一串数字（Token）。
+            tiktoken 就是负责在人类文字和模型能理解的Token之间进行转换的“翻译官”'''
             import tiktoken
         except ImportError:
             raise ImportError(

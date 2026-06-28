@@ -121,6 +121,16 @@ class GlobalFunction:
         """重要：记忆存储路径，不可删除。需要备份。"""
         return os.path.abspath(os.path.join(GlobalFunction.workspace_path(), g_yaml_config["app"]["paths"]["memory_path"]))
 
+    @staticmethod
+    def knowledge_path(name: str) -> str:
+        """知识树产物目录：workspace/knowledge/{name}/"""
+        return os.path.join(GlobalFunction.workspace_path(), "knowledge", name)
+
+    @staticmethod
+    def review_path(plan_type: str) -> str:
+        """审查产物目录：workspace/review/{plan_type}/"""
+        return os.path.join(GlobalFunction.workspace_path(), "review", plan_type)
+
     ################文件##################
 
     @classmethod
@@ -351,7 +361,11 @@ class GlobalFunction:
                         content = "\n".join(content_lines).strip()
                         if outer_name == block_name:
                             if content.startswith('{') or content.startswith('['):
-                                parsed_results.append(json.loads(content))
+                                try:
+                                    parsed_results.append(json.loads(content))
+                                except json.JSONDecodeError as e:
+                                    GlobalFunction.log("JSON解析失败", f"错误: {e}\n内容前200字符: {content[:200]}")
+                                    parsed_results.append({outer_name: content})
                             else:
                                 parsed_results.append({outer_name: content})
                         else:

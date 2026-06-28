@@ -2,21 +2,27 @@ openai:
   #  api_key: "fastgpt-m5AaD8Li2hhTm1DQO9awVuDx1e9pgVGZEfNBnMGGbAX5GhJOK3Pi"
 
   #91
-#  api_key: "fastgpt-rxQKFa0gEpI1Y7B0L4pCHqvSyzwqcmR8noBF5tjGAJBeUTaFPcL6ukrCRgzU"
-#  base_url: "http://gpu.skyopenai.com:3000/api/v1"
-#  model: "qwen3-vl:32b"
+  #  api_key: "fastgpt-rxQKFa0gEpI1Y7B0L4pCHqvSyzwqcmR8noBF5tjGAJBeUTaFPcL6ukrCRgzU"
+  #  base_url: "http://gpu.skyopenai.com:3000/api/v1"
+  #  model: "qwen3-vl:32b"
 
-  #刘伟模型
-  api_key : "sk-37qm42MA5vqorqMoB59cA03394054b85B8096d6b2cF6A5Bc"
-  base_url: "http://183.222.234.174:5090/v1"
-  model: "qwen3"
+  #   #刘伟模型
+  # api_key : "sk-37qm42MA5vqorqMoB59cA03394054b85B8096d6b2cF6A5Bc"
+  # base_url: "http://183.222.234.174:5090/v1"
+  # model: "qwen3"
+
+  #DeepSeek
+  api_key : "sk-a67cb65e361841aba6f20254eb266ced"
+  base_url: "https://api.deepseek.com"
+  model: "deepseek-v4-flash"
 
   #51 60
   #  api_key: "sk-F7iKGTfdiRFLExq0gzIkkJg8LQ62DSfsJpgHnOQIVcXql4m9"
   #  base_url: "http://gpu.skyopenai.com:3002/v1"
   #  model: "qwen3:30b"
 
-  enable_thinking: true
+  # 思维链推理模式，模型内部先推理再输出
+  enable_thinking: false
 model:
   embedding_model: "BAAI/bge-small-zh-v1.5"
   #embedding_model: "BAAI/bge-small-en-v1.5"
@@ -57,7 +63,7 @@ gateway:
   port: 8081
 
 webui:
-  enabled: true
+  enabled: false
   port: 3000
 
 dev:

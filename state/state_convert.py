@@ -7,7 +7,7 @@ import subprocess
 import threading
 import zipfile
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import List, Optional
 from xml.etree import ElementTree
 
 from pdf2docx import Converter
@@ -30,9 +30,9 @@ class Pdf2DocxState(BaseState):
         self._duration = 10 * 60 * 1000
         self._pdf_path = pdf_path
         self._docx_path = docx_path
-        self._thread: Optional[threading.Thread] = None
+        self._thread = None
         self._done = False
-        self._error: Optional[BaseException] = None
+        self._error = None
 
     def Enter(self, owner):
         self._thread = threading.Thread(target=self._run, daemon=True)
@@ -158,27 +158,38 @@ class Docx2TextState(BaseState):
         '''
         super().__init__(**kwargs)
         self._docx_path = docx_path
+        self._done = False
 
     def Enter(self, owner):
-        with zipfile.ZipFile(io.BytesIO(Path(self._docx_path).read_bytes())) as archive:
-            xml_content = archive.read("word/document.xml")
-        root = ElementTree.fromstring(xml_content)
-        namespace = {
-            "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
-        }
-        texts: List[str] = []
-        for paragraph in root.findall(".//w:p", namespace):
-            parts = [
-                node.text
-                for node in paragraph.findall(".//w:t", namespace)
-                if node.text
-            ]
-            if parts:
-                texts.append("".join(parts))
-        self._full_text = "\n".join(texts)
+        self._thread = threading.Thread(target=self._run_extract,args=(owner,),daemon=True)
+        self._thread.start()
+
+    def _run_extract(self,owner):
+        try:
+            with zipfile.ZipFile(io.BytesIO(Path(self._docx_path).read_bytes())) as archive:
+                xml_content = archive.read("word/document.xml")
+            root = ElementTree.fromstring(xml_content)
+            namespace = {
+                "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+            }
+            texts: List[str] = []
+            for paragraph in root.findall(".//w:p", namespace):
+                parts = [
+                    node.text
+                    for node in paragraph.findall(".//w:t", namespace)
+                    if node.text
+                ]
+                if parts:
+                    texts.append("".join(parts))
+            self._full_text = "\n".join(texts)
+        except Exception as e:
+            GlobalFunction.log('提取文档文字内容线程出现问题',f"错误为：{e}")
+        finally:
+            self._done = True        
 
     def Execute(self, owner):
-        owner.remove_state(self)
+        if self._done:
+            owner.remove_state(self)
 
     def Exit(self, owner):
         pass
@@ -202,25 +213,41 @@ class Text2ChunksState(BaseState):
         super().__init__(**kwargs)
         self._docx_path = docx_path
         self._full_text = full_text
+        self._chunks = []
+        self._done = False
+        self._duration = 1000*60*10
 
     def Enter(self, owner: StateOwner):
-        self.full_text = self._full_text #当xxx后续要用到，内存。如果其余地方要使用_内存-->常规属性
-        actions = owner.execute_prompt('提取文档标题层级',self,None,[])
-        tree = actions[0].get('params',{}).get('tree',[])
-        self._chunks = self._json_to_chunks(tree)
+        self._thread = threading.Thread(target=self._run_extract,args=(owner,),daemon=True)
+        self._thread.start()
     
-    # 正则方案--太脆了
-    
+    def _run_extract(self,owner):
+        try:
+            self.full_text = self._full_text
+            actions = owner.execute_prompt('提取文档标题层级',self,None,[])
+            tree = actions[0].get('params',{}).get('tree',[])
+            if not tree:
+                raise ValueError('LLM 返回的标题树为空，未提取到任何章节标题')
+            self._chunks = self._json_to_chunks(tree)
+            self._fill_content(self._chunks, self.full_text)
+            if self._chunks[0].content == '':
+                raise ValueError('抽样检测第一个元素的原文发现为空')
+        except Exception as e:
+            import traceback
+            GlobalFunction.log('LLM提取文档章节线程出错',f'错误：{e}\n{traceback.format_exc()}')
+        finally:
+            self._done = True
+
     def _json_to_chunks(self, tree):
         result = []
-        for node in tree:          # tree 是列表，node 是字典
+        for node in tree:
             number = node.get("number", "")
             title = node.get("title", "")
-            level = node.get("level", 1)
+            level = int(node.get("level", 1))
             content = node.get("content", "")
-            children = node.get("children", [])   # children 也是列表
+            children = node.get("children", [])
 
-            child_chunks = self._json_to_chunks(children)  # 递归
+            child_chunks = self._json_to_chunks(children)
             chunk = HeadingChunk(
                 level=level,
                 number=number,
@@ -231,9 +258,83 @@ class Text2ChunksState(BaseState):
             result.append(chunk)
         return result
 
+    def _fill_content(self, chunks, full_text):
+        """根据 LLM 返回的标题在原文中精确定位，将标题间正文切分填充"""
+        ordered = []
+        def _dfs(nodes):
+            for c in nodes:
+                ordered.append(c)
+                if c.children:
+                    _dfs(c.children)
+        _dfs(chunks)
+        if not ordered:
+            return
+
+        # 第一遍：找每个标题在原文中的位置，存局部 dict
+        title_pos = {}  # id(chunk) -> (pos, line_end)，-1 表示未找到
+        search_from = 0
+        for chunk in ordered:
+            pos = full_text.find(chunk.title, search_from)
+            # 跳过目录条目（行末带页码，如 "标题  114"）
+            while pos >= 0:
+                line_end = full_text.find('\n', pos)
+                if line_end < 0:
+                    line_end = len(full_text)
+                after_title = full_text[pos + len(chunk.title):line_end].strip()
+                if after_title and after_title.isdigit():
+                    pos = full_text.find(chunk.title, line_end)
+                else:
+                    break
+            if pos < 0:
+                title_pos[id(chunk)] = (-1, -1)
+                continue
+            line_end = full_text.find('\n', pos)
+            if line_end < 0:
+                line_end = len(full_text)
+            title_pos[id(chunk)] = (pos, line_end)
+            search_from = line_end
+
+        # 第二遍：用标题位置计算正文边界，写入 chunk.content / start_index / end_index
+        for i, chunk in enumerate(ordered):
+            tpos, tline_end = title_pos[id(chunk)]
+            if tpos < 0:
+                continue
+
+            title_end = tpos + len(chunk.title)
+            same_line_text = full_text[title_end:tline_end].strip()
+            if same_line_text:
+                content_start = title_end
+                while content_start < len(full_text) and full_text[content_start] in (' ', '\t', '　'):
+                    content_start += 1
+            else:
+                content_start = tline_end + 1
+
+            if chunk.children:
+                first_child = chunk.children[0]
+                first_child_pos = title_pos[id(first_child)][0]
+                if first_child_pos > content_start:
+                    chunk.content = full_text[content_start:first_child_pos].strip()
+                    chunk.start_index = content_start
+                    chunk.end_index = first_child_pos
+                continue
+
+            content_end = len(full_text)
+            for j in range(i + 1, len(ordered)):
+                nxt = ordered[j]
+                nxt_pos = title_pos[id(nxt)][0]
+                if nxt.level <= chunk.level and nxt_pos > 0:
+                    content_end = nxt_pos
+                    break
+
+            if content_end > content_start:
+                chunk.content = full_text[content_start:content_end].strip()
+                chunk.start_index = content_start
+                chunk.end_index = content_end
+
 
     def Execute(self, owner):
-        owner.remove_state(self)
+        if self._done:
+            owner.remove_state(self)
 
     def Exit(self, owner):
         pass

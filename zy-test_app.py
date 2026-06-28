@@ -7,7 +7,8 @@ from common import g_yaml_config
 # 行续符，等价于括号下的换行写法 python主动处理括号、方括号、花括号的换行
 from state import MetaReadState, ClearChatState, ClearTaskState, \
     ClearEvalAdviceState
-from state.state_doc import WordParseState
+from state.state_doc import WordParseState, HeadingChunk
+from state.state_convert import Text2ChunksState
 from state.state_ocr import TableOCRState
 from state.state_task import ScanTaskState, ExecuteTaskState
 from state.state_modify import (
@@ -15,36 +16,35 @@ from state.state_modify import (
     ModifyHtmlState, ModifyMarkdownState, ModifyDocxState,
     ModifyXmlState, ModifyEnvState, ModifyRegexState, ModifyPyCodeState,
 )
+from state.state_review import BuildKnowledgeState
 
+# 测试生成知识树
+def test_build_json_tree():
+    file_path = r'D:\solver\docs\review\标准\中国铁路成都局集团有限公司营业线施工管理实施细则 - 副本.docx'
+    g_owner.add_state(BuildKnowledgeState(file_path,'营业线施工管理实施细则'))
 
-# FIXME 张耀: 测试文件解析
+# FIXME 张耀: 元认知--测试文件解析
 def utest_file_parse():
     file_path = os.path.join(g_owner.workspace_path, "user/files/test/test.xlsx")
     g_owner.add_state(MetaReadState(file_path, "稍等，我阅读一下文件", "用户突然传来文件，没有明显的需求和任务归属。"))
 
-# 测试前 检查是否有旧产物（ 重跑 word parse state，效果更清晰 ）
+# 测试前 图片OCR 检查是否有旧产物（ 重跑 word parse state，效果更清晰 ）
 def ztest_img_ocr_state():
     root = Path(g_owner.workspace_path) / "user/files/202605/罗玉华-中国银行__docx__解析/图"
     imgocr_state = TableOCRState(source_path=str(root), batch_index=0, auto_install=False)
     g_owner.add_state(imgocr_state)
 
-# zhang 提前删除产物，看效果（有幂等检查）
+# zhang 文档解析状态机 提前删除产物，看效果（有幂等检查）
 def ztest_word_parse_state():
-    root = Path(g_owner.workspace_path) / "user/files/202605"
-    for filePath in root.rglob("*.docx"):
-        if "__docx__解析" in str(filePath):
-            continue
-        parse_state = WordParseState(str(filePath))
-        g_owner.add_state(parse_state)
-
-
+    file_path = str(Path(__file__).parent / "docs/review/方案/S218盐边县城连接线下穿峨广线铁路工程涉铁段专项施工方案.docx")
+    parse_state = WordParseState(file_path)
+    g_owner.add_state(parse_state)
 
 # zhang 仅实现ScanTaskState
 def ztest_scan_task():
     """扫描现有的任务"""
     g_owner.add_state(ScanTaskState())
     g_owner.add_state(ExecuteTaskState())
-
 
 def clear_local_chat_data_state():
     """清除所有状态"""

@@ -29,7 +29,7 @@ from webui import start_webui,stop_webui
 统一管理大模型
 '''
 llm = OPENAI(
-    provider="qwen",
+    provider="deepseek",
     model=g_yaml_config["openai"]["model"],  # gpt-4o-mini
     api_key=os.getenv("API_KEY") or g_yaml_config["openai"]["api_key"],
     base_url=g_yaml_config["openai"]["base_url"],

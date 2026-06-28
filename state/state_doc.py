@@ -5,9 +5,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional, Sequence
-
 import pandas as pd
-
 from common import GlobalFunction
 from .base_state import BaseState
 from .state_file import COL_HASH, COL_PATH, FILES_ABSTRACT_NAME
@@ -20,7 +18,6 @@ from .state_file import COL_HASH, COL_PATH, FILES_ABSTRACT_NAME
 @dataclass
 class DocxImage:
     # zhang: docx 中抽取的一张图片。
-
     index: int
     rel_id: str
     media_name: str
@@ -28,22 +25,19 @@ class DocxImage:
     position: int
     blob: bytes
 
-
 @dataclass
 class DocxTable:
     # zhang: docx 中抽取的一个表格，保留结构化行列和 markdown 文本。
-
     index: int
     position: int
     title: str
     rows: List[List[str]]
     markdown: str
 
-
 @dataclass
 class HeadingChunk:
-    # zhang: 文本切分后的标题节点，children 表示下级标题。
-    level: int
+    '''pageindex的json树'''
+    level: int # 知识库条款的强制程度：强制、推荐和参考，来自标准规范原文的用语，得到的等级
     number: str
     title: str
     content: str
@@ -52,9 +46,8 @@ class HeadingChunk:
     node_id: str = ""
     start_index: int = -1
     end_index: int = -1
-    summary: str = ""
-    prefix_summary: str = ""
-
+    summary: str = "" # 自身总结+子节点总结
+    prefix_summary: str = "" #自身总结
 
 
 # --------------------------------------------------------------------------
@@ -62,18 +55,6 @@ class HeadingChunk:
 # --------------------------------------------------------------------------
 
 PARSE_DIR_SUFFIX = "__docx__解析"
-
-HEADING_PATTERN = re.compile(r"^Heading\s*(\d+)$", re.IGNORECASE)
-TOC_STYLE_PATTERN = re.compile(r"^toc\s*(\d+)$", re.IGNORECASE)
-# FIXME 张 不完善
-CHINESE_HEADING_PATTERN = re.compile(
-    r"^(第?[一二三四五六七八九十百千万零〇]+)[、章节部分篇]\s*(.+)$"
-)
-# FIXME 张 topc style 123?->456?
-NUMERIC_HEADING_PATTERN = re.compile(r"^(\d+(?:\.\d+)+)(?:\.\s+|\s+|、|．)(.+)$")
-LIST_ITEM_PATTERN = re.compile(
-    r"^(?:\(?\d+\)|（\d+）|\([一二三四五六七八九十]+\)|\d+、)"
-)
 
 REL_NAMESPACE = {
     "r": "http://schemas.openxmlformats.org/package/2006/relationships"
@@ -83,17 +64,17 @@ _CONF_DIR = Path(__file__).resolve().parent.parent / "workspace" / "conf"
 _media_content_types_cache: Optional[dict] = None
 
 
-def get_media_content_types() -> dict:
+def get_media_content_types():
+    """读取 workspace/conf/imagetype.json，返回 {扩展名: MIME类型}"""
     global _media_content_types_cache
     if _media_content_types_cache is None:
+        import json
+        imagetypes_path = _CONF_DIR / "imagetype.json"
         try:
-            _media_content_types_cache = json.loads(
-                (_CONF_DIR / "imagetype.json").read_text(encoding="utf-8")
-            )
+            _media_content_types_cache = json.loads(imagetypes_path.read_text(encoding="utf-8"))
         except Exception:
             _media_content_types_cache = {}
     return _media_content_types_cache
-
 
 # --------------------------------------------------------------------------
 # 模块级工具函数
@@ -112,15 +93,15 @@ def _safe_write_text(path: Path, content: str, label: str) -> None:
     try:
         path.write_text(content, encoding="utf-8")
     except Exception as exc:
-        GlobalFunction.log("解析错误", f"{label} [{path}]: {exc}")
+        GlobalFunction.log("文件写入时出现错误", f"{label} [{path}]: {exc}")
 
 
 # --------------------------------------------------------------------------
 # 子状态机 (从拆分文件导入)
 # --------------------------------------------------------------------------
 
-from .state_convert import Doc2DocxState, Docx2TextState, Pdf2DocxState, Text2ChunksState  # noqa: E402
-from .state_extract import ExtractDocxImagesState, ExtractDocxTablesState  # noqa: E402
+from .state_convert import Doc2DocxState, Docx2TextState, Pdf2DocxState, Text2ChunksState
+from .state_extract import ExtractDocxImagesState, ExtractDocxTablesState
 
 
 # --------------------------------------------------------------------------
@@ -135,10 +116,7 @@ class WordParseState(BaseState):
     # 阶段常量
     STAGE_INIT = "init"
     STAGE_NORMALIZE = "normalize"
-    STAGE_TABLES = "tables"
-    STAGE_IMAGES = "images"
-    STAGE_TEXT = "text"
-    STAGE_CHUNKS = "chunks"
+    STAGE_EXTRACTING = "extracting"
 
     def __init__(self, source_path: str,  # 待解析的文件路径（.docx / .pdf / .doc）
                  output_root: Optional[str] = None,  # 解析产物输出根目录，默认同文件目录
@@ -148,9 +126,8 @@ class WordParseState(BaseState):
         self.output_root = output_root
         self._duration = 60 * 60 * 1000
         self._stage = self.STAGE_INIT
-        self._current_sub_state: Optional[BaseState] = None
+        self._current_sub_states: List[BaseState] = []
         self._done = False
-        self._started = False
 
         # 中间结果
         self._source_hash = ""
@@ -165,13 +142,10 @@ class WordParseState(BaseState):
         self._images: List[DocxImage] = []
         self._full_text = ""
         self._chunks: List[HeadingChunk] = []
+        self._chunks_started = False
 
     def Enter(self, owner):
-        # 初始化路径、计算 hash、创建目录，幂等检查通过则跳过
-        if self._started:
-            return
-        self._started = True
-
+        # 检查路径文件是否存在
         source = Path(self.source_path).expanduser().resolve()
         if not source.exists():
             GlobalFunction.log("解析错误", f"源文件不存在: {source}")
@@ -190,6 +164,7 @@ class WordParseState(BaseState):
         self._full_text_path = self._parsed_root / f"{source.stem}_全文.txt"
         self._source_hash = self._file_sha256(source)
 
+        # 内存幂等性检查--owner上有没有添加过这个cache
         if not hasattr(owner, "parsed_document_cache"):
             owner.parsed_document_cache = {}
 
@@ -204,31 +179,22 @@ class WordParseState(BaseState):
             return
 
     def Execute(self, owner):
-        # 等待子状态完成 → 推进到下一阶段
         if self._done:
             owner.remove_state(self)
             return
 
-        # 等待子状态完成
-        if (
-                self._current_sub_state is not None
-                and
-                self._current_sub_state in owner._states
-        ):
+        if self._stage == self.STAGE_EXTRACTING:
+            self._check_extracting_progress(owner)
+            return
+
+        # 等待所有子状态完成
+        if any(s in owner._states for s in self._current_sub_states):
             return
 
         if self._stage == self.STAGE_INIT:
             self._advance_from_init(owner)
         elif self._stage == self.STAGE_NORMALIZE:
             self._advance_from_normalize(owner)
-        elif self._stage == self.STAGE_TABLES:
-            self._advance_from_tables(owner)
-        elif self._stage == self.STAGE_IMAGES:
-            self._advance_from_images(owner)
-        elif self._stage == self.STAGE_TEXT:
-            self._advance_from_text(owner)
-        elif self._stage == self.STAGE_CHUNKS:
-            self._advance_from_chunks(owner)
 
     def Exit(self, owner):
         pass
@@ -240,29 +206,32 @@ class WordParseState(BaseState):
     def _advance_from_init(self, owner):
         source_ext = Path(self.source_path).suffix.lower()
         source_stem = Path(self.source_path).stem
-
+        # 无需转换
         if source_ext == ".docx":
-            # 本身就是 docx，直接使用原始路径，不产生新文件
             self._docx_path = self.source_path
-            self._add_sub_state(owner, ExtractDocxTablesState(self._docx_path))
-            self._stage = self.STAGE_TABLES
+            self._add_sub_states(owner, [
+                ExtractDocxTablesState(self._docx_path),
+                ExtractDocxImagesState(self._docx_path),
+                Docx2TextState(self._docx_path)
+            ])
+            self._stage = self.STAGE_EXTRACTING
         elif source_ext == ".pdf":
             # pdf → docx 产物放在解析目录内
             docx_path = str(self._parsed_root / f"{source_stem}.docx")
-            self._add_sub_state(owner, Pdf2DocxState(self.source_path, docx_path))
+            self._add_sub_states(owner, [Pdf2DocxState(self.source_path, docx_path)])
             self._stage = self.STAGE_NORMALIZE
         elif source_ext == ".doc":
             # doc → docx 产物放在解析目录内
             docx_path = str(self._parsed_root / f"{source_stem}.docx")
-            self._add_sub_state(owner, Doc2DocxState(self.source_path, docx_path))
+            self._add_sub_states(owner, [Doc2DocxState(self.source_path, docx_path)])
             self._stage = self.STAGE_NORMALIZE
         else:
-            GlobalFunction.log("解析错误", f"暂不支持的文件类型: {source_ext}")
+            GlobalFunction.log("文档解析INIT阶段出错", f"暂不支持的文件类型: {source_ext}")
             self._done = True
 
     def _advance_from_normalize(self, owner):
-        sub_state = self._current_sub_state
-        if sub_state._error is not None:
+        sub_state = self._current_sub_states[0] if self._current_sub_states else None
+        if sub_state is not None and sub_state._error is not None:
             GlobalFunction.log("解析错误",
                                 f"pdf/doc → docx 转换失败: 源={self.source_path}, "
                                 f"目标={self._parsed_root / f'{Path(self.source_path).stem}.docx'}, "
@@ -271,30 +240,36 @@ class WordParseState(BaseState):
             return
         source_stem = Path(self.source_path).stem
         self._docx_path = str(self._parsed_root / f"{source_stem}.docx")
-        self._add_sub_state(owner, ExtractDocxTablesState(self._docx_path))
-        self._stage = self.STAGE_TABLES
+        self._add_sub_states(owner, [
+            ExtractDocxTablesState(self._docx_path),
+            ExtractDocxImagesState(self._docx_path),
+            Docx2TextState(self._docx_path),
+        ])
+        self._stage = self.STAGE_EXTRACTING
 
-    def _advance_from_tables(self, owner):
-        # 表格提取完成，推进到图片提取
-        self._tables = self._current_sub_state._tables
-        self._add_sub_state(owner, ExtractDocxImagesState(self._docx_path))
-        self._stage = self.STAGE_IMAGES
+    def _check_extracting_progress(self, owner):
+        '''文字提取完成后立即启动切块，不等待表/图;所有子状态完成-->收集结果'''
+        text_state = next((s for s in self._current_sub_states if s.__class__.__name__ == "Docx2TextState"), None)
+        if not self._chunks_started and text_state and text_state._done:
+            self._full_text = getattr(text_state, '_full_text', '')
+            chunks_state = Text2ChunksState(self._docx_path, self._full_text)
+            self._current_sub_states.append(chunks_state)
+            owner.add_state(chunks_state)
+            self._chunks_started = True
 
-    def _advance_from_images(self, owner):
-        # 图片提取完成，推进到全文文本提取
-        self._images = self._current_sub_state._images
-        self._add_sub_state(owner, Docx2TextState(self._docx_path))
-        self._stage = self.STAGE_TEXT
+        # 等待所有子状态（表、图、文字、切块）完成
+        if any(s in owner._states for s in self._current_sub_states):
+            return
 
-    def _advance_from_text(self, owner):
-        # 全文提取完成，推进到标题分块
-        self._full_text = self._current_sub_state._full_text
-        self._add_sub_state(owner, Text2ChunksState(self._docx_path, self._full_text))
-        self._stage = self.STAGE_CHUNKS
+        # 收集结果
+        for sub in self._current_sub_states:
+            if hasattr(sub, '_tables'):
+                self._tables = sub._tables
+            if hasattr(sub, '_images'):
+                self._images = sub._images
+            if hasattr(sub, '_chunks'):
+                self._chunks = sub._chunks
 
-    def _advance_from_chunks(self, owner):
-        # 分块完成，写入全部输出产物，标记完成
-        self._chunks = self._current_sub_state._chunks
         self._write_outputs(owner)
         owner.parsed_document_cache[self._source_hash] = str(self._parsed_root)
         self._done = True
@@ -304,10 +279,11 @@ class WordParseState(BaseState):
     # 辅助
     # --------------------------------------------------------------------------
 
-    def _add_sub_state(self, owner, state):
-        # 记录当前子状态引用，加入 owner 状态列表
-        self._current_sub_state = state
-        owner.add_state(state)
+    def _add_sub_states(self, owner, states: list):
+        '''标记就current sub state；并向owner添加'''
+        self._current_sub_states = states
+        for s in states:
+            owner.add_state(s)
 
     def _check_idempotent(self, owner) -> bool:
         # 1. 内存缓存：同会话已解析过，直接返回
@@ -370,44 +346,16 @@ class WordParseState(BaseState):
                 digest.update(chunk)
         return digest.hexdigest()
 
-    @staticmethod
-    def _relative_manifest_path(manifest_path: Path, target_path: Path) -> str:
-        # 计算相对路径，优先相对于 workspace 根目录
-        workspace_root = next(
-            (parent for parent in manifest_path.parents if parent.name == "workspace"),
-            None,
-        )
-        if workspace_root is not None:
-            try:
-                return str(target_path.relative_to(workspace_root)).replace("\\", "/")
-            except ValueError:
-                pass
-        return os.path.relpath(target_path, manifest_path.parent).replace("\\", "/")
-
-    @staticmethod
-    def _join_outline_lines(lines: Sequence[str]) -> str:
-        # 空行过滤 + 末尾补换行，供目录文件写出
-        clean_lines = [line for line in lines if line]
-        return ("\n".join(clean_lines) + "\n") if clean_lines else ""
-
-    @staticmethod
-    def _write_image_blob(image: DocxImage, image_path: Path) -> None:
-        # 图片 blob 直写入磁盘，旋转校正由 PaddleOCR 内置方向分类器处理
-        image_path.write_bytes(image.blob)
-
     def _chunk_file_stem(self, chunk: HeadingChunk) -> str:
-        # 标题节点 → 安全的目录名（编号.标题_sha1前8位）
+        # 标题节点 → 安全的目录名（标题_sha1前8位）
         safe_title = _sanitize_name(chunk.title)
-        if chunk.level == 0 and chunk.title == "前言":
-            digest = hashlib.sha1(chunk.title.encode("utf-8")).hexdigest()[:8]
-            return f"前言_{digest}"
-        raw_name = f"{chunk.number}.{chunk.title}"
-        digest = hashlib.sha1(raw_name.encode("utf-8")).hexdigest()[:8]
-        safe_number = _sanitize_name(chunk.number)
-        return f"{safe_number}.{safe_title}_{digest}"
+        if not safe_title:
+            safe_title = _sanitize_name(chunk.number)
+        digest = hashlib.sha1((chunk.number + chunk.title).encode("utf-8")).hexdigest()[:8]
+        return f"{safe_title}_{digest}"
 
     def _write_chunk_tree(self, chunk: HeadingChunk, parent_dir: Path) -> None:
-        # 递归将标题节点树写入磁盘目录
+        '''递归将标题节点树写入'''
         chunk_dir = parent_dir / self._chunk_file_stem(chunk)
         chunk_dir.mkdir(parents=True, exist_ok=True)
 
@@ -419,34 +367,8 @@ class WordParseState(BaseState):
         for child in chunk.children:
             self._write_chunk_tree(child, chunk_dir)
 
-    def _append_heading_children(
-            self, chunk: HeadingChunk, level2_lines: List[str], level3_lines: List[str]
-    ) -> None:
-        # 提取节点的二级子标题，追加到目录行列表
-        level2_children = [child for child in chunk.children if child.level == 2]
-        if level2_children:
-            level2_lines.append(chunk.title)
-            for child in level2_children:
-                level2_lines.append(f"  - {child.title}")
-                self._append_heading_grandchildren(child, level3_lines, chunk.title)
-
-    def _append_heading_grandchildren(
-            self,
-            chunk: HeadingChunk,
-            level3_lines: List[str],
-            level1_title: str = "",
-    ) -> None:
-        # 提取节点的三级子标题，追加到目录行列表
-        level3_children = [child for child in chunk.children if child.level == 3]
-        if not level3_children:
-            return
-        header = f"{level1_title} / {chunk.title}" if level1_title else chunk.title
-        level3_lines.append(header)
-        for child in level3_children:
-            level3_lines.append(f"  - {child.title}")
-
     def _write_heading_outline_files(self, parsed_root: Path, chunks: Sequence[HeadingChunk]) -> None:
-        # 从标题树提取一/二/三级目录，写入三个 txt 文件
+        '''三个层级目录的信息写入'''
         level1_lines: List[str] = []
         level2_lines: List[str] = []
         level3_lines: List[str] = []
@@ -454,24 +376,30 @@ class WordParseState(BaseState):
         for chunk in chunks:
             if chunk.level == 1:
                 level1_lines.append(chunk.title)
-                self._append_heading_children(chunk, level2_lines, level3_lines)
+                for child in chunk.children:
+                    if child.level == 2:
+                        level2_lines.append(f"  - {child.title}")
+                        for grandchild in child.children:
+                            if grandchild.level == 3:
+                                level3_lines.append(f"{chunk.title} / {child.title}")
+                                level3_lines.append(f"    - {grandchild.title}")
             elif chunk.level == 2:
                 level2_lines.append(chunk.title)
-                self._append_heading_grandchildren(chunk, level3_lines)
+                for child in chunk.children:
+                    if child.level == 3:
+                        level3_lines.append(chunk.title)
+                        level3_lines.append(f"  - {child.title}")
             elif chunk.level == 3:
                 level3_lines.append(chunk.title)
 
-        (parsed_root / "一级目录信息.txt").write_text(
-            self._join_outline_lines(level1_lines), encoding="utf-8"
-        )
-        (parsed_root / "二级目录信息.txt").write_text(
-            self._join_outline_lines(level2_lines), encoding="utf-8"
-        )
-        (parsed_root / "三级目录信息.txt").write_text(
-            self._join_outline_lines(level3_lines), encoding="utf-8"
-        )
+        for stem, lines in [("一级", level1_lines), ("二级", level2_lines), ("三级", level3_lines)]:
+            (parsed_root / f"{stem}目录信息.txt").write_text(
+                ("\n".join(filter(None, lines)) + "\n") if any(lines) else "",
+                encoding="utf-8",
+            )
 
     def _write_outputs(self, owner):
+        '''落盘函数'''
         # 将所有中间结果写入磁盘：表格md、图片+元数据、全文txt、目录文件、标题树、manifest
         for table in self._tables:
             stem = f"表{table.index}_{table.position}_{table.title}"
@@ -482,7 +410,7 @@ class WordParseState(BaseState):
             stem = f"图{image.index}"
             image_path = self._image_dir / f"{stem}{image.extension}"
             try:
-                self._write_image_blob(image, image_path)
+                image_path.write_bytes(image.blob)
             except Exception as exc:
                 GlobalFunction.log("解析错误", f"图片写入失败 [{image_path}]: {exc}")
                 continue
@@ -516,9 +444,8 @@ class WordParseState(BaseState):
         for chunk in self._chunks:
             self._write_chunk_tree(chunk, self._text_dir)
 
-        manifest_source = self._relative_manifest_path(self._parsed_root / "parse_manifest.md", Path(self.source_path))
-        manifest_docx = self._relative_manifest_path(self._parsed_root / "parse_manifest.md",
-                                                     Path(self._docx_path))
+        manifest_source = os.path.relpath(self.source_path, self._parsed_root)
+        manifest_docx = os.path.relpath(self._docx_path, self._parsed_root)
         (self._parsed_root / "parse_manifest.md").write_text(
             "\n".join([
                 f"source_hash: {self._source_hash}",

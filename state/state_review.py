@@ -2,72 +2,86 @@ from .base_state import BaseState,StateOwner
 from pathlib import Path
 from common import GlobalFunction
 from .state_doc import WordParseState,HeadingChunk
-import json,threading
+from docx import Document
+from docx.shared import Pt
+import json,threading,re
 
+# 正文字符数 ≤ 此阈值时跳过 LLM，直接用原文作摘要（~200 token，中文字符约 1:1.5~2）
+SUMMARY_LLM_THRESHOLD_CHARS = 130
 
-# 生成文本块摘要
+# 生成节点摘要
 class GenSummaryState(BaseState):
-    """要在原本的json树形结构里添加新的字段（摘要）"""
-    def __init__(self, chunks:list[HeadingChunk], **kwargs):
+    """对单个文本切块节点生成摘要，原地修改 chunk.prefix_summary / chunk.summary"""
+    stateName = "GenSummaryState"
+
+    def __init__(self, chunk: HeadingChunk, **kwargs):
         super().__init__(**kwargs)
-        self.chunks = chunks
+        self.chunk = chunk
         self._done = False
-        self._duration = 1000*60*15
-    
-    # 独立的递归函数-->自下而上
-    def _summarize_nodes(self,chunks:list[HeadingChunk],owner:StateOwner):
-        """自底向上递归，先生成子节点摘要"""
-        for chunk in chunks:
-            # dataclass vs dict
-            if chunk.children:
-                self._summarize_nodes(chunk.children,owner)
-            
-            lines = []
-            for child in chunk.children:
-                if child.summary:
-                    lines.append(f'{child.number} {child.title}:{child.summary}')
-            # 都是对已有的chunk进行原地修改
-            self.children_summaries = '\n'.join(lines)
-            
-            self.node_number = chunk.number
-            self.node_title = chunk.title
-            self.node_level = chunk.level
-            self.node_content = chunk.content
-            
-            actions = owner.execute_prompt('生成节点摘要',self)
-            params = actions[0]['params']
-            chunk.prefix_summary = params['prefix_summary']
-            chunk.summary = params['summary']
-            
-    def _run_summarize(self,owner):
+        self._duration = 1000 * 60 * 8
+
+    def Enter(self, owner):
+        lines = []
+        for child in self.chunk.children:
+            if child.summary:
+                lines.append(f'{child.number} {child.title}：{child.summary}')
+        self.children_summaries = '\n'.join(lines)
+        
+        self.node_number = self.chunk.number
+        self.node_title = self.chunk.title
+        self.node_level = self.chunk.level
+        self.node_content = self.chunk.content
+
+        # 正文足够短 → 跳过 LLM，直接用原文当摘要（小文本跳过摘要）
+        if len(self.chunk.content.strip()) <= SUMMARY_LLM_THRESHOLD_CHARS:
+            is_leaf = not self.chunk.children
+            # 前缀摘要--非叶子节点的原文，叶子节点为空
+            self.chunk.prefix_summary = "" if is_leaf else self.chunk.content.strip()
+            if is_leaf:
+                # 叶子节点摘要-->原文
+                self.chunk.summary = self.chunk.content.strip()
+            else:
+                # 非叶子节点摘要-->原文+子节点的摘要
+                parts = [self.chunk.content.strip()] if self.chunk.content.strip() else []
+                parts.extend(line for line in lines if line)
+                self.chunk.summary = "；".join(parts)
+            self._done = True
+        else:
+            self._thread = threading.Thread(target=self._run_summarize, args=(owner,), daemon=True)
+            self._thread.start()
+
+    def _run_summarize(self, owner):
         try:
-            self._summarize_nodes(self.chunks,owner)
+            actions = owner.execute_prompt('生成节点摘要', self)
+            if actions and isinstance(actions[0], dict):
+                params = actions[0].get('params', {})
+                self.chunk.prefix_summary = params.get('prefix_summary', '')
+                self.chunk.summary = params.get('summary', '')
+            else:
+                GlobalFunction.log('生成节点摘要失败', f'节点 {self.chunk.number} {self.chunk.title} 未获取到有效摘要')
         except Exception as e:
-            GlobalFunction.log('知识树摘要总结出错',f'出错内容:{e}')
+            GlobalFunction.log('节点摘要出错', f'节点 {self.chunk.number} {self.chunk.title}: {e}')
         finally:
-            self._done = True        
-            
-    def Enter(self,owner):
-        self._thread = threading.Thread(
-            target=self._run_summarize,args=(owner,),daemon=True
-        )
-        self._thread.start()
-    
-    def Execute(self, owner:StateOwner):
+            self._done = True
+
+    def Execute(self, owner: StateOwner):
         if self._done:
             owner.remove_state(self)
-            return
+
     def Exit(self, owner):
         pass
             
 # 构建pageindex的知识库json知识树
 class BuildKnowledgeState(BaseState):
+    '''构建json知识树，参数一：源文件路径，参数二，知识库名'''
+    stateName = "BuildKnowledgeState"
+
     def __init__(self, source_path:str , name:str ,**kwargs):
         super().__init__(**kwargs)
         self.path = source_path
         self.name = name
         self._done = False
-        self._duration = 1000 * 60 * 10
+        self._duration = 1000 * 60 * 30
         self._stage = 'init'
 
     # 生命周期函数写状态机和owner
@@ -77,7 +91,7 @@ class BuildKnowledgeState(BaseState):
     鸭子类型-->看起来像鸭子、叫起来像鸭子-->鸭子
     """
     def Enter(self,owner):
-        # expanduser针对“~”，翻译为用户目录，resolver绝对值处理，去除.和..这种
+        # expanduser针对"~"，翻译为用户目录，resolver绝对值处理，去除.和..这种
         source = Path(self.path).expanduser().resolve()
         if not source.exists():
             GlobalFunction.log("解析错误",f"源文件不存在：{source}")
@@ -85,11 +99,12 @@ class BuildKnowledgeState(BaseState):
             return
         # 建立知识库的目录 parents比如knowledge不存在，设置为true会自动创建
         # exist_ok设置为true，即使目录已经存在也不报错
-        output_dir = Path(owner.workspace_path)/"knowledge"/self.name
+        output_dir = Path(GlobalFunction.knowledge_path(self.name))
         output_dir.mkdir(parents=True,exist_ok=True)
         # 构建知识库的第一步解析文档
         self._current_sub_state = WordParseState(source_path=self.path,output_root=str(output_dir))
         owner.add_state(self._current_sub_state)
+        GlobalFunction.log('解析知识文档','进入知识文档解析的编排线程')
         self._stage = "parse"
         self._output_dir = output_dir #存下来后面要用
 
@@ -97,21 +112,52 @@ class BuildKnowledgeState(BaseState):
         if self._done:
             owner.remove_state(self)
             return
-        # 解析结束
         if self._stage == 'parse':
             if self._current_sub_state not in owner._states:
-                self._stage = 'summarize'  #开始总结摘要
+                self._stage = 'summarize'
+                GlobalFunction.log('进入摘要总结阶段','并发处理各层级的摘要中')
                 self._chunks = self._current_sub_state._chunks
                 self._full_text = self._current_sub_state._full_text
-                self._current_sub_state = GenSummaryState(self._chunks)
-                owner.add_state(self._current_sub_state)
-        # 总结结束
+                # 按层级分组，自底向上并发
+                self._level_map = {}  # 按照level将节点存起来，dict-->"level":[]
+                self._collect_by_level(self._chunks, self._level_map)
+                # 先总结子节点
+                # sorted函数，第一个参数是可遍历的的结构，reverse true 代表 3,2,1
+                self._levels = sorted(self._level_map.keys(), reverse=True)
+                self._current_level_idx = 0  # 指针，只想self._levels
+                self._pending_summaries = []  # 指针层的状态机实例列表
+                self._spawn_current_level(owner)
         elif self._stage == 'summarize':
-            if self._current_sub_state not in owner._states:
-                self._stage='build'
-                # 开始构建树
-                self._thread = threading.Thread(target=self._run_build,daemon=True,args=(owner,))
-                self._thread.start()
+            # 当前总结摘要的状态机都结束了(pending的都不在states中)
+            if not any(s in owner._states for s in self._pending_summaries):
+                self._current_level_idx += 1  #拿下一层
+                # 不要超过列表边界--跑完每一层
+                if self._current_level_idx < len(self._levels):
+                    self._spawn_current_level(owner)
+                else:
+                    self._stage = 'build'
+                    GlobalFunction.log('建树','建树中（id和落盘）')
+                    self._thread = threading.Thread(target=self._run_build, daemon=True, args=(owner,))
+                    self._thread.start()
+
+    def _collect_by_level(self, chunks: list[HeadingChunk], level_map: dict):
+        """自上而下，递归收集所有节点，按 level 分组"""
+        for chunk in chunks:
+            # setdefault 如果key没有对应的value，就返回默认值[]，然后append
+            # 如果level已经有对应的value，则直接添加节点
+            level_map.setdefault(chunk.level, []).append(chunk)
+            if chunk.children:
+                self._collect_by_level(chunk.children, level_map)
+
+    def _spawn_current_level(self, owner):
+        """为当前层级的所有节点各创建一个 GenSummaryState，实现并发"""
+        level = self._levels[self._current_level_idx]  # [3,2,1]第一位是3
+        chunks = self._level_map[level]  # 拿到第一层的节点
+        self._pending_summaries = []  # 每层节点的状态机列表
+        for chunk in chunks:
+            gs = GenSummaryState(chunk=chunk)
+            self._pending_summaries.append(gs)
+            owner.add_state(gs)
 
     def _chunks_to_json(self,chunks:list[HeadingChunk]):
         """将chunk树-->最终的json树（PageIndex）"""
@@ -136,12 +182,14 @@ class BuildKnowledgeState(BaseState):
     def _run_build(self,owner:StateOwner):
         try:
             chunks = self._chunks
-            full_text = self._full_text
-            # DFS计算 node_id + 计算字符偏移 index
-            self._assign_ids_and_indices(chunks=chunks,full_text=full_text)
+            if not chunks:
+                return
+            # DFS分配 node_id，父节点聚合子节点索引
+            self._assign_ids_and_indices(chunks=chunks)
             # 最终的知识树
             jsonChunks = self._chunks_to_json(chunks)
             # 落盘json知识树
+            GlobalFunction.log('开始落盘知识树',"标志知识树落盘")
             output_path = self._output_dir / '知识树.json'
             output_path.write_text(
                 json.dumps(jsonChunks,ensure_ascii=False,indent=2),
@@ -151,28 +199,18 @@ class BuildKnowledgeState(BaseState):
             GlobalFunction.log('构建失败',f"失败信息：{e}")
         finally:
             # 构建结束
+            GlobalFunction.log('知识树落盘成功','知识树落盘成功，注意查收')
             self._done=True
     
-    def _assign_ids_and_indices(self, chunks:list[HeadingChunk], full_text):
-        """DFS遍历树，计算id和index"""
-        # 可以用整数int，但是闭包有问题。内部函数如果想要使用“=”赋值的话，
-        # python则是创建新变量，而不是在原本的索引位置的数据上修改。可以用nonlocal声明该int是外部的变量
-        # 如果用列表，则是“=”修改列表内部元素
+    def _assign_ids_and_indices(self, chunks: list[HeadingChunk]):
+        """DFS遍历树，分配 node_id，父节点聚合子节点的 start/end_index"""
         counter = [0]
-        search_from = [0]
 
-        def walk(nodes:list[HeadingChunk]):
+        def walk(nodes: list[HeadingChunk]):
             for chunk in nodes:
                 counter[0] += 1
-                chunk.node_id = f"{counter[0]:04d}"# 格式化 04d-->四位数编号
-                
-                if chunk.content:
-                    start = full_text.find(chunk.content, search_from[0])
-                    chunk.start_index = start
-                    chunk.end_index = start + len(chunk.content)
-                    search_from[0] = chunk.end_index
+                chunk.node_id = f"{counter[0]:04d}"
 
-                # 子节点的递归调用
                 if chunk.children:
                     walk(chunk.children)
                     for child in chunk.children:
@@ -182,23 +220,26 @@ class BuildKnowledgeState(BaseState):
                         if child.end_index != -1:
                             if chunk.end_index == -1 or child.end_index > chunk.end_index:
                                 chunk.end_index = child.end_index
-        
+
         walk(chunks)
     
     def Exit(self,owner):
         pass
 
-# 根据方案类型和相关的知识树片段自动生成审查清单
+# 根据"方案类型"和"相关的知识树片段"自动生成审查清单
 class GenCheckListState(BaseState):
     '''两个阶段：知识树相关性--找出森林里，每棵树上相关的枝条；将知识转换为约束条款--根据每个节点的摘要，总结对应每条的llm审查点'''
+    stateName = "GenCheckListState"
+
     def __init__(self, knowledge_names: list[str], plan_type: str, **kwargs):
         super().__init__(**kwargs)
         self.knowledge_names = knowledge_names
         self.plan_type = plan_type
         self._done = False
+        self._duration = 1000*60*30
 
     def Enter(self, owner: StateOwner):
-        output_dir = Path(owner.workspace_path) / "knowledge" / self.plan_type
+        output_dir = Path(GlobalFunction.review_path(self.plan_type))
         output_dir.mkdir(parents=True, exist_ok=True)
         self._output_dir = output_dir
 
@@ -209,9 +250,10 @@ class GenCheckListState(BaseState):
 
     def _run_generate(self, owner):
         try:
+            GlobalFunction.log('开始生成审查清单','生成审查清单线程开启')
             all_trees = []
             for name in self.knowledge_names:
-                tree_path = Path(owner.workspace_path) / "knowledge" / name / "知识树.json"
+                tree_path = Path(GlobalFunction.knowledge_path(name)) / "知识树.json"
                 # extend，是无缝拼接列表，合成新的列表--此处将所有知识树拼在一起，是一个森林
                 all_trees.extend(json.loads(tree_path.read_text(encoding="utf-8")))
 
@@ -228,6 +270,7 @@ class GenCheckListState(BaseState):
         except Exception as e:
             GlobalFunction.log('生成审查清单错误', f'错误为{e}')
         finally:
+            GlobalFunction.log('成功生成审查清单','注意查收审查清单')
             self._done = True
 
     def _selected_tree(self,owner,trees:list[dict])->list[dict]:
@@ -291,8 +334,10 @@ class GenCheckListState(BaseState):
     def Exit(self,owner):
         pass
     
-# 逐项合规性检查
+# 取"知识库原文"，逐项按照"审查清单"检查"施工方案"合规性
 class ReviewPlanState(BaseState):
+    stateName = "ReviewPlanState"
+
     def __init__(self,plan_path:str,plan_type:str,**kwargs):
         super().__init__(**kwargs)
         self.plan_path = plan_path
@@ -309,7 +354,7 @@ class ReviewPlanState(BaseState):
             self._done = True
             return
         
-        output_dir = Path(owner.workspace_path)/"review"/self.plan_type
+        output_dir = Path(GlobalFunction.review_path(self.plan_type))
         output_dir.mkdir(exist_ok=True,parents=True)
 
         self._current_sub_state = WordParseState(source_path=self.plan_path,output_root=str(output_dir))
@@ -343,10 +388,11 @@ class ReviewPlanState(BaseState):
         拿到审查清单+对应原文-->llm开始分析-->输出结果
         '''
         try:
+            GlobalFunction.log('开始依据审查清单逐项审查','正在逐条审查方案合规性')
             # wordparsestate挂载的--方案原文
             self.plan_text = self._current_sub_state._full_text
             # 拿到审查清单
-            checklist_path = Path(owner.workspace_path) / 'knowledge' / self.plan_type / "审查清单.json"
+            checklist_path = Path(GlobalFunction.review_path(self.plan_type)) / "审查清单.json"
             checklist:list[dict] = json.loads(checklist_path.read_text(encoding='utf-8'))
             
             # 条规原文
@@ -365,8 +411,8 @@ class ReviewPlanState(BaseState):
                 
                 if name and start != -1 and end != -1:
                     if name not in full_texts: # 懒加载，拿到对应知识树的全文
-                        dir_path = Path(owner.workspace_path) / 'knowledge' / name
-                        files = list(dir_path.glob("*_全文.txt"))
+                        dir_path = Path(GlobalFunction.knowledge_path(name))
+                        files = list(dir_path.glob("**/*_全文.txt"))
                         full_texts[name] = files[0].read_text(encoding='utf-8') if files else ''
                     self.clause_text = full_texts[name][start:end]
                 else:
@@ -393,4 +439,138 @@ class ReviewPlanState(BaseState):
         except Exception as e:
             GlobalFunction.log('审查线程错误', f'错误为{e}')
         finally:
+            GlobalFunction.log('合规性检查完成','可以查看审查结果')
             self._done = True
+
+# 人工复查环节（涉及open webui）
+class HumanReviewState(BaseState):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+    def Enter(self, owner):
+        pass
+    def Execute(self, owner):
+        pass
+    def Exit(self, entity):
+        pass
+    
+# 生成报告（提示词--审查报告）
+class GenReportState(BaseState):
+    def __init__(self, prompt:str, data:list, plan_type:str, **kwargs):
+        super().__init__(**kwargs)
+        self.prompt = prompt
+        self.data = data
+        self.plan_type = plan_type
+        self._duration = 1000*60*10
+        self._done = False
+        self._thread = None
+
+    def Enter(self, owner):
+        self.data = json.dumps(self.data, ensure_ascii=False, indent=2)
+        output_path = Path(GlobalFunction.review_path(self.plan_type))
+        output_path.mkdir(parents=True, exist_ok=True)
+        self._output_dir = output_path
+        self._thread = threading.Thread(target=self._gen_report, args=(owner,), daemon=True)
+        self._thread.start()
+
+    def Execute(self, owner:StateOwner):
+        if self._done:
+            owner.remove_state(self)
+
+    def Exit(self, entity):
+        pass
+
+    def _gen_report(self, owner:StateOwner):
+        try:
+            GlobalFunction.log('开始生成报告','进入报告生成线程')
+            actions = owner.execute_prompt(self.prompt, self)
+            report_md = actions[0]['params']['report']
+            if not report_md:
+                raise ValueError('生成报告的内容为空')
+
+            md_path = self._output_dir / '审查报告.md'
+            md_path.write_text(report_md, encoding='utf-8')
+            GlobalFunction.log('报告md已保存', str(md_path))
+
+            docx_path = self._output_dir / '审查报告.docx'
+            self._md_to_docx(report_md, str(docx_path))
+            GlobalFunction.log('报告docx已生成', str(docx_path))
+        except Exception as e:
+            GlobalFunction.log('生成报告线程出错', f'错误为:{e}')
+        finally:
+            GlobalFunction.log('成功生成报告', '注意查收审查报告')
+            self._done = True
+
+    def _md_to_docx(self, md_text: str, output_path: str):
+        """将 markdown 文本转为 docx，处理标题、表格、加粗、列表"""
+        lines = md_text.strip().split('\n')
+        doc = Document()
+        doc.styles['Normal'].font.size = Pt(12)
+        doc.styles['Normal'].font.name = '宋体'
+
+        i = 0
+        while i < len(lines):
+            line = lines[i]
+
+            if line.strip().startswith('|') and line.strip().endswith('|'):
+                table_lines = []
+                while i < len(lines) and lines[i].strip().startswith('|') and lines[i].strip().endswith('|'):
+                    table_lines.append(lines[i])
+                    i += 1
+                rows = [[c.strip() for c in ln.strip().split('|')[1:-1]] for ln in table_lines]
+                if len(rows) >= 2:
+                    header = rows[0]
+                    sep_re = re.compile(r'^[-:]{3,}$')
+                    data_start = 2 if (len(rows) > 1 and all(sep_re.match(c) for c in rows[1])) else 1
+                    table = doc.add_table(rows=1 + len(rows) - data_start, cols=len(header))
+                    table.style = 'Light Grid Accent 1'
+                    for j, cell_text in enumerate(header):
+                        table.rows[0].cells[j].text = ''
+                        self._write_cell(table.rows[0].cells[j].paragraphs[0], cell_text)
+                    for row_idx in range(data_start, len(rows)):
+                        for j, cell_text in enumerate(rows[row_idx]):
+                            if j < len(header):
+                                table.rows[1 + row_idx - data_start].cells[j].text = ''
+                                self._write_cell(table.rows[1 + row_idx - data_start].cells[j].paragraphs[0], cell_text)
+                continue
+
+            heading_match = re.match(r'^(#{1,3})\s+(.+)', line)
+            if heading_match:
+                level = len(heading_match.group(1))
+                text = re.sub(r'\*\*([^*]+)\*\*', r'\1', heading_match.group(2))
+                doc.add_heading(text, level=level)
+                i += 1
+                continue
+
+            list_match = re.match(r'^(\s*)-\s+(.+)', line)
+            if list_match:
+                p = doc.add_paragraph(style='List Bullet')
+                self._write_cell(p, list_match.group(2))
+                i += 1
+                continue
+
+            ordered_match = re.match(r'^(\s*)\d+\.\s+(.+)', line)
+            if ordered_match:
+                p = doc.add_paragraph(style='List Number')
+                self._write_cell(p, ordered_match.group(2))
+                i += 1
+                continue
+
+            if not line.strip() or re.match(r'^[-*_]{3,}\s*$', line):
+                i += 1
+                continue
+
+            p = doc.add_paragraph()
+            self._write_cell(p, line)
+            i += 1
+
+        doc.save(output_path)
+
+    @staticmethod
+    def _write_cell(paragraph, text: str):
+        """写入段落，解析 **bold** 标记"""
+        for part in re.split(r'(\*\*[^*]+\*\*)', text):
+            if part.startswith('**') and part.endswith('**'):
+                run = paragraph.add_run(part[2:-2])
+                run.bold = True
+            else:
+                paragraph.add_run(part)
