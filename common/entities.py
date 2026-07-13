@@ -314,7 +314,11 @@ class WorkTask:
 
 
 class PromptIndex:
-    _by_name = {}
+    '''
+        对同一批提示词的两个全局字典，execute_prompt调用可以使用名字和文件名
+    '''
+    
+    _by_name = {}  
     _by_filename = {}
 
     def __init__(self, index_list):
@@ -371,14 +375,25 @@ class PromptIndex:
 
     # 加载提示词，填充占位符
     def load_prompt(self, prompt_name: str, owner, state) -> tuple[str, dict]:
+        '''
+        提示词对象格式：
+            {
+                "名称": name,
+                "文件名": filename,
+                "文件路径": os.path.relpath(file_path, workdir),  # 保存相对路径便于后续查找
+                "输入参数": {p: "input" for p in placeholders} if placeholders else {}
+            }
+        '''
         prompt_json = self.get_src_prompt(prompt_name)
         if not prompt_json:
             return None, None
         input_param = prompt_json["输入参数"]
+        
         # 使用完整路径（包含子目录相对路径）加载文件
         from common import GlobalFunction
         output_text = GlobalFunction.load_file(os.path.join(GlobalFunction.prompt_path(), prompt_json["文件路径"]))
         if input_param:
+            
             # 遍历每个需要替换的键
             for key in input_param.keys():
                 placeholder = "{{" + key + "}}"  # 占位符格式 {{key}}
@@ -396,6 +411,7 @@ class PromptIndex:
                     value = "(Not Provided)"
                     # FIXME 需要构建提示词创建这个参数获得的代码。
                     GlobalFunction.log("运行时错误", f"提示词[{prompt_name}]输入参数[{key}]不存在，请检查提示词配置。")
+                
                 # 替换所有出现的占位符
                 output_text = output_text.replace(placeholder, str(value))
         return output_text, prompt_json
@@ -412,6 +428,12 @@ class PromptIndex:
         """
         # 提取基本文件名（处理路径）
         filename = os.path.basename(name)
+        '''
+            os.path.basename("workspace/prompts/files/导航知识树.md")
+            # → "导航知识树.md"
+            os.path.basename("导航知识树.md")
+            # → "导航知识树.md"  （本来就没有路径，原样返回）
+        '''
         # 判断是否为 markdown 文件（可扩展其他后缀）
         if filename.endswith('.md'):
             return self.get_by_filename(filename)

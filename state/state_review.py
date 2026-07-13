@@ -83,6 +83,8 @@ class BuildKnowledgeState(BaseState):
         self._done = False
         self._duration = 1000 * 60 * 30
         self._stage = 'init'
+        self._root_summary_done = False
+        self._root_node = None
 
     # 生命周期函数写状态机和owner
     """
@@ -135,10 +137,17 @@ class BuildKnowledgeState(BaseState):
                 if self._current_level_idx < len(self._levels):
                     self._spawn_current_level(owner)
                 else:
-                    self._stage = 'build'
-                    GlobalFunction.log('建树','建树中（id和落盘）')
-                    self._thread = threading.Thread(target=self._run_build, daemon=True, args=(owner,))
+                    self._stage = 'root_summary'
+                    GlobalFunction.log('生成根节点摘要','为知识树生成文档级根节点')
+                    self._thread = threading.Thread(target=self._run_root_summary, daemon=True, args=(owner,))
                     self._thread.start()
+
+        elif self._stage == 'root_summary':
+            if self._root_summary_done:
+                self._stage = 'build'
+                GlobalFunction.log('建树','建树中（id和落盘）')
+                self._thread = threading.Thread(target=self._run_build, daemon=True, args=(owner,))
+                self._thread.start()
 
     def _collect_by_level(self, chunks: list[HeadingChunk], level_map: dict):
         """自上而下，递归收集所有节点，按 level 分组"""
@@ -169,6 +178,7 @@ class BuildKnowledgeState(BaseState):
             "end_index" : chunk.end_index,
             "summary" : chunk.summary,
             "prefix_summary" : chunk.prefix_summary,
+            "use_condition" : chunk.use_condition,
             "level" : chunk.level,
             "number" : chunk.number,
             "title" : chunk.title,
@@ -179,9 +189,40 @@ class BuildKnowledgeState(BaseState):
             jsonChunks.append(node)
         return jsonChunks
 
+    def _run_root_summary(self, owner):
+        '为知识树添加一个根节点，方便后续从森林里选出知识树'
+        try:
+            lines = []
+            for chunk in self._chunks:
+                lines.append(f"{chunk.number} {chunk.title}")
+                if chunk.summary:
+                    lines.append(f"  摘要：{chunk.summary}")
+            self.root_context = '\n'.join(lines)
+
+            actions = owner.execute_prompt('生成知识树根节点摘要', self)
+            params = actions[0].get('params', {}) if actions else {}
+            summary = params.get('summary', '')
+            use_condition = params.get('use_condition', '')
+        except Exception as e:
+            GlobalFunction.log('根节点摘要生成失败', f'{e}')
+            summary = ''
+            use_condition = ''
+        finally:
+            self._root_node = HeadingChunk(
+                level=0,
+                number='',
+                title=self.name,
+                content='',
+                children=self._chunks,
+                summary=summary,
+                use_condition=use_condition,
+            )
+            GlobalFunction.log('根节点摘要生产完成','根节点生成了全篇摘要')
+            self._root_summary_done = True
+
     def _run_build(self,owner:StateOwner):
         try:
-            chunks = self._chunks
+            chunks = [self._root_node] if self._root_node else self._chunks
             if not chunks:
                 return
             # DFS分配 node_id，父节点聚合子节点索引
@@ -288,8 +329,11 @@ class GenCheckListState(BaseState):
             lines = []
             for node in pending:
                 has = " [含子章节]" if node.get('children') else ""
-                # 转成适合LLM分析的文本 [0001] 1 桩基础 \n 摘要[含子章节]
-                lines.append(f"[{node['node_id']}] {node['number']} {node['title']}\n{node['summary']}{has}")
+                uc = node.get('use_condition', '')
+                uc_line = f"\n适用条件：{uc}" if uc else ""
+                # 转成适合LLM分析的文本 [0001] 1 桩基础 \n 摘要适用条件[含子章节]
+                lines.append(f"[{node['node_id']}] {node['number']} {node['title']}\n{node['summary']}  {uc_line}  {has}")
+            # llm用的数据-->当前节点的信息
             self.current_nodes = '\n\n'.join(lines) #得到第一层节点信息的字符串，把列表里的每个元素间隔两行
 
             actions = owner.execute_prompt("导航知识树", self)

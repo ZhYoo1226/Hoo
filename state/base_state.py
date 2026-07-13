@@ -17,7 +17,7 @@ from lunar_python import Solar
 
 from common import ChatMessage, GlobalFunction, GlobalObject
 from common.register import g_tool_registry
-
+from state_solver import StateOwner
 
 def _read_target_property(current: object, props: str) -> object:
     """
@@ -178,7 +178,6 @@ class StateOwner:
         # 1.向聊天历史记录中增加消息
         self.chat_hist_file_path = GlobalFunction.chat_hist_store_file()
 
-
     def execute_prompt(self,
                        user_prompt: str,  # user提示词
                        state: BaseState = None,  # 当前状态
@@ -186,9 +185,9 @@ class StateOwner:
                        conversation: list = None,  # 基于的对话内容
                        user_msg: str = None,  # 用户消息, user_prompt二选一
                        images: list[str] = None,  # VL 模型的图片路径列表
-                       ) -> List[
-        dict]:
+                       ) -> List[dict]:
         """执行提示词，返回response执行Action"""
+        
         # prompt_file=规划任务.md
         assert self.llm_prompt_model, "提示词执行模型未设置，请设置owner.llm_prompt_model的模型。"
         self.llm_prompt_model.reset_tokens()
@@ -203,23 +202,24 @@ class StateOwner:
             {"role": "user", "content": "### 生成审查清单\n\n**知识树:**\n[...]\n**方案类型:** 桥梁施工方案"}
         ]
         '''
+        
         messages = self._to_llm_conversation(owner=self, state=state, system_prompt=system_prompt,
                                              conversation=conversation, user_prompt=user_prompt)
         # 额外的用户消息
         if user_msg:
             messages.append({"role": "user", "content": user_msg})
-
         # apikey--webui替换
         user_key = getattr(self,"_user_api_key","")
         if user_key:
             self.llm_prompt_model.client.api_key = user_key
-
-        # 请求模型 发送给模型
+        # 请求模型 发送给模型，返回结果；query处理一些请求的基础信息打印和日志
         llm_output = self.llm_prompt_model.query(messages=messages, images=images)  # prompt model
+        
         # 日志方面
         query_log = self.llm_prompt_model.get_query_log()
         self.llm_prompt_model.reset_query_log()
         GlobalFunction.log("模型日志", f"{json.dumps(query_log, ensure_ascii=False, indent=2)}")
+        
         # 拿到返回
         if llm_output:
             # 拿到action块
@@ -737,6 +737,7 @@ class StateOwner:
 
     def _to_llm_conversation(self, owner, state, system_prompt, conversation, user_prompt):
         """转换成llm的对话格式"""
+        # llm接受的对话--json形式
         # 必须加入的系统提示词
         messages = []
         if system_prompt:
@@ -764,9 +765,10 @@ class StateOwner:
 
         return messages
 
-    def execute_chat(self, owner, state=None, system_prompt: str = "系统提示词"):
+    def execute_chat(self, owner:StateOwner, state=None, system_prompt: str = "系统提示词"):
         """
         同步执行聊天，返回response执行Action
+        同时聊天和执行
         """
         assert owner.llm_prompt_model, "提示词执行模型未设置，请设置owner.llm_prompt_model的模型。"
         owner.llm_prompt_model.reset_tokens()
@@ -779,27 +781,28 @@ class StateOwner:
         conversation = _conversation_func(limit=-1, roles=["用户", "助手", "观察"])
         # 转换成llm对话消息格式
         messages = owner._to_llm_conversation(self, state, system_prompt, conversation, user_prompt=None)
-        
+        # 前端openweb ui传进来的apikey
         user_key = getattr(owner, "_user_api_key", "")
         if user_key:
             owner.llm_prompt_model.client.api_key = user_key
-
+        # llm请求
         llm_output = owner.llm_prompt_model.query(messages=messages)  # prompt model
-        # 直接聊天，不会输出action指令
-        # 解析思考
+        # 直接聊天，不会输出action指令        
+        # 记录日志
         query_log = owner.llm_prompt_model.get_query_log()
         owner.llm_prompt_model.reset_query_log()
         GlobalFunction.log("模型日志", f"{json.dumps(query_log, ensure_ascii=False, indent=2)}")
+        # 提取出思考
         think_text = GlobalFunction.parse_llm_think(llm_output)
         if think_text:
             owner.record_role_chat("思考", think_text)
-
+        # 拿到llm_output中的'''action ... ''' 代码块
         action_json = GlobalFunction.extract_action_json(llm_output)
         if action_json:
             # 有可能返回的是action
             owner.execute_action(action_json)
         else:
-            # 没有action，直接输出llm_output
+            # 没有action，直接拿到reply的内容，输出
             reply_text = GlobalFunction.parse_llm_reply(llm_output)
             owner.record_role_chat("助手", reply_text)
 
@@ -814,11 +817,13 @@ class StateOwner:
 
         data_list = None
         if isinstance(action_json, list):
+            # json list是一个列表，每个元素是一个字典，action成为第一个字典
             action = action_json[0]
             # 如果action_json的长度大于1，datas等于 action_json[1:]
             data_list = action_json[1:]
         else:
             action = action_json
+            
         # 组装action的data_list数据集，如果有！
         if data_list:
             action["data_list"] = data_list
@@ -826,27 +831,29 @@ class StateOwner:
             self.sys_breathe_log(f"llm 输出中没有 action: {action_json}")
             return False
         action_name = action["action"]
+        
         # 判断是否是 state 操作，格式为 state:xxxState 或者 actionName
-        # FIXME 后续的可能情况，不需要用register注册，直接用actionName即可
         state_name = ""
+        # 方式一 返回的是state:WordParseState
         if action_name.startswith("state:"):
             # 提取 state 名称
             state_name = action_name.split(":", 1)[1]
-
+        # 方式二 返回的是WordParseState
         if action_name in StateOwner._states_class:
             state_name = action_name
-
         # 先从缓存中查找
         if state_name in StateOwner._states_class:
             state_class = StateOwner._states_class[state_name]
+            # 解包 字典
             state = state_class(**action)
             # 这个新增的状态，隶属于某个具体的任务。如何绑定任务？
             self.add_state(state)
             return True
+        # FIXME 后续的可能情况，不需要用register注册，直接用actionName即可
         else:
             try:
                 # 普通工具调用
                 return g_tool_registry.execute(tool_name=action_name, owner=self, **action)
             except Exception as e:
-                self.sys_breathe_log(f"执行工具{action_name}失败: {e}")
+                self.sys_breathe_log(f"执行工具{action_name}失败:不属于状态机和全局工具 ， {e}")
                 return False

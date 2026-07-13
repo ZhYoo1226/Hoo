@@ -14,6 +14,7 @@ from .ocr_worker import (
     get_gpu_free_memory_mb,
 )
 from .base_state import BaseState
+from common import GlobalFunction
 
 # OCR 配置目录：imagetype.json / paddleocr/deps.json 等
 _CONF_DIR = Path(__file__).resolve().parent.parent / "workspace" / "conf"
@@ -25,13 +26,56 @@ _MEDIA_CONTENT_TYPES: dict = json.loads(
 
 
 # --------------------------------------------------------------------------
+# 图片初始化基类：收集图片 → 落盘元信息md文件
+# --------------------------------------------------------------------------
+
+class ImgInitState(BaseState):
+    """图片初始化基类：扫描图片目录，为每张图片创建统一的元信息md文件。"""
+
+    MEDIA_CONTENT_TYPES = _MEDIA_CONTENT_TYPES
+    _image_type = ""  # 子类覆盖
+
+    def __init__(self, source_path: str, **kwargs):
+        super().__init__(**kwargs)
+        self.source_path = Path(source_path)
+
+    def Enter(self, owner):
+        image_paths = self._collect_image_paths(self.source_path)
+        for image_path in image_paths:
+            output_path = image_path.parent / f"{image_path.stem}_图片解析.md"
+            if not output_path.exists():
+                try:
+                    rel_path = str(image_path.relative_to(Path(owner.workspace_path))).replace("\\", "/")
+                except ValueError:
+                    rel_path = image_path.name
+                GlobalFunction.write_image_meta(str(output_path), {
+                    "图片路径": rel_path,
+                    "图片类型": self._image_type,
+                })
+
+    def Execute(self, owner):
+        pass
+
+    def Exit(self, owner):
+        pass
+
+    @staticmethod
+    def _collect_image_paths(source_dir: Path) -> List[Path]:
+        paths: List[Path] = []
+        if not source_dir.exists():
+            return paths
+        for path in source_dir.rglob("*"):
+            if path.suffix.lower() in ImgInitState.MEDIA_CONTENT_TYPES:
+                paths.append(path)
+        return sorted(paths)
+
+
+# --------------------------------------------------------------------------
 # OCR 基类：图片预处理、进程池管理、结果回写磁盘
 # --------------------------------------------------------------------------
 
-class _BaseOCRState(BaseState):
+class _BaseOCRState(ImgInitState):
     """OCR 基类：图片预处理、进程池管理、结果回写磁盘。"""
-
-    MEDIA_CONTENT_TYPES = _MEDIA_CONTENT_TYPES
 
     def __init__(
         self,
@@ -42,9 +86,8 @@ class _BaseOCRState(BaseState):
         batch_index: int = 0,  # 批次序号，用于日志标识
         **kwargs,
     ):
-        super().__init__(**kwargs)
+        super().__init__(source_path=source_path, **kwargs)
         self._duration = 60 * 60 * 1000
-        self.source_path = Path(source_path)
         self.auto_install = auto_install
         self.use_textline_orientation = use_textline_orientation
         self.lang = lang
@@ -57,6 +100,7 @@ class _BaseOCRState(BaseState):
         if self._started:
             return
         self._started = True
+        super().Enter(owner)  # ImgInitState: 创建图片元信息md文件
         t = threading.Thread(target=self._run_ocr, args=(owner,), daemon=True)
         t.start()
 
@@ -138,56 +182,23 @@ class _BaseOCRState(BaseState):
             enhanced.append(image_path)
         return enhanced
 
-    @staticmethod
-    def _collect_image_paths(source_dir: Path) -> List[Path]:
-        paths: List[Path] = []
-        if not source_dir.exists():
-            return paths
-        for path in source_dir.rglob("*"):
-            if path.suffix.lower() in _BaseOCRState.MEDIA_CONTENT_TYPES:
-                paths.append(path)
-        return sorted(paths)
-
     def _write_ocr_text_metadata(self, image_path: Path, ocr_text: str, owner) -> None:
         output_path = image_path.parent / f"{image_path.stem}_图片解析.md"
 
-        # 读取已有 JSON（state_doc 或其他阶段可能已写入部分字段）
-        result: Dict = {}
-        if output_path.exists():
-            content = output_path.read_text(encoding="utf-8")
-            match = re.search(r"```json\s*\n([\s\S]*?)\n```", content)
-            if match:
-                try:
-                    result = json.loads(match.group(1))
-                except json.JSONDecodeError:
-                    pass
-
+        fields = {
+            "图片类型": self._image_type,
+            "文字识别": ocr_text,
+        }
         # 图片路径：已有则保留，否则自行计算
+        result = GlobalFunction.load_image_meta(str(output_path))
         if not result.get("图片路径"):
             try:
                 rel_path = str(image_path.relative_to(Path(owner.workspace_path))).replace("\\", "/")
             except ValueError:
                 rel_path = image_path.name
-            result["图片路径"] = rel_path
+            fields["图片路径"] = rel_path
 
-        # 填入 OCR 负责的字段
-        result["图片类型"] = self._image_type
-        result["文字识别"] = ocr_text
-
-        # 补充默认值
-        result.setdefault("docx_rel_id", "")
-        result.setdefault("docx_media_name", "")
-        result.setdefault("内容概述", "")
-
-        output_path.write_text(
-            f"# {image_path.stem} 图片解析\n\n"
-            f"## 图片信息摘要\n\n"
-            f"```json\n"
-            f"{json.dumps(result, ensure_ascii=False, indent=2)}\n"
-            f"```\n\n"
-            f"## 图片处理\n",
-            encoding="utf-8",
-        )
+        GlobalFunction.write_image_meta(str(output_path), fields)
 
     def _ensure_ocr_ready(self, owner) -> None:
         """仅检查依赖是否已安装，不做 import 以避免在父进程中初始化 CUDA。"""

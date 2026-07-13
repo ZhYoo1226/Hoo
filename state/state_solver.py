@@ -130,6 +130,7 @@ class SolverOwner(StateOwner):
 
         # 遍历目录下所有md文件
         GlobalFunction.log("运行状态", f"开始扫描目录 {prompt_path} 下的所有md文件，构建提示词索引")
+        
         # 递归遍历目录及所有子目录下所有md文件
         for root, dirs, files in os.walk(prompt_path):
             for filename in files:
@@ -141,7 +142,7 @@ class SolverOwner(StateOwner):
                     # 提取所有{{xxx}}格式的占位符（包含空格、不换行），支持中文和多层级xx.yy.zz(path = 'c:/test/xxx.pdf')格式
                     pattern = re.compile(r'\{\{([^\n\r]+?.*?)\}\}')
                     placeholders = pattern.findall(content)
-                    # 去重
+                    # 去重 set方法--对可迭代的对象转成集合-->同时去重
                     placeholders = list(set(placeholders))
 
                     # 从文件名获取提示词名称（去掉后缀）
@@ -152,10 +153,11 @@ class SolverOwner(StateOwner):
                         "名称": name,
                         "文件名": filename,
                         "文件路径": os.path.relpath(file_path, prompt_path),  # 保存相对路径便于后续查找
-                        "输入参数": {p: "input" for p in placeholders} if placeholders else {}
+                        "输入参数": {p: "input" for p in placeholders} if placeholders else {}  # 待填充和替换的
                     }
                     GlobalFunction.log("运行状态",
                                        f"Prompts 添加提示词索引条目: \n{json.dumps(item, ensure_ascii=False, indent=2)}")
+                    
                     index_list.append(item)
 
         # 构建索引

@@ -112,11 +112,12 @@ class OPENAI(BaseLLM):
 
         return client.chat.completions.create(model=model, messages=messages, **kwargs)
 
+    # 最后llm调用，终端显示
     @override
     def query(
             self,
             prompt: str = None,
-            messages=None,
+            messages=None,  # 之前的对话史
             images: list[str] = None,  # VL 模型的图片路径列表
             end_when_error=False,
             max_retry=3,
@@ -133,15 +134,16 @@ class OPENAI(BaseLLM):
         if prompt:
             if images:
                 content = [{"type": "text", "text": prompt}]
-                for img_path in images:
+                for img_path in images:  #再把图片们添加进去
                     b64 = self._encode_image(img_path)
                     mime, _ = mimetypes.guess_type(img_path)
-                    if not mime:
+                    if not mime:  #默认设置
                         mime = "image/jpeg"
-                    content.append({
+                    content.append({  #image_url是data:{jpg};base64,{图片二进制}
                         "type": "image_url",
                         "image_url": {"url": f"data:{mime};base64,{b64}"}
                     })
+                    # 上传的图片添加到小溪里
                 messages = messages + [{"role": "user", "content": content}]
             else:
                 messages = messages + [{"role": "user", "content": prompt}]

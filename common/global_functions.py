@@ -1,5 +1,10 @@
 import ast
+import pandas as pd
+# 检查活的对象
 import inspect
+# 当action/fuction.py里注册一个工具函数，框架用inspect自动提取参数名、类型和注释描述
+# 生成tool schema暴露给LLM
+
 import io
 import json
 import logging
@@ -9,18 +14,17 @@ import textwrap
 import tokenize
 from datetime import datetime
 from typing import List, Union
-
-from . import PromptIndex, ChatMessage
 from .config import g_yaml_config
+from .entities import WorkFile,PromptIndex, ChatMessage
 
 """存在的意义就是统一全局的变量名，哪些用了，哪些没用"""
+
 GlobalNames = {
     "元认知分类": "元认知分类",
     "领域模型": "领域模型",
     "规划任务下一步动作": "规划任务下一步动作",
     "任务提示词": "任务提示词",
 }
-
 
 class GlobalObject:
     """
@@ -30,7 +34,6 @@ class GlobalObject:
     """
     _WorkFileMap: dict = {}  # uuid → WorkFile
     Prompts: PromptIndex = None
-
 
 class GlobalFunction:
 
@@ -44,7 +47,6 @@ class GlobalFunction:
         # 判断role是否为None，删除None
         chat_messsages = [m for m in [ChatMessage(data=p.strip().rstrip('\n')) for p in parts if p] if m.role is not None]
         return chat_messsages
-
 
     @staticmethod
     def register_work_files(df: "pd.DataFrame"):
@@ -274,12 +276,28 @@ class GlobalFunction:
         date_str = datetime.now().strftime("%Y%m%d")
         return os.path.join(GlobalFunction.chat_path(), f"chat_{date_str}.md")
 
+    '''
+        LLM 原始输出:
+        ┌────────────────────────────────────────────
+        │ <think>我需要先理解用户的需求...</think>         ← parse_llm_think 拿这部分
+        │                                             
+        │ 好的，我理解您的需求。我来帮您处理。              ← parse_llm_reply 拿这部分
+        │                                            
+        │ ```action                                  
+        │ {"action": "meta:task", ...}                   <- extract_action_json 拿这里
+        │ ```                                        
+        └────────────────────────────────────────────
+
+    '''
+
+    # 针对推理模型的 --> DeepSeek-R1
+    # 如果没用<think>xxx</think>，则直接返回原文
     @staticmethod
     def parse_llm_think(response: str):
-        """解析LLM输出文本中的think内容"""
-        """提取<think></think>之间的内容"""
+        """提取think标签之间的内容"""
         think_match = re.search(r'<think>(.*?)</think>', response, re.DOTALL)
         if think_match:
+            # 
             think_text = think_match.group(1) if think_match else ""
             return think_text
         else:
@@ -289,8 +307,27 @@ class GlobalFunction:
     def parse_llm_reply(response: str):
         """解析LLM输出文本中的reply内容:提取</think>之后的内容。否则返回原文"""
         if "</think>" in response:
+            # 第三个参数让.能匹配换行符，否则换行截停
+            # f''-- f-string，花括号内可以插入变量
+            # r'' -- raw string，避免转义\，不然\-->\\
+            '''
+                作为一个匹配单元-->套括号
+                只作为标记，后续不用，则是非捕获(?:)
+                需要正则匹配并取出来的，则是捕获,()
+                --------------------------------
+                量词 * ? +
+                --------------------------------
+                字符开头^
+                字符结尾$
+                --------------------------------
+                .匹配任意字符
+                贪婪和懒惰，a123b456b，匹配到第一个b懒惰，匹配到第2个b贪婪
+                .* 贪婪捕获 从开头匹配到尽量多的匹配结尾
+                .*? 懒惰捕获 从开头匹配到尽量少的匹配结尾，
+            '''
             reply_match = re.search(r'(?:.*?</think>)?(.*)', response, re.DOTALL)
             if reply_match:
+                # 
                 reply_text = reply_match.group(1) if reply_match else ""
                 return reply_text
             else:
@@ -301,12 +338,14 @@ class GlobalFunction:
     @staticmethod
     def extract_action_json(response: str):
         """
-        解析LLM输出文本中的操作指令
+        解析LLM输出文本中的操作指令 '''action xxx ''' 变为json形式的dict
         """
         if "```action" in response:
+            # 切了之后，被切的string会消失
             predict_action = response.split("```action")[1]
             if predict_action:
-                predict_action = predict_action.replace("```action", "```").split("```")[0]
+                predict_action = predict_action.split("```")[0]
+                # 从str-->json，从str变成dict
                 predict_json = json.loads(predict_action.strip())
                 return predict_json
         return None
@@ -396,7 +435,7 @@ class GlobalFunction:
 
     @staticmethod
     def load_file(file_path: str):
-        """Helper function that loads a single file into a string"""
+        """将文件内容加载为string，json格式使用json.load加载"""
         _, ext = os.path.splitext(file_path)
         with open(file_path, "r", encoding='utf-8') as file:
             if ext == ".json":
@@ -409,22 +448,57 @@ class GlobalFunction:
         with open(file_path, "w", encoding='utf-8') as file:
             file.write(content)
 
+    # action/function里注册工具
     @staticmethod
     def inspect_function_desc(func_cls):
         """检查函数名称，描述，参数信息"""
         parameters = {}
-        sig = inspect.signature(func_cls)
-        source = inspect.getsource(func_cls)
-        doc = inspect.getdoc(func_cls) or ""
-        # 去除公共缩进，使代码在顶层合法
+        sig = inspect.signature(func_cls)  # 拿到的参数名字、类型和默认值
+        source = inspect.getsource(func_cls)  # 函数的python源码字符串，完整def+装饰器+最近的注释行
+        doc = inspect.getdoc(func_cls) or ""  # 只拿docstring，自动处理缩进
+        # dedent去除def整体每行前面的的公共缩进，使代码在顶层合法
         source = textwrap.dedent(source)
+        '''
+            ast用法：源码字符串解析成语法树
+            Module                                    ← 模块根节点
+                └─ body[0]: FunctionDef               ← body列表是所有顶层语句，此处只输入了函数定义
+                        ├─ name: "meta_read"                   ← 函数名，只能是字符串字面量
+                        ├─ decorator_list[0]: Call             ← 装饰器
+                        │  └─ func: Attribute                  此处是Attribute的原因是，装饰器使用的是@g_tool_registry.register对象属性
+                        │     └─ value: Name(id="g_tool_registry")  value是被访问属性的对象表达式
+                        │     └─ attr: "register"                   attr是对象的属性
+                        │  └─ args[0]: Constant(value="meta:read")  参数
+                        ├─ args                                ← 参数列表
+                        │  ├─ arg(file_uuid, annotation=Name(id="str"))
+                        │  ├─ arg(owner, annotation=Name(id="StateOwner"))
+                        │  ├─ kwarg(arg="kwargs")
+                        ├─ body[0]: Expr                       ← 函数体第一内部语句，每一行（docstring）
+                        │  └─ value: Constant(value="根据文件uuid，分析文件内容")
+                        └─ body[1]: Expr                       ← 函数体第二条
+                            └─ value: Call(func=Name(id="print"))
+        '''
         tree = ast.parse(source)
         if tree.body:
             func_def = tree.body[0]
             if isinstance(func_def, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 # Get all comments from the source code
-                comments = {}
-                latest_name = None
+                '''
+                函数这样写--在检查的时候能拿到参数信息comments
+                def meta_read(
+                            file_uuid: str,  # 文件uuid
+                            owner: StateOwner  # 状态所有者
+                            ):  
+                    """根据uuid分析文件"""      ← 这是 docstring，不是注释
+                    print("meta:read")          ← 这是代码
+
+                comments = {
+                            "file_uuid": "文件uuid",
+                            "owner": "状态所有者",
+                        }
+
+                ''' 
+                comments = {}  #参数名：注释
+                latest_name = None  #暂存上一次遇到的的参数名
                 for token in tokenize.generate_tokens(io.StringIO(source).readline):
                     if token.type == tokenize.COMMENT and latest_name is not None:
                         line = token.line
@@ -453,11 +527,18 @@ class GlobalFunction:
                         raise ValueError(p_comment)
                     # 组装参数格式
                     parameters[param_name] = f"{p_type},{p_comment}"
+                '''给llm的tool schema
+                {
+                    "file_uuid": "str,文件uuid"
+                }
+                '''
+                
         # 组装返回值
         tool = {
             "action": func_cls.__name__,
             "description": doc.strip()
         }
+        # 重复的属性--覆盖，不存在的属性--新增
         tool.update(parameters)
         return tool
 
@@ -500,3 +581,40 @@ class GlobalFunction:
     def embedding_model():
         """获取嵌入模型"""
         return g_yaml_config["model"]["embedding_model"]
+
+    # 图片元信息统一字段模板
+    IMAGE_META_COMMON = {
+        "图片路径": "",
+        "图片格式": "",
+        "图片类型": "",
+        "内容概述": "",
+        "文字识别": ""
+    }
+
+    @staticmethod
+    def load_image_meta(md_path: str) -> dict:
+        """读取图片元信息md文件中的JSON块，模板兜底保证统一字段不缺失"""
+        result = dict(GlobalFunction.IMAGE_META_COMMON)
+        if os.path.exists(md_path):
+            content = GlobalFunction.load_file(md_path)
+            match = re.search(r"```json\s*\n([\s\S]*?)\n```", content)
+            if match:
+                try:
+                    result.update(json.loads(match.group(1)))
+                except json.JSONDecodeError:
+                    pass
+        return result
+
+    @staticmethod
+    def write_image_meta(output_md_path: str, fields: dict):
+        """落盘图片元信息md文件。新建时从统一模板初始化，已存在时增量合并字段"""
+        stem = os.path.basename(output_md_path).replace("_图片解析.md", "")
+        result = GlobalFunction.load_image_meta(output_md_path)
+        result.update(fields)
+        with open(output_md_path, 'w', encoding='utf-8') as f:
+            f.write(f"# {stem} 图片解析\n\n")
+            f.write(f"## 图片信息摘要\n\n")
+            f.write(f"```json\n")
+            f.write(f"{json.dumps(result, ensure_ascii=False, indent=2)}\n")
+            f.write(f"```\n\n")
+            f.write(f"## 图片处理\n")

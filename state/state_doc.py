@@ -48,6 +48,7 @@ class HeadingChunk:
     end_index: int = -1
     summary: str = "" # 自身总结+子节点总结
     prefix_summary: str = "" #自身总结
+    use_condition: str = "" # 根节点专用：什么场景下使用该知识树进行审查
 
 
 # --------------------------------------------------------------------------
@@ -418,25 +419,12 @@ class WordParseState(BaseState):
                 rel_img = str(image_path.relative_to(Path(owner.workspace_path))).replace("\\", "/")
             except ValueError:
                 rel_img = image_path.name
-            result = {
+            output_md = self._image_dir / f"{stem}_图片解析.md"
+            GlobalFunction.write_image_meta(str(output_md), {
                 "docx_rel_id": image.rel_id,
                 "docx_media_name": image.media_name,
                 "图片路径": rel_img,
-                "图片类型": "",
-                "内容概述": "",
-                "文字识别": "",
-            }
-            output_md = self._image_dir / f"{stem}_图片解析.md"
-            _safe_write_text(
-                output_md,
-                f"# {stem} 图片解析\n\n"
-                f"## 图片信息摘要\n\n"
-                f"```json\n"
-                f"{json.dumps(result, ensure_ascii=False, indent=2)}\n"
-                f"```\n\n"
-                f"## 图片处理\n",
-                "图片元数据写入失败",
-            )
+            })
 
         _safe_write_text(self._full_text_path, self._full_text, "全文写入失败")
         self._write_heading_outline_files(self._parsed_root, self._chunks)

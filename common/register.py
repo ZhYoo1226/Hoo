@@ -1,6 +1,5 @@
 from common import GlobalFunction
 
-
 class ToolRegistry:
     def __init__(self):
         self._map = {}
@@ -9,6 +8,7 @@ class ToolRegistry:
         """注册一个工具"""
 
         def decorator(func):
+            # function的字符串名
             key = name if name else func.__name__
             print(f"注册工具: {key}")
             self._map[key] = func
@@ -42,7 +42,6 @@ class ToolRegistry:
         if not func:
             raise KeyError(f"Unknown tool: {tool_name}")
         return func(*args, **kwargs)
-
 
 # 创建全局注册器
 g_tool_registry = ToolRegistry()
