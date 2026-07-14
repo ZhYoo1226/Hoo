@@ -99,9 +99,8 @@ class RefactorTableState(BaseState):
         # 步骤5：结束状态
         owner.remove_state(self)
 
-
-def Exit(self, owner):
-    """
-    状态退出时调用的方法。
-    """
-    pass
+    def Exit(self, owner):
+        """
+        状态退出时调用的方法。
+        """
+        pass
