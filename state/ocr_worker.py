@@ -1,23 +1,33 @@
 import importlib
-import json
 import multiprocessing
 import os
 import subprocess
 import sys
 import threading
-from pathlib import Path
 from typing import Dict, List, Tuple
 
 os.environ.setdefault("DISABLE_MODEL_SOURCE_CHECK", "True")
 
-_CONF_DIR = Path(__file__).resolve().parent.parent / "workspace" / "conf" / "paddleocr"
+# GPU/CPU 配置：改 USE_GPU 即可切换
+USE_GPU: bool = False
+GPU_MEM: int = 13000  # 单卡显存上限 MB
 
-_DEPS = json.loads((_CONF_DIR / "deps.json").read_text(encoding="utf-8"))
-_OCR_CONF = json.loads((_CONF_DIR / "models.json").read_text(encoding="utf-8"))
+_PADDLE_DEPS = {
+    "paddlepaddle_cpu": "3.1.1",
+    "paddlepaddle_gpu": "3.1.1.post120",
+    "paddleocr": "3.3.3",
+}
 
-# 计算模式：改 deps.json 中 use_gpu 即可切换 CPU/GPU
-USE_GPU: bool = _DEPS.get("use_gpu", False)
-GPU_MEM: int = _DEPS.get("gpu_mem", 12000)                # 单卡显存上限 MB
+_OCR_MODELS = {
+    "cpu": {
+        "text_detection_model_name": "PP-OCRv5_mobile_det",
+        "text_recognition_model_name": "PP-OCRv5_mobile_rec",
+    },
+    "gpu": {
+        "text_detection_model_name": "PP-OCRv5_server_det",
+        "text_recognition_model_name": "PP-OCRv5_server_rec",
+    },
+}
 os.environ.setdefault("FLAGS_gpu_memory_limit_mb", str(GPU_MEM))
 
 # GPU 模式下必须用 spawn 启动子进程，CUDA 不支持 fork
@@ -26,11 +36,11 @@ if USE_GPU:
 
 # 根据 use_gpu 自动选取对应的 Paddle 版本和模型组
 _paddle_ver_key = "paddlepaddle_gpu" if USE_GPU else "paddlepaddle_cpu"
-PINNED_PADDLE_VERSION: str = _DEPS[_paddle_ver_key]       # pip install 用到的版本号
-PINNED_PADDLEOCR_VERSION: str = _DEPS["paddleocr"]
+PINNED_PADDLE_VERSION: str = _PADDLE_DEPS[_paddle_ver_key]
+PINNED_PADDLEOCR_VERSION: str = _PADDLE_DEPS["paddleocr"]
 
 _models_key = "gpu" if USE_GPU else "cpu"
-_MODELS = _OCR_CONF[_models_key]                          # 检测 / 识别模型名
+_MODELS = _OCR_MODELS[_models_key]
 
 # 自动安装命令，常驻子进程启动和 state_ocr 兜底安装均依赖此常量
 OCR_INSTALL_COMMANDS = [

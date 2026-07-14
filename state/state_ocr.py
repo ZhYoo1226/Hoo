@@ -1,5 +1,4 @@
 import importlib.util
-import json
 import re
 import subprocess
 import threading
@@ -16,13 +15,14 @@ from .ocr_worker import (
 from .base_state import BaseState
 from common import GlobalFunction
 
-# OCR 配置目录：imagetype.json / paddleocr/deps.json 等
-_CONF_DIR = Path(__file__).resolve().parent.parent / "workspace" / "conf"
-
-# 图片后缀 → MIME 映射，_collect_image_paths 以此过滤可识别文件
-_MEDIA_CONTENT_TYPES: dict = json.loads(
-    (_CONF_DIR / "imagetype.json").read_text(encoding="utf-8")
-)
+# 支持的图片后缀
+_MEDIA_EXTENSIONS: set = {
+    ".png", ".apng", ".jpg", ".jpeg", ".jpe", ".jfif", ".pjpeg", ".pjp",
+    ".bmp", ".dib", ".gif", ".tif", ".tiff", ".wmf", ".emf", ".webp",
+    ".svg", ".ico", ".cur", ".heic", ".heif", ".avif", ".tga", ".icns",
+    ".jp2", ".j2k", ".jpx", ".jpm", ".exr", ".pcx", ".ppm", ".pgm",
+    ".pbm", ".pnm",
+}
 
 
 # --------------------------------------------------------------------------
@@ -32,7 +32,7 @@ _MEDIA_CONTENT_TYPES: dict = json.loads(
 class ImgInitState(BaseState):
     """图片初始化基类：扫描图片目录，为每张图片创建统一的元信息md文件。"""
 
-    MEDIA_CONTENT_TYPES = _MEDIA_CONTENT_TYPES
+    MEDIA_CONTENT_TYPES = _MEDIA_EXTENSIONS
     _image_type = ""  # 子类覆盖
 
     def __init__(self, source_path: str, **kwargs):
