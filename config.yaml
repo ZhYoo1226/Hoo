@@ -1,4 +1,8 @@
 openai:
+  provider: "qwen"
+  # 思维链推理模式，模型内部先推理再输出
+  enable_thinking: false
+  
   #  api_key: "fastgpt-m5AaD8Li2hhTm1DQO9awVuDx1e9pgVGZEfNBnMGGbAX5GhJOK3Pi"
 
   #91
@@ -11,18 +15,22 @@ openai:
   # base_url: "http://183.222.234.174:5090/v1"
   # model: "qwen3"
 
-  #DeepSeek
-  api_key : "sk-a67cb65e361841aba6f20254eb266ced"
-  base_url: "https://api.deepseek.com"
-  model: "deepseek-v4-flash"
+  # #DeepSeek
+  # api_key : "sk-a67cb65e361841aba6f20254eb266ced"
+  # base_url: "https://api.deepseek.com"
+  # model: "deepseek-v4-flash"
+
+  #新模型
+  api_key : "fastgpt-oJUlJbDnnE6O5JBTpg3hHSYuGv33WfVzgYJA0mWaYYCTPfEcEyWTPPmbo3Rb"
+  base_url: "http://183.222.234.169:3000/api/v1"
+  model: "qwen3.6:27b"  
 
   #51 60
   #  api_key: "sk-F7iKGTfdiRFLExq0gzIkkJg8LQ62DSfsJpgHnOQIVcXql4m9"
   #  base_url: "http://gpu.skyopenai.com:3002/v1"
   #  model: "qwen3:30b"
 
-  # 思维链推理模式，模型内部先推理再输出
-  enable_thinking: false
+
 model:
   embedding_model: "BAAI/bge-small-zh-v1.5"
   #embedding_model: "BAAI/bge-small-en-v1.5"

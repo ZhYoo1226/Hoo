@@ -1,6 +1,5 @@
 import os
 import signal
-import subprocess
 import time
 
 # 当前路径
@@ -19,7 +18,6 @@ print(f"os.environ['FASTEMBED_CACHE_PATH'] -> {os.environ['FASTEMBED_CACHE_PATH'
 print(f"os.environ['HF_HOME'] -> {os.environ['HF_HOME']}")
 print(f"os.environ['HF_ENDPOINT'] -> {os.environ['HF_ENDPOINT']}")
 
-from common import GlobalFunction
 from state import g_yaml_config, g_owner, LiveState, StateOwner
 from l2p.llm.openai import OPENAI
 from gateway import start_gateway, stop_gateway
@@ -29,7 +27,8 @@ from webui import start_webui,stop_webui
 统一管理大模型
 '''
 llm = OPENAI(
-    provider="deepseek",
+    # 嵌套读
+    provider=g_yaml_config["openai"]["provider"],
     model=g_yaml_config["openai"]["model"],  # gpt-4o-mini
     api_key=os.getenv("API_KEY") or g_yaml_config["openai"]["api_key"],
     base_url=g_yaml_config["openai"]["base_url"],

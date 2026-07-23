@@ -19,16 +19,16 @@ from typing_extensions import override
 
 from .base import BaseLLM, load_yaml
 
-
+# 定义一个OPENAI类，从代码里读取配置
 class OPENAI(BaseLLM):
     def __init__(
             self,
-            model: str,
-            config_path: str = "l2p/llm/utils/openaiSDK.yaml",
-            provider: str = "openai",
-            api_key: str | None = None,
-            base_url: str = "https://api.openai.com/v1/",
-            enable_thinking: bool = True,
+            model: str, # 模型
+            config_path: str = "l2p/llm/utils/openaiSDK.yaml", # sdk配置文件路径，默认.utils/openaiSDK.yaml
+            provider: str = "openai", # 提供商
+            api_key: str | None = None, # 密钥
+            base_url: str = "https://api.openai.com/v1/", # base_url
+            enable_thinking: bool = True, # 是否思考链
     ) -> None:
 
         # load yaml configuration path

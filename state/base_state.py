@@ -17,7 +17,6 @@ from lunar_python import Solar
 
 from common import ChatMessage, GlobalFunction, GlobalObject
 from common.register import g_tool_registry
-from state_solver import StateOwner
 
 def _read_target_property(current: object, props: str) -> object:
     """
@@ -247,7 +246,10 @@ class StateOwner:
             if file.endswith(".memory"):
                 '''获得文件basename'''
                 memory_name = os.path.splitext(file)[0]
-                self._memories[memory_name] = Engram(path=os.path.join(f"{memory_path}/{file}"), embedder_model=GlobalFunction.embedding_model())
+                try:
+                    self._memories[memory_name] = Engram(path=os.path.join(f"{memory_path}/{file}"), embedder_model=GlobalFunction.embedding_model())
+                except Exception as e:
+                    self.sys_breathe_log(f"加载记忆 [{memory_name}] 失败: {e}")
 
     def list_memory(self) -> List[str]:
         """列出所有记忆"""
@@ -261,7 +263,11 @@ class StateOwner:
             self.load_memories()
 
         if memory_name not in self._memories:
-            self._memories[memory_name] = Engram(path=os.path.join(GlobalFunction.memory_path(), f"{memory_name}.memory"), embedder_model=GlobalFunction.embedding_model())
+            try:
+                self._memories[memory_name] = Engram(path=os.path.join(GlobalFunction.memory_path(), f"{memory_name}.memory"), embedder_model=GlobalFunction.embedding_model())
+            except Exception as e:
+                self.sys_breathe_log(f"创建记忆 [{memory_name}] 失败: {e}")
+                return None
         return self._memories[memory_name]
 
     def current_time(self):
@@ -765,7 +771,7 @@ class StateOwner:
 
         return messages
 
-    def execute_chat(self, owner:StateOwner, state=None, system_prompt: str = "系统提示词"):
+    def execute_chat(self, owner, state=None, system_prompt: str = "系统提示词"):
         """
         同步执行聊天，返回response执行Action
         同时聊天和执行
